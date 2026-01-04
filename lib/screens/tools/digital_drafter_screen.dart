@@ -1,7 +1,7 @@
 import 'dart:typed_data';
-import 'dart:ui' as ui; // Needed for image capture
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart'; // Needed for RepaintBoundary
+import 'package:flutter/rendering.dart';
 import 'package:signature/signature.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -17,17 +17,19 @@ class DigitalDrafterScreen extends StatefulWidget {
 }
 
 class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
-  // GlobalKey to capture the EXACT screen size (Fixes the Zoom Bug)
+  // Key for the RepaintBoundary (Captures drawing ONLY)
   final GlobalKey _canvasKey = GlobalKey();
   
-  Uint8List? _backgroundImage; 
+  // Layers
+  Uint8List? _bakedImage; // Old strokes
   late SignatureController _controller;
   
+  // Settings
   double _currentStrokeWidth = 3.0;
   Color _currentColor = Colors.white;
   bool _isUploading = false;
   
-  // Tools State
+  // Tools
   bool _showGrid = true;
   bool _showRuler = false;
   bool _showCompass = false;
@@ -43,37 +45,37 @@ class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
     _controller = SignatureController(
       penStrokeWidth: _currentStrokeWidth,
       penColor: _currentColor,
-      exportBackgroundColor: Colors.transparent,
+      exportBackgroundColor: Colors.transparent, // Important!
     );
   }
 
-  // 📸 FIX: Capture the widget exactly as it looks (No trimming/zooming)
+  // 📸 BAKE: Only captures the drawing layers, NOT the grid
   Future<void> _bakeCurrentStrokes() async {
     if (_controller.isEmpty) return;
 
     try {
-      // 1. Find the RenderObject of the canvas
+      // 1. Capture the specific boundary (The Stroke Stack)
       RenderRepaintBoundary? boundary = _canvasKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
       if (boundary == null) return;
 
-      // 2. Convert to Image (Pixel Perfect)
-      ui.Image image = await boundary.toImage(pixelRatio: 2.0); // 2.0 for High Quality
+      // 2. High Res Capture
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0); 
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       
       if (byteData != null) {
         setState(() {
-          _backgroundImage = byteData.buffer.asUint8List(); // Set as new background
-          _controller.clear(); // Clear active pen
+          _bakedImage = byteData.buffer.asUint8List(); // Save as new base
+          _controller.clear(); // Clear active lines
         });
       }
     } catch (e) {
-      debugPrint("Error baking strokes: $e");
+      debugPrint("Bake error: $e");
     }
   }
 
+  // 🖨️ EXPORT: Handles White-on-Black PDF
   Future<void> _saveAndUpload() async {
-    // Force bake any active strokes first so they are included
-    await _bakeCurrentStrokes();
+    await _bakeCurrentStrokes(); // Finalize drawing
     
     setState(() => _isUploading = true);
     try {
@@ -86,29 +88,32 @@ class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
         pw.Page(
           pageFormat: PdfPageFormat.a4,
           build: (pw.Context context) {
-            return pw.Stack(
-              children: [
-                // Draw the FULL Combined Image
-                if (_backgroundImage != null)
-                  pw.Center(child: pw.Image(pw.MemoryImage(_backgroundImage!))),
-                
-                // Add Watermark
-                pw.Center(
-                  child: pw.Opacity(
-                    opacity: 0.15,
-                    child: pw.Transform.rotate(
-                      angle: 0.5,
-                      child: pw.Column(
-                        mainAxisSize: pw.MainAxisSize.min,
-                        children: [
-                          pw.Text(studentName, style: pw.TextStyle(fontSize: 40, fontWeight: pw.FontWeight.bold, color: PdfColors.grey)),
-                          pw.Text(regId, style: pw.TextStyle(fontSize: 30, color: PdfColors.grey)),
-                        ],
+            return pw.Container(
+              color: PdfColors.black, // 🟢 FIX: Make PDF Background Black
+              child: pw.Stack(
+                children: [
+                  // The Drawing
+                  if (_bakedImage != null)
+                     pw.Center(child: pw.Image(pw.MemoryImage(_bakedImage!))),
+                  
+                  // The Watermark (Inverted color)
+                  pw.Center(
+                    child: pw.Opacity(
+                      opacity: 0.15,
+                      child: pw.Transform.rotate(
+                        angle: 0.5,
+                        child: pw.Column(
+                          mainAxisSize: pw.MainAxisSize.min,
+                          children: [
+                            pw.Text(studentName, style: pw.TextStyle(fontSize: 40, fontWeight: pw.FontWeight.bold, color: PdfColors.white)),
+                            pw.Text(regId, style: pw.TextStyle(fontSize: 30, color: PdfColors.white)),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),
@@ -122,6 +127,17 @@ class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
     }
   }
 
+  // 🧼 ERASER LOGIC
+  void _toggleEraser() {
+    _bakeCurrentStrokes();
+    setState(() {
+      _isEraserMode = !_isEraserMode;
+      // Eraser paints Black (to match background)
+      _currentColor = _isEraserMode ? Colors.black : Colors.white;
+      _initializeController();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,84 +146,105 @@ class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
         title: Text("Drafter Pro 📐", style: GoogleFonts.orbitron(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF1E1E1E),
         actions: [
-          IconButton(icon: Icon(_showGrid ? Icons.grid_off : Icons.grid_on, color: Colors.cyanAccent), onPressed: () => setState(() => _showGrid = !_showGrid)),
-          // 📏 Toggle Draggable Ruler
-          IconButton(icon: Icon(Icons.straighten, color: _showRuler ? Colors.yellowAccent : Colors.grey), onPressed: () => setState(() => _showRuler = !_showRuler)),
-          // 🧭 Toggle Draggable Compass
-          IconButton(icon: Icon(Icons.architecture, color: _showCompass ? Colors.orangeAccent : Colors.grey), onPressed: () => setState(() => _showCompass = !_showCompass)),
-          IconButton(icon: const Icon(Icons.upload_file, color: Colors.greenAccent), onPressed: _saveAndUpload),
+          IconButton(
+            icon: Icon(_showGrid ? Icons.grid_off : Icons.grid_on, color: Colors.cyanAccent), 
+            onPressed: () => setState(() => _showGrid = !_showGrid)
+          ),
+          IconButton(
+            icon: Icon(Icons.upload_file, color: Colors.greenAccent), 
+            onPressed: _saveAndUpload
+          ),
         ],
       ),
       body: Column(
         children: [
+          // 🎨 CANVAS AREA
           Expanded(
-            child: Stack(
-              children: [
-                // 🖌️ THE DRAWING CANVAS (Wrapped in RepaintBoundary)
-                RepaintBoundary(
-                  key: _canvasKey,
-                  child: Container(
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(color: Colors.black, border: Border.all(color: Colors.grey[800]!)),
-                    child: Stack(
-                      children: [
-                        if (_showGrid) Positioned.fill(child: CustomPaint(painter: GridPainter())),
-                        
-                        // Background Layer (Previous Strokes)
-                        if (_backgroundImage != null)
-                          Positioned.fill(child: Image.memory(_backgroundImage!, fit: BoxFit.cover)),
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.black, // Background is strictly Black
+                border: Border.all(color: Colors.grey[800]!),
+              ),
+              child: Stack(
+                children: [
+                  // 1. GRID LAYER (Bottom, Visual Only)
+                  // This is OUTSIDE the RepaintBoundary so it never gets saved!
+                  if (_showGrid) Positioned.fill(child: CustomPaint(painter: GridPainter())),
 
-                        // Active Layer (Current Pen)
-                        Positioned.fill(
-                          child: Signature(
-                            controller: _controller,
-                            backgroundColor: Colors.transparent,
+                  // 2. DRAWING LAYER (The part we capture)
+                  Positioned.fill(
+                    child: RepaintBoundary(
+                      key: _canvasKey,
+                      child: Stack(
+                        children: [
+                          // Baked Image (Previous Strokes)
+                          if (_bakedImage != null)
+                            Positioned.fill(child: Image.memory(_bakedImage!, fit: BoxFit.cover)),
+
+                          // Active Pen (Current Stroke)
+                          Positioned.fill(
+                            child: Signature(
+                              controller: _controller,
+                              backgroundColor: Colors.transparent,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                // 🛠️ DRAGGABLE TOOLS LAYER (Sits ON TOP of the canvas)
-                // These will NOT be saved in the PDF, they are just guides.
-                if (_showRuler)
-                  const DraggableToolWidget(
-                    child: Icon(Icons.straighten, size: 300, color: Colors.yellowAccent),
-                  ),
-                if (_showCompass)
-                  const DraggableToolWidget(
-                    child: Icon(Icons.architecture, size: 250, color: Colors.orangeAccent),
-                  ),
-              ],
+                  // 📏 REAL RULER (Draggable)
+                  if (_showRuler)
+                    DraggableToolWidget(
+                      child: CustomPaint(
+                        size: const Size(300, 80),
+                        painter: RulerPainter(),
+                      ),
+                    ),
+
+                  // 📐 REAL PROTRACTOR (Draggable)
+                  if (_showCompass)
+                    DraggableToolWidget(
+                      child: CustomPaint(
+                        size: const Size(200, 200),
+                        painter: ProtractorPainter(),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
           
-          // 🎛️ CONTROLS
+          // 🎛️ TOOLBAR
           Container(
             padding: const EdgeInsets.all(10),
             color: const Color(0xFF1E1E1E),
             child: Row(
               children: [
-                // Eraser
+                 // TOOLS TOGGLES
+                _buildToggleBtn(Icons.straighten, _showRuler, () => setState(() => _showRuler = !_showRuler)),
+                const SizedBox(width: 8),
+                _buildToggleBtn(Icons.architecture, _showCompass, () => setState(() => _showCompass = !_showCompass)),
+                
+                const SizedBox(width: 20),
+                
+                // ERASER
                 GestureDetector(
-                  onTap: () {
-                    _bakeCurrentStrokes();
-                    setState(() {
-                      _isEraserMode = !_isEraserMode;
-                      _currentColor = _isEraserMode ? Colors.black : Colors.white;
-                      _initializeController(); // Reset with new color
-                    });
-                  },
+                  onTap: _toggleEraser,
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(color: _isEraserMode ? Colors.red : Colors.grey[800], borderRadius: BorderRadius.circular(5)),
+                    decoration: BoxDecoration(
+                      color: _isEraserMode ? Colors.red : Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)
+                    ),
                     child: const Icon(Icons.cleaning_services, size: 20, color: Colors.white),
                   ),
                 ),
-                const SizedBox(width: 15),
                 
-                // Color Palette (Only active if not erasing)
+                const SizedBox(width: 20),
+                
+                // COLORS (Hidden if erasing)
                 if (!_isEraserMode) ...[
                   _buildColorBtn(Colors.white),
                   _buildColorBtn(Colors.blueAccent),
@@ -215,18 +252,19 @@ class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
                 ],
 
                 const Spacer(),
-                const Text("Size: ", style: TextStyle(color: Colors.grey)),
+                
+                // SLIDER
                 SizedBox(
-                  width: 120,
+                  width: 100,
                   child: Slider(
                     value: _currentStrokeWidth,
                     min: 1, max: 20,
                     activeColor: _isEraserMode ? Colors.red : Colors.cyanAccent,
-                    onChangeEnd: (_) => _bakeCurrentStrokes(), // Bake when done sliding
+                    onChangeEnd: (_) => _bakeCurrentStrokes(),
                     onChanged: (val) {
                       setState(() {
                         _currentStrokeWidth = val;
-                        // Recreate controller to apply size
+                        // Refresh Controller
                         _controller = SignatureController(
                           penStrokeWidth: val,
                           penColor: _currentColor,
@@ -245,11 +283,27 @@ class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
     );
   }
 
+  Widget _buildToggleBtn(IconData icon, bool isActive, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.cyanAccent.withOpacity(0.2) : Colors.transparent,
+          border: Border.all(color: isActive ? Colors.cyanAccent : Colors.grey),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Icon(icon, size: 20, color: isActive ? Colors.cyanAccent : Colors.grey),
+      ),
+    );
+  }
+
   Widget _buildColorBtn(Color color) {
     return GestureDetector(
       onTap: () {
-        _bakeCurrentStrokes(); // Save old color layer
+        _bakeCurrentStrokes();
         setState(() {
+          _isEraserMode = false;
           _currentColor = color;
           _initializeController();
         });
@@ -257,17 +311,20 @@ class _DigitalDrafterScreenState extends State<DigitalDrafterScreen> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 5),
         width: 30, height: 30,
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: _currentColor == color ? 2 : 0)),
+        decoration: BoxDecoration(
+          color: color, 
+          shape: BoxShape.circle, 
+          border: Border.all(color: Colors.white, width: _currentColor == color ? 2 : 0)
+        ),
       ),
     );
   }
 }
 
-// 📏 DRAGGABLE TOOL WIDGET (Move, Rotate, Scale)
+// 📏 DRAGGABLE TOOL WIDGET
 class DraggableToolWidget extends StatefulWidget {
   final Widget child;
   const DraggableToolWidget({super.key, required this.child});
-
   @override
   State<DraggableToolWidget> createState() => _DraggableToolWidgetState();
 }
@@ -275,7 +332,6 @@ class DraggableToolWidget extends StatefulWidget {
 class _DraggableToolWidgetState extends State<DraggableToolWidget> {
   Offset _offset = const Offset(100, 100);
   double _scale = 1.0;
-  double _rotation = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -287,15 +343,13 @@ class _DraggableToolWidgetState extends State<DraggableToolWidget> {
           setState(() {
             _offset += details.focalPointDelta;
             _scale = (_scale * details.scale).clamp(0.5, 3.0);
-            _rotation += details.rotation;
+            // Rotation removed to prevent spinning
           });
         },
         child: Transform(
-          transform: Matrix4.identity()
-            ..scale(_scale)
-            ..rotateZ(_rotation),
+          transform: Matrix4.identity()..scale(_scale),
           alignment: Alignment.center,
-          child: Opacity(opacity: 0.8, child: widget.child), // Slightly transparent to see lines under it
+          child: Opacity(opacity: 0.7, child: widget.child),
         ),
       ),
     );
@@ -308,6 +362,82 @@ class GridPainter extends CustomPainter {
     final paint = Paint()..color = Colors.white10..strokeWidth = 1;
     for (double x = 0; x < size.width; x += 40) canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
     for (double y = 0; y < size.height; y += 40) canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+  }
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// 📏 PAINTER: Yellow Engineering Ruler
+class RulerPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Yellow Plastic Body (Transparent)
+    final bodyPaint = Paint()
+      ..color = Colors.yellowAccent.withOpacity(0.3)
+      ..style = PaintingStyle.fill;
+    
+    final borderPaint = Paint()
+      ..color = Colors.yellowAccent.withOpacity(0.8)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
+
+    canvas.drawRRect(rrect, bodyPaint);
+    canvas.drawRRect(rrect, borderPaint);
+
+    // 2. Ticks (Markings)
+    final tickPaint = Paint()
+      ..color = Colors.black.withOpacity(0.6)
+      ..strokeWidth = 1.5;
+
+    // Draw Ticks every 10 pixels (simulating mm/cm)
+    for (double i = 10; i < size.width; i += 10) {
+      double height = (i % 50 == 0) ? 25.0 : 12.0; // Long tick every 5th
+      canvas.drawLine(Offset(i, 0), Offset(i, height), tickPaint);
+      canvas.drawLine(Offset(i, size.height), Offset(i, size.height - height), tickPaint);
+    }
+  }
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// 📐 PAINTER: Engineering Protractor
+class ProtractorPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height);
+    final radius = size.width / 2;
+
+    // 1. Body
+    final bodyPaint = Paint()
+      ..color = Colors.orangeAccent.withOpacity(0.3)
+      ..style = PaintingStyle.fill;
+    
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      3.14159, 3.14159, false, bodyPaint,
+    );
+
+    // 2. Border
+    final borderPaint = Paint()
+      ..color = Colors.orangeAccent
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+    
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      3.14159, 3.14159, false, borderPaint,
+    );
+    
+    // 3. Angle Lines
+    final linePaint = Paint()
+      ..color = Colors.black.withOpacity(0.5)
+      ..strokeWidth = 1.5;
+
+    canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height), borderPaint);
+    canvas.drawLine(center, center - const Offset(0, 20), linePaint); // 90 degree mark
   }
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;

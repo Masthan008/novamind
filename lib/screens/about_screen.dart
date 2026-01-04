@@ -268,7 +268,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                       ),
                     ),
                     child: Text(
-                      'v1.0.3.M • Timetable & Zoom Update',
+                      'v2.0.0 • Notification System & UI Polish',
                       style: GoogleFonts.firaCode(
                         fontSize: 14,
                         color: Colors.cyanAccent,
@@ -488,10 +488,10 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           1800,
                         ),
                         _buildEnhancedFeature(
-                          'Smart Alarms',
-                          'Label-Based Alarms with Custom Ringtones',
-                          Icons.alarm_outlined,
-                          Colors.pink,
+                          'DevRef Hub',
+                          '200+ Programming Cheatsheets with Professional Logos',
+                          Icons.library_books_outlined,
+                          Colors.amber,
                           1850,
                         ),
                       ],

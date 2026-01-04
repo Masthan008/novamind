@@ -48,9 +48,10 @@ class NotificationService {
       'class_alerts',
       'Class Reminders',
       description: 'Notifications for daily timetable classes',
-      importance: Importance.high, // High but not max - less intrusive
+      importance: Importance.max, // Max for custom sound
       playSound: true,
       enableVibration: true,
+      sound: RawResourceAndroidNotificationSound('alarm_1'), // Custom sound from res/raw
     );
 
     // Channel 2: News & Updates (Low frequency, critical)
@@ -272,6 +273,7 @@ class NotificationService {
           priority: Priority.high,
           color: Color(0xFF00FFFF),
           playSound: true,
+          sound: RawResourceAndroidNotificationSound('alarm_1'), // Custom sound
           enableVibration: true,
         ),
       ),
@@ -294,10 +296,11 @@ class NotificationService {
           'class_alerts', 
           'Class Alerts',
           channelDescription: 'Reminders for upcoming classes',
-          importance: Importance.high,
+          importance: Importance.max,
           priority: Priority.high,
           color: Color(0xFF00FFFF),
           playSound: true,
+          sound: RawResourceAndroidNotificationSound('alarm_1'), // Custom sound
           enableVibration: true,
         ),
       ),
@@ -307,6 +310,43 @@ class NotificationService {
     );
     
     print('✅ Scheduled alerts for $className (Day $dayOfWeek at $classHour:$classMinute)');
+  }
+
+  // 🗓️ Calendar Reminder Support
+  static Future<void> scheduleCalendarReminder({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime scheduledTime,
+  }) async {
+    final tzTime = tz.TZDateTime.from(scheduledTime, tz.local);
+    if (tzTime.isBefore(tz.TZDateTime.now(tz.local))) return;
+
+    await _notifications.zonedSchedule(
+      id,
+      title,
+      body,
+      tzTime,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'calendar_channel', 
+          'Calendar Reminders',
+          channelDescription: 'Notifications for personal events',
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: true,
+          sound: RawResourceAndroidNotificationSound('alarm_1'),
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+    );
+    print("📅 Calendar Reminder Set: $title");
+  }
+
+  /// Cancel a specific notification by ID
+  static Future<void> cancelNotification(int id) async {
+    await _notifications.cancel(id);
   }
 
   /// Cancel specific class alerts

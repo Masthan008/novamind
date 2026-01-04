@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/glass_container.dart';
 import '../../widgets/glass_button.dart';
-import '../alarm/alarm_provider.dart';
+
 
 class SleepScreen extends StatefulWidget {
   const SleepScreen({super.key});
@@ -117,10 +117,7 @@ class _SleepScreenState extends State<SleepScreen> with TickerProviderStateMixin
 
   void _setAlarm(int cycles) {
     final sleepTime = _getSleepDateTime(cycles);
-    final alarmProvider = Provider.of<AlarmProvider>(context, listen: false);
-    
-    // Create a unique ID based on time
-    int id = sleepTime.millisecondsSinceEpoch ~/ 1000;
+
     
     if (sleepTime.isBefore(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -132,13 +129,7 @@ class _SleepScreenState extends State<SleepScreen> with TickerProviderStateMixin
       return;
     }
 
-    alarmProvider.scheduleAlarmWithNote(
-      sleepTime,
-      'assets/sounds/alarm_1.mp3', // Default sound
-      'Bedtime! Time to sleep for optimal rest.',
-      loopAudio: false,
-      alarmId: id,
-    );
+    // Note: Alarm functionality removed
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

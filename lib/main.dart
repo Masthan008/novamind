@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:io'; // For Platform check
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; // Critical Import
 import 'package:provider/provider.dart';
-import 'package:alarm/alarm.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:webview_flutter/webview_flutter.dart';
@@ -12,14 +13,14 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 // Imports from your project structure
 import 'theme/app_theme.dart';
 import 'screens/splash_screen.dart';
-import 'screens/ring_screen.dart'; // Contains AlarmRingScreen
+
 import 'screens/auth_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'animations/slide_up_route.dart';
 import 'modules/calculator/calculator_provider.dart';
-import 'modules/alarm/alarm_provider.dart';
-import 'modules/alarm/alarm_service.dart';
+
+
 import 'providers/focus_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/accessibility_provider.dart';
@@ -159,9 +160,10 @@ void main() async {
       print("✅ Supabase Initialized Successfully");
     }
 
+
+    
     // --- Services Init ---
-    await AlarmService.init();
-    print("✅ Alarm Service Initialized");
+
     
     await TimetableService.initializeTimetable();
     print("✅ Timetable Service Initialized");
@@ -227,7 +229,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => CalculatorProvider()),
-        ChangeNotifierProvider(create: (_) => AlarmProvider()),
+
         ChangeNotifierProvider(create: (_) => FocusProvider()),
       ],
       child: const FluxFlowApp(),
@@ -245,20 +247,7 @@ class FluxFlowApp extends StatefulWidget {
 class _FluxFlowAppState extends State<FluxFlowApp> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  @override
-  void initState() {
-    super.initState();
-    // Listen for Alarm Ring
-    AlarmService.ringStream.listen((alarmSettings) {
-      debugPrint("⏰ ALARM RINGING! ID: ${alarmSettings.id}");
-      // FIX 2 from Diagnostic Report: Use correct class 'AlarmRingScreen'
-      navigatorKey.currentState?.push(
-        MaterialPageRoute(
-          builder: (context) => AlarmRingScreen(alarmSettings: alarmSettings),
-        ),
-      );
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {

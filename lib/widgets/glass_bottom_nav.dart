@@ -40,7 +40,7 @@ class _GlassBottomNavState extends State<GlassBottomNav>
     )..repeat(reverse: true);
     
     // Create individual controllers for each nav item
-    _itemControllers = List.generate(4, (index) {
+    _itemControllers = List.generate(3, (index) {
       return AnimationController(
         duration: const Duration(milliseconds: 300),
         vsync: this,
@@ -121,10 +121,10 @@ class _GlassBottomNavState extends State<GlassBottomNav>
                     return AnimatedPositioned(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeOutCubic,
-                      left: (MediaQuery.of(context).size.width - 40) / 4 * widget.currentIndex + 8,
+                      left: (MediaQuery.of(context).size.width - 40) / 3 * widget.currentIndex + 8,
                       top: 8,
                       child: Container(
-                        width: (MediaQuery.of(context).size.width - 40) / 4 - 16,
+                        width: (MediaQuery.of(context).size.width - 40) / 3 - 16,
                         height: 54,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -150,9 +150,8 @@ class _GlassBottomNavState extends State<GlassBottomNav>
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildNavItem(0, Icons.calendar_today_outlined, Icons.calendar_today, "Timetable", Colors.cyanAccent),
-                    _buildNavItem(1, Icons.alarm_outlined, Icons.alarm, "Alarm", Colors.orange),
-                    _buildNavItem(2, Icons.event_outlined, Icons.event, "Calendar", Colors.green),
-                    _buildNavItem(3, Icons.chat_bubble_outline, Icons.chat_bubble, "ChatHub", Colors.pink),
+                    _buildNavItem(1, Icons.event_outlined, Icons.event, "Calendar", Colors.green),
+                    _buildNavItem(2, Icons.chat_bubble_outline, Icons.chat_bubble, "ChatHub", Colors.pink),
                   ],
                 ),
               ],

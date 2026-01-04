@@ -12,7 +12,7 @@ import '../providers/accessibility_provider.dart';
 import '../widgets/glass_bottom_nav.dart';
 import '../widgets/accessibility_wrapper.dart';
 import '../modules/calculator/calculator_screen.dart';
-import '../modules/alarm/alarm_screen.dart';
+
 import '../modules/games/enhanced_2048_screen.dart';
 import '../modules/games/enhanced_tictactoe_screen.dart';
 import '../modules/focus/focus_forest_screen.dart';
@@ -71,9 +71,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   final List<Widget> _screens = [
     const TimetableScreen(),  // Index 0 - Timetable
-    const AlarmScreen(),      // Index 1 - Alarm
-    const CalendarScreen(),   // Index 2 - Calendar
-    const ChatScreen(),       // Index 3 - Chat
+    const CalendarScreen(),   // Index 1 - Calendar
+    const ChatScreen(),       // Index 2 - Chat
   ];
 
   @override

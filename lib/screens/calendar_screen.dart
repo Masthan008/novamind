@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../modules/alarm/alarm_service.dart';
+import '../services/notification_service.dart';
 import '../widgets/glass_container.dart';
 
 class CalendarReminder {
@@ -897,17 +897,10 @@ class _CalendarScreenState extends State<CalendarScreen>
                 final reminderId = DateTime.now().millisecondsSinceEpoch.toString();
 
                 try {
-                  await AlarmService.scheduleAlarm(
-                    id: alarmId,
-                    dateTime: reminderDateTime,
-                    assetAudioPath: AlarmService.defaultAudioPath,
-                    notificationTitle: '$selectedCategory Reminder',
-                    notificationBody: title,
-                    reminderNote: notesController.text.trim(),
-                    loopAudio: true,
-                    vibrate: true,
-                    androidFullScreenIntent: true,
-                  );
+                  // Note: Calendar reminders no longer use alarms
+                  // Class alerts are handled by NotificationService
+                  // await NotificationService.scheduleClassNotification(...);
+
 
                   final reminder = CalendarReminder(
                     id: reminderId,
@@ -976,7 +969,8 @@ class _CalendarScreenState extends State<CalendarScreen>
 
     if (confirmed == true) {
       try {
-        await AlarmService.stopAlarm(reminder.alarmId);
+        // Note: Calendar reminders no longer use alarms
+        // await NotificationService.cancelAll();
         
         final normalizedDate = _normalizeDate(reminder.dateTime);
         _reminders[normalizedDate]?.removeWhere((r) => r.id == reminder.id);

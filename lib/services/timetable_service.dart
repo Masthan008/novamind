@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/class_session.dart';
-import '../modules/alarm/alarm_service.dart';
+import 'notification_service.dart';
 
 class TimetableService {
   static const String _seedFlagKey = 'timetable_v7'; // Updated to v7 for new notification logic
@@ -115,16 +115,12 @@ class TimetableService {
           
           debugPrint('Scheduling ${session.subjectName} for ${_getDayName(classDayOfWeek)} at ${_formatTime(alarmTime)}');
           
-          // Schedule the alarm
-          await AlarmService.scheduleAlarm(
+          // ✅ Use NotificationService instead of AlarmService
+          await NotificationService.scheduleCalendarReminder(
             id: alarmId,
-            dateTime: alarmTime,
-            assetAudioPath: AlarmService.defaultAudioPath,
-            notificationTitle: '📚 Class Starting Soon',
-            notificationBody: '${session.subjectName} starts in 10 minutes',
-            loopAudio: false, // Just a notification sound
-            vibrate: true,
-            androidFullScreenIntent: false,
+            title: '📚 Class Starting Soon',
+            body: '${session.subjectName} starts in 10 minutes',
+            scheduledTime: alarmTime,
           );
           
           alarmsScheduled++;

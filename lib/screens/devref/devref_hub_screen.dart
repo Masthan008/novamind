@@ -196,19 +196,92 @@ class _DevRefHubScreenState extends State<DevRefHubScreen> {
     );
   }
 
-  // 🖼️ SMART ICON RENDERER
-  // If it's a file path, show Image. If it's emoji, show Text.
-  Widget _buildIcon(String iconData, {double size = 24}) {
-    if (iconData.endsWith('.png') || iconData.endsWith('.jpg') || iconData.endsWith('.jpeg')) {
+  // 🖼️ PROFESSIONAL LOGO RENDERER
+  // Uses real logo images from assets with intelligent fallback
+  Widget _buildIcon(String iconData, {double size = 24, Color? color}) {
+    // If it's already a full path, use it directly
+    if (iconData.contains('/') && (iconData.endsWith('.png') || iconData.endsWith('.jpg'))) {
       return Image.asset(
         iconData,
         width: size,
         height: size,
-        errorBuilder: (c, o, s) => Icon(Icons.broken_image, color: Colors.grey, size: size),
+        errorBuilder: (c, o, s) => Icon(Icons.code, color: color ?? Colors.amber, size: size),
       );
-    } else {
-      return Text(iconData, style: TextStyle(fontSize: size));
     }
+    
+    // Map icon data to logo file names
+    final logoMap = {
+      // Programming Languages
+      'python': 'python.png',
+      'javascript': 'javascript.png',
+      'js': 'javascript.png',
+      'java': 'java.png',
+      'c++': 'cpp.png',
+      'cpp': 'cpp.png',
+      'php': 'php.png',
+      'ruby': 'ruby.png',
+      'go': 'go.png',
+      'golang': 'go.png',
+      'rust': 'rust.png',
+      'kotlin': 'kotlin.png',
+      'swift': 'swift.png',
+      'typescript': 'typescript.png',
+      'ts': 'typescript.png',
+      
+      // Web Frameworks
+      'react': 'react.png',
+      'reactjs': 'react.png',
+      'angular': 'angular.png',
+      'angularjs': 'angular.png',
+      'vue': 'vue.png',
+      'vuejs': 'vue.png',
+      
+      // Backend & Runtime
+      'node': 'nodejs.png',
+      'nodejs': 'nodejs.png',
+      
+      // Databases
+      'mongodb': 'mongodb.png',
+      'mongo': 'mongodb.png',
+      'mysql': 'mysql.png',
+      
+      // DevOps & Tools
+      'git': 'git.png',
+      'docker': 'docker.png',
+      
+      // Web Standards
+      'html': 'html.png',
+      'html5': 'html.png',
+      'css': 'css.png',
+      'css3': 'css.png',
+    };
+    
+    // Try to find a matching logo
+    final lowerIconData = iconData.toLowerCase();
+    String? logoFile;
+    
+    for (var entry in logoMap.entries) {
+      if (lowerIconData.contains(entry.key)) {
+        logoFile = entry.value;
+        break;
+      }
+    }
+    
+    // If we found a logo, use it
+    if (logoFile != null) {
+      return Image.asset(
+        'assets/images/logos/$logoFile',
+        width: size,
+        height: size,
+        errorBuilder: (c, o, s) {
+          // Fallback to Material icon if image fails to load
+          return Icon(Icons.library_books, color: color ?? Colors.amber, size: size);
+        },
+      );
+    }
+    
+    // Fallback to Material icon for unmapped technologies
+    return Icon(Icons.library_books, color: color ?? Colors.amber, size: size);
   }
 
   Widget _buildSearchBar() {
