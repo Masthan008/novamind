@@ -1,0 +1,13 @@
+﻿{
+    "id":  "clojure",
+    "description":  "Quick reference guide for Clojure",
+    "icon":  "ðŸ”µ",
+    "snippets":  {
+                     "Getting Started":  "# Clojure Quick Reference\n\nBasic commands and usage for Clojure.\nVisit https://quickref.me/clojure for complete documentation.",
+                     "Examples":  "# Practical examples for Clojure\n\n# More examples at https://quickref.me/clojure",
+                     "Common Commands":  "# Essential Clojure commands\n\n# Check documentation at https://quickref.me/clojure"
+                 },
+    "category":  "programming",
+    "title":  "Clojure",
+    "url":  "https://quickref.me/clojure"
+}

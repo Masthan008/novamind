@@ -1,0 +1,13 @@
+﻿{
+    "id":  "elixir",
+    "description":  "Quick reference guide for Elixir",
+    "icon":  "ðŸ’§",
+    "snippets":  {
+                     "Getting Started":  "# Elixir Quick Reference\n\nBasic commands and usage for Elixir.\nVisit https://quickref.me/elixir for complete documentation.",
+                     "Examples":  "# Practical examples for Elixir\n\n# More examples at https://quickref.me/elixir",
+                     "Common Commands":  "# Essential Elixir commands\n\n# Check documentation at https://quickref.me/elixir"
+                 },
+    "category":  "programming",
+    "title":  "Elixir",
+    "url":  "https://quickref.me/elixir"
+}

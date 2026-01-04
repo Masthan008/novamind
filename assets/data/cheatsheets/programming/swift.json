@@ -1,0 +1,20 @@
+{
+    "id": "swift",
+    "title": "Swift",
+    "icon": "🍎",
+    "category": "programming",
+    "url": "https://quickref.me/swift",
+    "description": "Swift is a powerful and intuitive programming language for iOS, macOS, and beyond.",
+    "snippets": {
+        "Variables": "var x = 5  // Mutable\nlet y = 10  // Immutable\nvar name: String = \"John\"\nvar price: Double = 19.99",
+        "Arrays": "var fruits = [\"apple\", \"banana\", \"orange\"]\nfruits.append(\"grape\")\nfruits[0]  // \"apple\"\nfruits.count  // 4",
+        "Loops": "// For loop\nfor i in 0..<5 {\n    print(i)\n}\n\n// For-in\nfor fruit in fruits {\n    print(fruit)\n}\n\n// While\nwhile x < 10 {\n    x += 1\n}",
+        "Functions": "func add(a: Int, b: Int) -> Int {\n    return a + b\n}\n\n// Shorthand\nfunc add(a: Int, b: Int) -> Int { a + b }\n\nlet result = add(a: 5, b: 3)",
+        "If/Else": "if x > 0 {\n    print(\"Positive\")\n} else if x < 0 {\n    print(\"Negative\")\n} else {\n    print(\"Zero\")\n}\n\n// Ternary\nlet result = x > 0 ? \"Positive\" : \"Negative\"",
+        "Dictionaries": "var ages = [\"John\": 30, \"Alice\": 25]\nages[\"Bob\"] = 35\nprint(ages[\"John\"]!)  // 30\nages.keys\nages.values",
+        "Classes & Structs": "class Person {\n    var name: String\n    var age: Int\n    \n    init(name: String, age: Int) {\n        self.name = name\n        self.age = age\n    }\n    \n    func greet() -> String {\n        return \"Hi, I'm \\(name)\"\n    }\n}\n\nlet p = Person(name: \"Alice\", age: 25)",
+        "Optionals": "var name: String? = \"John\"\nvar age: Int? = nil\n\n// Unwrapping\nif let unwrapped = name {\n    print(unwrapped)\n}\n\n// Nil coalescing\nlet value = name ?? \"Default\"",
+        "Guard": "func greet(name: String?) {\n    guard let name = name else {\n        print(\"No name provided\")\n        return\n    }\n    print(\"Hello \\(name)\")\n}",
+        "Closures": "let numbers = [1, 2, 3, 4, 5]\n\n// Map\nlet doubled = numbers.map { $0 * 2 }\n\n// Filter\nlet evens = numbers.filter { $0 % 2 == 0 }\n\n// Reduce\nlet sum = numbers.reduce(0, +)"
+    }
+}

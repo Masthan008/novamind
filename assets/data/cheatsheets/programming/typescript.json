@@ -1,0 +1,13 @@
+﻿{
+    "id":  "typescript",
+    "description":  "Quick reference guide for TypeScript",
+    "icon":  "ðŸ”·",
+    "snippets":  {
+                     "Getting Started":  "# TypeScript Quick Reference\n\nBasic commands and usage for TypeScript.\nVisit https://quickref.me/typescript for complete documentation.",
+                     "Examples":  "# Practical examples for TypeScript\n\n# More examples at https://quickref.me/typescript",
+                     "Common Commands":  "# Essential TypeScript commands\n\n# Check documentation at https://quickref.me/typescript"
+                 },
+    "category":  "programming",
+    "title":  "TypeScript",
+    "url":  "https://quickref.me/typescript"
+}

@@ -1,0 +1,20 @@
+{
+    "id": "c",
+    "title": "C",
+    "icon": "🔧",
+    "category": "programming",
+    "url": "https://quickref.me/c",
+    "description": "C is a general-purpose programming language known for its efficiency and low-level access.",
+    "snippets": {
+        "Variables": "int x = 5;\nchar name[] = \"John\";\nfloat price = 19.99;\nconst int MAX = 100;",
+        "Arrays": "int numbers[5] = {1, 2, 3, 4, 5};\nchar str[20] = \"Hello\";\n\n// Access\nprintf(\"%d\", numbers[0]);\n\n// Size\nint size = sizeof(numbers) / sizeof(numbers[0]);",
+        "Loops": "// For loop\nfor (int i = 0; i < 5; i++) {\n    printf(\"%d\\n\", i);\n}\n\n// While\nwhile (x < 10) {\n    x++;\n}\n\n// Do-while\ndo {\n    x++;\n} while (x < 10);",
+        "Functions": "int add(int a, int b) {\n    return a + b;\n}\n\nvoid greet(char* name) {\n    printf(\"Hello %s\\n\", name);\n}\n\nint result = add(5, 3);",
+        "If/Else": "if (x > 0) {\n    printf(\"Positive\\n\");\n} else if (x < 0) {\n    printf(\"Negative\\n\");\n} else {\n    printf(\"Zero\\n\");\n}",
+        "Pointers": "int x = 10;\nint* ptr = &x;  // Pointer to x\n*ptr = 20;  // Dereference\n\n// Array pointer\nint arr[] = {1, 2, 3};\nint* p = arr;\nprintf(\"%d\", *(p + 1));  // 2",
+        "Structs": "struct Person {\n    char name[50];\n    int age;\n};\n\nstruct Person p1;\nstrcpy(p1.name, \"John\");\np1.age = 30;",
+        "Dynamic Memory": "#include <stdlib.h>\n\n// Allocate\nint* arr = (int*)malloc(5 * sizeof(int));\n\n// Use\narr[0] = 10;\n\n// Free\nfree(arr);",
+        "File I/O": "#include <stdio.h>\n\n// Write\nFILE* file = fopen(\"data.txt\", \"w\");\nfprintf(file, \"Hello World\");\nfclose(file);\n\n// Read\nFILE* f = fopen(\"data.txt\", \"r\");\nchar buffer[100];\nfgets(buffer, 100, f);\nfclose(f);",
+        "String Functions": "#include <string.h>\n\nchar str1[20] = \"Hello\";\nchar str2[20] = \"World\";\n\nstrlen(str1);  // Length\nstrcpy(str1, str2);  // Copy\nstrcat(str1, str2);  // Concatenate\nstrcmp(str1, str2);  // Compare"
+    }
+}

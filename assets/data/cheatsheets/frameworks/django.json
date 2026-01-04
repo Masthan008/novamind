@@ -1,0 +1,13 @@
+﻿{
+    "id":  "django",
+    "description":  "Quick reference guide for Django",
+    "icon":  "ðŸŽ¸",
+    "snippets":  {
+                     "Getting Started":  "# Django Quick Reference\n\nBasic commands and usage for Django.\nVisit https://quickref.me/django for complete documentation.",
+                     "Examples":  "# Practical examples for Django\n\n# More examples at https://quickref.me/django",
+                     "Common Commands":  "# Essential Django commands\n\n# Check documentation at https://quickref.me/django"
+                 },
+    "category":  "frameworks",
+    "title":  "Django",
+    "url":  "https://quickref.me/django"
+}

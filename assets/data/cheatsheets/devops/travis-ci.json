@@ -1,0 +1,13 @@
+﻿{
+    "id":  "travis-ci",
+    "description":  "Quick reference guide for Travis CI",
+    "icon":  "ðŸ”„",
+    "snippets":  {
+                     "Getting Started":  "# Travis CI Quick Reference\n\nBasic commands and usage for Travis CI.\nVisit https://quickref.me/travis for complete documentation.",
+                     "Examples":  "# Practical examples for Travis CI\n\n# More examples at https://quickref.me/travis",
+                     "Common Commands":  "# Essential Travis CI commands\n\n# Check documentation at https://quickref.me/travis"
+                 },
+    "category":  "devops",
+    "title":  "Travis CI",
+    "url":  "https://quickref.me/travis"
+}

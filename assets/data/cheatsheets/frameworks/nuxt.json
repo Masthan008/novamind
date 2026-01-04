@@ -1,0 +1,13 @@
+﻿{
+    "id":  "nuxt",
+    "description":  "Quick reference guide for Nuxt.js",
+    "icon":  "ðŸ’š",
+    "snippets":  {
+                     "Getting Started":  "# Nuxt.js Quick Reference\n\nBasic commands and usage for Nuxt.js.\nVisit https://quickref.me/nuxt for complete documentation.",
+                     "Examples":  "# Practical examples for Nuxt.js\n\n# More examples at https://quickref.me/nuxt",
+                     "Common Commands":  "# Essential Nuxt.js commands\n\n# Check documentation at https://quickref.me/nuxt"
+                 },
+    "category":  "frameworks",
+    "title":  "Nuxt.js",
+    "url":  "https://quickref.me/nuxt"
+}

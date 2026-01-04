@@ -1,0 +1,13 @@
+﻿{
+    "id":  "jenkins",
+    "description":  "Quick reference guide for Jenkins",
+    "icon":  "ðŸ”¨",
+    "snippets":  {
+                     "Getting Started":  "# Jenkins Quick Reference\n\nBasic commands and usage for Jenkins.\nVisit https://quickref.me/jenkins for complete documentation.",
+                     "Examples":  "# Practical examples for Jenkins\n\n# More examples at https://quickref.me/jenkins",
+                     "Common Commands":  "# Essential Jenkins commands\n\n# Check documentation at https://quickref.me/jenkins"
+                 },
+    "category":  "devops",
+    "title":  "Jenkins",
+    "url":  "https://quickref.me/jenkins"
+}

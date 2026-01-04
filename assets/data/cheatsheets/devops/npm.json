@@ -1,0 +1,13 @@
+﻿{
+    "id":  "npm",
+    "description":  "Quick reference guide for NPM",
+    "icon":  "ðŸ“¦",
+    "snippets":  {
+                     "Getting Started":  "# NPM Quick Reference\n\nBasic commands and usage for NPM.\nVisit https://quickref.me/npm for complete documentation.",
+                     "Examples":  "# Practical examples for NPM\n\n# More examples at https://quickref.me/npm",
+                     "Common Commands":  "# Essential NPM commands\n\n# Check documentation at https://quickref.me/npm"
+                 },
+    "category":  "devops",
+    "title":  "NPM",
+    "url":  "https://quickref.me/npm"
+}

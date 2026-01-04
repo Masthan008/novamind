@@ -1,0 +1,13 @@
+﻿{
+    "id":  "webpack",
+    "description":  "Quick reference guide for Webpack",
+    "icon":  "ðŸ“¦",
+    "snippets":  {
+                     "Getting Started":  "# Webpack Quick Reference\n\nBasic commands and usage for Webpack.\nVisit https://quickref.me/webpack for complete documentation.",
+                     "Examples":  "# Practical examples for Webpack\n\n# More examples at https://quickref.me/webpack",
+                     "Common Commands":  "# Essential Webpack commands\n\n# Check documentation at https://quickref.me/webpack"
+                 },
+    "category":  "devops",
+    "title":  "Webpack",
+    "url":  "https://quickref.me/webpack"
+}

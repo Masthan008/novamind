@@ -1,0 +1,13 @@
+﻿{
+    "id":  "ruby",
+    "description":  "Quick reference guide for Ruby",
+    "icon":  "ðŸ’Ž",
+    "snippets":  {
+                     "Getting Started":  "# Ruby Quick Reference\n\nBasic commands and usage for Ruby.\nVisit https://quickref.me/ruby for complete documentation.",
+                     "Examples":  "# Practical examples for Ruby\n\n# More examples at https://quickref.me/ruby",
+                     "Common Commands":  "# Essential Ruby commands\n\n# Check documentation at https://quickref.me/ruby"
+                 },
+    "category":  "programming",
+    "title":  "Ruby",
+    "url":  "https://quickref.me/ruby"
+}

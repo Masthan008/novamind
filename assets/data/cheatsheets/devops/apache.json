@@ -1,0 +1,13 @@
+﻿{
+    "id":  "apache",
+    "description":  "Quick reference guide for Apache",
+    "icon":  "ðŸª¶",
+    "snippets":  {
+                     "Getting Started":  "# Apache Quick Reference\n\nBasic commands and usage for Apache.\nVisit https://quickref.me/apache for complete documentation.",
+                     "Examples":  "# Practical examples for Apache\n\n# More examples at https://quickref.me/apache",
+                     "Common Commands":  "# Essential Apache commands\n\n# Check documentation at https://quickref.me/apache"
+                 },
+    "category":  "devops",
+    "title":  "Apache",
+    "url":  "https://quickref.me/apache"
+}

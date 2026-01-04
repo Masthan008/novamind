@@ -1,0 +1,13 @@
+﻿{
+    "id":  "cron",
+    "description":  "Quick reference guide for Cron",
+    "icon":  "â°",
+    "snippets":  {
+                     "Getting Started":  "# Cron Quick Reference\n\nBasic commands and usage for Cron.\nVisit https://quickref.me/cron for complete documentation.",
+                     "Examples":  "# Practical examples for Cron\n\n# More examples at https://quickref.me/cron",
+                     "Common Commands":  "# Essential Cron commands\n\n# Check documentation at https://quickref.me/cron"
+                 },
+    "category":  "linux",
+    "title":  "Cron",
+    "url":  "https://quickref.me/cron"
+}

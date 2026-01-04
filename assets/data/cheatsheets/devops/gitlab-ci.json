@@ -1,0 +1,13 @@
+﻿{
+    "id":  "gitlab-ci",
+    "description":  "Quick reference guide for GitLab CI",
+    "icon":  "ðŸ¦Š",
+    "snippets":  {
+                     "Getting Started":  "# GitLab CI Quick Reference\n\nBasic commands and usage for GitLab CI.\nVisit https://quickref.me/gitlab-ci for complete documentation.",
+                     "Examples":  "# Practical examples for GitLab CI\n\n# More examples at https://quickref.me/gitlab-ci",
+                     "Common Commands":  "# Essential GitLab CI commands\n\n# Check documentation at https://quickref.me/gitlab-ci"
+                 },
+    "category":  "devops",
+    "title":  "GitLab CI",
+    "url":  "https://quickref.me/gitlab-ci"
+}

@@ -1,0 +1,18 @@
+{
+    "id": "docker",
+    "title": "Docker",
+    "icon": "🐳",
+    "category": "devops",
+    "url": "https://quickref.me/docker",
+    "description": "Docker is a platform for developing, shipping, and running applications in containers.",
+    "snippets": {
+        "Basic Commands": "# List containers\ndocker ps\ndocker ps -a\n\n# List images\ndocker images\n\n# Pull image\ndocker pull nginx\n\n# Remove container\ndocker rm container-id\n\n# Remove image\ndocker rmi image-id",
+        "Run Container": "# Run container\ndocker run image\n\n# Run with port mapping\ndocker run -p 8080:80 nginx\n\n# Run in background\ndocker run -d nginx\n\n# Run with name\ndocker run --name my-nginx nginx\n\n# Run with volume\ndocker run -v /host/path:/container/path nginx",
+        "Container Management": "# Start container\ndocker start container-id\n\n# Stop container\ndocker stop container-id\n\n# Restart container\ndocker restart container-id\n\n# View logs\ndocker logs container-id\n\n# Execute command\ndocker exec -it container-id bash",
+        "Dockerfile": "FROM node:14\n\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm install\n\nCOPY . .\n\nEXPOSE 3000\n\nCMD [\"npm\", \"start\"]",
+        "Build Image": "# Build image\ndocker build -t my-app .\n\n# Build with tag\ndocker build -t my-app:v1.0 .\n\n# Build from specific Dockerfile\ndocker build -f Dockerfile.prod -t my-app .",
+        "Docker Compose": "version: '3.8'\nservices:\n  web:\n    image: nginx\n    ports:\n      - \"8080:80\"\n  db:\n    image: postgres\n    environment:\n      POSTGRES_PASSWORD: secret\n\n# Commands\ndocker-compose up\ndocker-compose down\ndocker-compose ps",
+        "Networking": "# List networks\ndocker network ls\n\n# Create network\ndocker network create my-network\n\n# Connect container\ndocker network connect my-network container-id\n\n# Inspect network\ndocker network inspect my-network",
+        "Volumes": "# Create volume\ndocker volume create my-volume\n\n# List volumes\ndocker volume ls\n\n# Inspect volume\ndocker volume inspect my-volume\n\n# Remove volume\ndocker volume rm my-volume\n\n# Use volume\ndocker run -v my-volume:/data nginx"
+    }
+}

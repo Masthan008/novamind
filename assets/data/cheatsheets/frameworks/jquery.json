@@ -1,0 +1,13 @@
+﻿{
+    "id":  "jquery",
+    "description":  "Quick reference guide for jQuery",
+    "icon":  "ðŸ’²",
+    "snippets":  {
+                     "Getting Started":  "# jQuery Quick Reference\n\nBasic commands and usage for jQuery.\nVisit https://quickref.me/jquery for complete documentation.",
+                     "Examples":  "# Practical examples for jQuery\n\n# More examples at https://quickref.me/jquery",
+                     "Common Commands":  "# Essential jQuery commands\n\n# Check documentation at https://quickref.me/jquery"
+                 },
+    "category":  "frameworks",
+    "title":  "jQuery",
+    "url":  "https://quickref.me/jquery"
+}

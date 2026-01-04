@@ -1,0 +1,13 @@
+﻿{
+    "id":  "flask",
+    "description":  "Quick reference guide for Flask",
+    "icon":  "ðŸ§ª",
+    "snippets":  {
+                     "Getting Started":  "# Flask Quick Reference\n\nBasic commands and usage for Flask.\nVisit https://quickref.me/flask for complete documentation.",
+                     "Examples":  "# Practical examples for Flask\n\n# More examples at https://quickref.me/flask",
+                     "Common Commands":  "# Essential Flask commands\n\n# Check documentation at https://quickref.me/flask"
+                 },
+    "category":  "frameworks",
+    "title":  "Flask",
+    "url":  "https://quickref.me/flask"
+}

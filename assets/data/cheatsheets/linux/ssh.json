@@ -1,0 +1,18 @@
+{
+    "id": "ssh",
+    "title": "SSH",
+    "icon": "🔐",
+    "category": "linux",
+    "url": "https://quickref.me/ssh",
+    "description": "SSH (Secure Shell) is a protocol for secure remote login and command execution.",
+    "snippets": {
+        "Basic Connection": "# Connect to server\nssh user@hostname\nssh user@192.168.1.100\n\n# Specify port\nssh -p 2222 user@hostname\n\n# Verbose output\nssh -v user@hostname",
+        "Key Generation": "# Generate SSH key\nssh-keygen -t rsa -b 4096 -C \"your_email@example.com\"\n\n# Generate ED25519 key (recommended)\nssh-keygen -t ed25519 -C \"your_email@example.com\"\n\n# Specify file location\nssh-keygen -t rsa -f ~/.ssh/my_key",
+        "Copy Key to Server": "# Copy public key\nssh-copy-id user@hostname\n\n# Specify key file\nssh-copy-id -i ~/.ssh/my_key.pub user@hostname\n\n# Manual copy\ncat ~/.ssh/id_rsa.pub | ssh user@hostname \"mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys\"",
+        "Config File": "# ~/.ssh/config\nHost myserver\n    HostName 192.168.1.100\n    User admin\n    Port 2222\n    IdentityFile ~/.ssh/my_key\n\n# Usage\nssh myserver",
+        "File Transfer": "# Copy file to server\nscp file.txt user@hostname:/path/to/destination\n\n# Copy from server\nscp user@hostname:/path/to/file.txt ./local/path\n\n# Copy directory\nscp -r folder user@hostname:/path/\n\n# Using rsync\nrsync -avz folder/ user@hostname:/path/",
+        "Port Forwarding": "# Local port forwarding\nssh -L 8080:localhost:80 user@hostname\n\n# Remote port forwarding\nssh -R 8080:localhost:80 user@hostname\n\n# Dynamic port forwarding (SOCKS proxy)\nssh -D 1080 user@hostname",
+        "Tunneling": "# SSH tunnel\nssh -N -L 3306:localhost:3306 user@hostname\n\n# Background tunnel\nssh -f -N -L 3306:localhost:3306 user@hostname\n\n# Keep alive\nssh -o ServerAliveInterval=60 user@hostname",
+        "Security": "# Disable password authentication\n# In /etc/ssh/sshd_config:\nPasswordAuthentication no\n\n# Change default port\nPort 2222\n\n# Disable root login\nPermitRootLogin no\n\n# Restart SSH service\nsudo systemctl restart sshd"
+    }
+}

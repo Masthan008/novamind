@@ -1,0 +1,13 @@
+﻿{
+    "id":  "netstat",
+    "description":  "Quick reference guide for Netstat",
+    "icon":  "ðŸŒ",
+    "snippets":  {
+                     "Getting Started":  "# Netstat Quick Reference\n\nBasic commands and usage for Netstat.\nVisit https://quickref.me/netstat for complete documentation.",
+                     "Examples":  "# Practical examples for Netstat\n\n# More examples at https://quickref.me/netstat",
+                     "Common Commands":  "# Essential Netstat commands\n\n# Check documentation at https://quickref.me/netstat"
+                 },
+    "category":  "linux",
+    "title":  "Netstat",
+    "url":  "https://quickref.me/netstat"
+}

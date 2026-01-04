@@ -1,0 +1,13 @@
+﻿{
+    "id":  "curl",
+    "description":  "Quick reference guide for Curl",
+    "icon":  "ðŸŒ",
+    "snippets":  {
+                     "Getting Started":  "# Curl Quick Reference\n\nBasic commands and usage for Curl.\nVisit https://quickref.me/curl for complete documentation.",
+                     "Examples":  "# Practical examples for Curl\n\n# More examples at https://quickref.me/curl",
+                     "Common Commands":  "# Essential Curl commands\n\n# Check documentation at https://quickref.me/curl"
+                 },
+    "category":  "linux",
+    "title":  "Curl",
+    "url":  "https://quickref.me/curl"
+}

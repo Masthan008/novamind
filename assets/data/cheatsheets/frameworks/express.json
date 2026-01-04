@@ -1,0 +1,13 @@
+﻿{
+    "id":  "express",
+    "description":  "Quick reference guide for Express.js",
+    "icon":  "ðŸš‚",
+    "snippets":  {
+                     "Getting Started":  "# Express.js Quick Reference\n\nBasic commands and usage for Express.js.\nVisit https://quickref.me/express for complete documentation.",
+                     "Examples":  "# Practical examples for Express.js\n\n# More examples at https://quickref.me/express",
+                     "Common Commands":  "# Essential Express.js commands\n\n# Check documentation at https://quickref.me/express"
+                 },
+    "category":  "frameworks",
+    "title":  "Express.js",
+    "url":  "https://quickref.me/express"
+}

@@ -1,0 +1,13 @@
+﻿{
+    "id":  "tar",
+    "description":  "Quick reference guide for Tar",
+    "icon":  "ðŸ“¦",
+    "snippets":  {
+                     "Getting Started":  "# Tar Quick Reference\n\nBasic commands and usage for Tar.\nVisit https://quickref.me/tar for complete documentation.",
+                     "Examples":  "# Practical examples for Tar\n\n# More examples at https://quickref.me/tar",
+                     "Common Commands":  "# Essential Tar commands\n\n# Check documentation at https://quickref.me/tar"
+                 },
+    "category":  "linux",
+    "title":  "Tar",
+    "url":  "https://quickref.me/tar"
+}

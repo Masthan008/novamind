@@ -1,0 +1,20 @@
+{
+    "id": "kotlin",
+    "title": "Kotlin",
+    "icon": "🅺",
+    "category": "programming",
+    "url": "https://quickref.me/kotlin",
+    "description": "Kotlin is a modern programming language that makes developers happier, especially for Android.",
+    "snippets": {
+        "Variables": "var x = 5  // Mutable\nval y = 10  // Immutable\nvar name: String = \"John\"\nvar price: Double = 19.99",
+        "Lists": "val fruits = listOf(\"apple\", \"banana\")\nval mutableFruits = mutableListOf(\"apple\", \"banana\")\nmutableFruits.add(\"orange\")\nfruits[0]  // \"apple\"\nfruits.size  // 2",
+        "Loops": "// For loop\nfor (i in 0..4) {\n    println(i)\n}\n\n// For-each\nfruits.forEach { fruit ->\n    println(fruit)\n}\n\n// While\nwhile (x < 10) {\n    x++\n}",
+        "Functions": "fun add(a: Int, b: Int): Int {\n    return a + b\n}\n\n// Single expression\nfun add(a: Int, b: Int) = a + b\n\nval result = add(5, 3)",
+        "If/Else": "if (x > 0) {\n    println(\"Positive\")\n} else if (x < 0) {\n    println(\"Negative\")\n} else {\n    println(\"Zero\")\n}\n\n// If as expression\nval result = if (x > 0) \"Positive\" else \"Negative\"",
+        "Maps": "val ages = mapOf(\"John\" to 30, \"Alice\" to 25)\nval mutableAges = mutableMapOf(\"John\" to 30)\nmutableAges[\"Bob\"] = 35\nages[\"John\"]  // 30",
+        "Classes": "class Person(val name: String, var age: Int) {\n    fun greet() = \"Hi, I'm $name\"\n}\n\nval person = Person(\"John\", 30)\nprintln(person.greet())",
+        "Null Safety": "var name: String? = null  // Nullable\nvar name2: String = \"John\"  // Non-nullable\n\n// Safe call\nval length = name?.length\n\n// Elvis operator\nval value = name ?: \"Default\"\n\n// Not-null assertion\nval len = name!!.length",
+        "When Expression": "when (x) {\n    1 -> println(\"One\")\n    2, 3 -> println(\"Two or Three\")\n    in 4..10 -> println(\"Four to Ten\")\n    else -> println(\"Other\")\n}\n\n// As expression\nval result = when {\n    x > 0 -> \"Positive\"\n    x < 0 -> \"Negative\"\n    else -> \"Zero\"\n}",
+        "Extension Functions": "fun String.addExclamation() = this + \"!\"\n\nval greeting = \"Hello\".addExclamation()  // \"Hello!\"\n\n// List extensions\nfun List<Int>.sum() = this.reduce { acc, i -> acc + i }"
+    }
+}

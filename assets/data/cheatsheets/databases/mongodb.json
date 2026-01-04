@@ -1,0 +1,18 @@
+{
+    "id": "mongodb",
+    "title": "MongoDB",
+    "icon": "🍃",
+    "category": "databases",
+    "url": "https://quickref.me/mongodb",
+    "description": "MongoDB is a popular NoSQL document database.",
+    "snippets": {
+        "Basic Commands": "// Show databases\nshow dbs\n\n// Use database\nuse mydb\n\n// Show collections\nshow collections\n\n// Drop database\ndb.dropDatabase()",
+        "Insert": "// Insert one\ndb.users.insertOne({\n    name: \"John\",\n    age: 30,\n    email: \"john@example.com\"\n})\n\n// Insert many\ndb.users.insertMany([\n    {name: \"Alice\", age: 25},\n    {name: \"Bob\", age: 35}\n])",
+        "Find": "// Find all\ndb.users.find()\n\n// Find one\ndb.users.findOne({name: \"John\"})\n\n// Find with condition\ndb.users.find({age: {$gt: 25}})\n\n// Projection\ndb.users.find({}, {name: 1, email: 1})\n\n// Limit\ndb.users.find().limit(10)",
+        "Update": "// Update one\ndb.users.updateOne(\n    {name: \"John\"},\n    {$set: {age: 31}}\n)\n\n// Update many\ndb.users.updateMany(\n    {age: {$lt: 30}},\n    {$inc: {age: 1}}\n)\n\n// Replace\ndb.users.replaceOne(\n    {name: \"John\"},\n    {name: \"John\", age: 32}\n)",
+        "Delete": "// Delete one\ndb.users.deleteOne({name: \"John\"})\n\n// Delete many\ndb.users.deleteMany({age: {$lt: 18}})\n\n// Drop collection\ndb.users.drop()",
+        "Query Operators": "// Comparison\n{age: {$gt: 25}}  // Greater than\n{age: {$gte: 25}}  // Greater than or equal\n{age: {$lt: 30}}  // Less than\n{age: {$lte: 30}}  // Less than or equal\n{age: {$ne: 25}}  // Not equal\n{age: {$in: [25, 30, 35]}}  // In array\n\n// Logical\n{$and: [{age: {$gt: 25}}, {age: {$lt: 35}}]}\n{$or: [{age: 25}, {age: 30}]}\n{$not: {age: {$gt: 25}}}",
+        "Aggregation": "db.users.aggregate([\n    {$match: {age: {$gt: 25}}},\n    {$group: {\n        _id: \"$age\",\n        count: {$sum: 1}\n    }},\n    {$sort: {count: -1}},\n    {$limit: 10}\n])",
+        "Indexes": "// Create index\ndb.users.createIndex({email: 1})\n\n// Compound index\ndb.users.createIndex({name: 1, age: -1})\n\n// List indexes\ndb.users.getIndexes()\n\n// Drop index\ndb.users.dropIndex(\"email_1\")"
+    }
+}

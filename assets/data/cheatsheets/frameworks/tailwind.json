@@ -1,0 +1,13 @@
+﻿{
+    "id":  "tailwind",
+    "description":  "Quick reference guide for Tailwind CSS",
+    "icon":  "ðŸŽ¨",
+    "snippets":  {
+                     "Getting Started":  "# Tailwind CSS Quick Reference\n\nBasic commands and usage for Tailwind CSS.\nVisit https://quickref.me/tailwind for complete documentation.",
+                     "Examples":  "# Practical examples for Tailwind CSS\n\n# More examples at https://quickref.me/tailwind",
+                     "Common Commands":  "# Essential Tailwind CSS commands\n\n# Check documentation at https://quickref.me/tailwind"
+                 },
+    "category":  "frameworks",
+    "title":  "Tailwind CSS",
+    "url":  "https://quickref.me/tailwind"
+}

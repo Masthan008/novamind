@@ -1,0 +1,18 @@
+{
+    "id": "kubernetes",
+    "title": "Kubernetes",
+    "icon": "☸️",
+    "category": "devops",
+    "url": "https://quickref.me/kubernetes",
+    "description": "Kubernetes is an open-source container orchestration platform.",
+    "snippets": {
+        "Basic Commands": "# Get resources\nkubectl get pods\nkubectl get services\nkubectl get deployments\n\n# Describe\nkubectl describe pod pod-name\n\n# Logs\nkubectl logs pod-name\n\n# Delete\nkubectl delete pod pod-name",
+        "Pods": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: nginx-pod\nspec:\n  containers:\n  - name: nginx\n    image: nginx:latest\n    ports:\n    - containerPort: 80",
+        "Deployments": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: nginx-deployment\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: nginx\n  template:\n    metadata:\n      labels:\n        app: nginx\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:latest\n        ports:\n        - containerPort: 80",
+        "Services": "apiVersion: v1\nkind: Service\nmetadata:\n  name: nginx-service\nspec:\n  selector:\n    app: nginx\n  ports:\n  - protocol: TCP\n    port: 80\n    targetPort: 80\n  type: LoadBalancer",
+        "ConfigMaps": "apiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: app-config\ndata:\n  database_url: \"postgres://db:5432\"\n  api_key: \"secret-key\"\n\n# Use in pod\nenvFrom:\n- configMapRef:\n    name: app-config",
+        "Secrets": "# Create secret\nkubectl create secret generic db-secret \\\n  --from-literal=password=mypassword\n\n# Use in pod\nenv:\n- name: DB_PASSWORD\n  valueFrom:\n    secretKeyRef:\n      name: db-secret\n      key: password",
+        "Scaling": "# Scale deployment\nkubectl scale deployment nginx-deployment --replicas=5\n\n# Autoscale\nkubectl autoscale deployment nginx-deployment \\\n  --min=2 --max=10 --cpu-percent=80",
+        "Namespaces": "# Create namespace\nkubectl create namespace dev\n\n# List namespaces\nkubectl get namespaces\n\n# Use namespace\nkubectl get pods -n dev\nkubectl config set-context --current --namespace=dev"
+    }
+}

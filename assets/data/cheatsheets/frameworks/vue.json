@@ -1,0 +1,18 @@
+{
+    "id": "vue",
+    "title": "Vue.js",
+    "icon": "💚",
+    "category": "frameworks",
+    "url": "https://quickref.me/vue",
+    "description": "Vue.js is a progressive framework for building user interfaces.",
+    "snippets": {
+        "Component": "<template>\n  <div>\n    <h1>{{ title }}</h1>\n    <button @click=\"increment\">Count: {{ count }}</button>\n  </div>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      title: 'Hello Vue',\n      count: 0\n    }\n  },\n  methods: {\n    increment() {\n      this.count++\n    }\n  }\n}\n</script>",
+        "Composition API": "<script setup>\nimport { ref, computed } from 'vue'\n\nconst count = ref(0)\nconst doubled = computed(() => count.value * 2)\n\nfunction increment() {\n  count.value++\n}\n</script>\n\n<template>\n  <button @click=\"increment\">{{ count }}</button>\n  <p>Doubled: {{ doubled }}</p>\n</template>",
+        "v-if / v-show": "<div v-if=\"isVisible\">Visible</div>\n<div v-else>Hidden</div>\n\n<div v-show=\"isShown\">Toggle visibility</div>",
+        "v-for": "<ul>\n  <li v-for=\"item in items\" :key=\"item.id\">\n    {{ item.text }}\n  </li>\n</ul>\n\n<div v-for=\"(value, key) in object\" :key=\"key\">\n  {{ key }}: {{ value }}\n</div>",
+        "v-model": "<input v-model=\"message\" />\n<p>{{ message }}</p>\n\n<input v-model.number=\"age\" type=\"number\" />\n<input v-model.trim=\"text\" />",
+        "Props": "<script>\nexport default {\n  props: {\n    title: String,\n    count: {\n      type: Number,\n      required: true,\n      default: 0\n    }\n  }\n}\n</script>\n\n<!-- Usage -->\n<MyComponent :title=\"'Hello'\" :count=\"5\" />",
+        "Emit Events": "<script>\nexport default {\n  emits: ['update'],\n  methods: {\n    handleClick() {\n      this.$emit('update', newValue)\n    }\n  }\n}\n</script>\n\n<!-- Parent -->\n<Child @update=\"handleUpdate\" />",
+        "Watch": "watch: {\n  count(newVal, oldVal) {\n    console.log(`Count changed from ${oldVal} to ${newVal}`)\n  }\n}\n\n// Composition API\nwatch(count, (newVal, oldVal) => {\n  console.log(`Changed: ${newVal}`)\n})"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "id": "dart",
+    "title": "Dart",
+    "icon": "🎯",
+    "category": "programming",
+    "url": "https://quickref.me/dart",
+    "description": "Dart is a client-optimized language for developing fast apps on any platform, especially Flutter.",
+    "snippets": {
+        "Variables": "int x = 5;\nString name = 'John';\ndouble price = 19.99;\nbool isValid = true;\nvar y = 10;  // Type inference\nfinal z = 20;  // Immutable\nconst PI = 3.14;  // Compile-time constant",
+        "Lists": "List<String> fruits = ['apple', 'banana'];\nfruits.add('orange');\nfruits[0];  // 'apple'\nfruits.length;  // 3\n\n// List methods\nfruits.remove('banana');\nfruits.contains('apple');",
+        "Loops": "// For loop\nfor (int i = 0; i < 5; i++) {\n  print(i);\n}\n\n// For-in\nfor (var fruit in fruits) {\n  print(fruit);\n}\n\n// While\nwhile (x < 10) {\n  x++;\n}",
+        "Functions": "int add(int a, int b) {\n  return a + b;\n}\n\n// Arrow function\nint add(int a, int b) => a + b;\n\n// Optional parameters\nvoid greet(String name, [String? title]) {\n  print('Hello $title $name');\n}",
+        "If/Else": "if (x > 0) {\n  print('Positive');\n} else if (x < 0) {\n  print('Negative');\n} else {\n  print('Zero');\n}\n\n// Ternary\nvar result = x > 0 ? 'Positive' : 'Negative';",
+        "Maps": "Map<String, int> ages = {\n  'John': 30,\n  'Alice': 25,\n};\n\nages['Bob'] = 35;\nprint(ages['John']);  // 30\nages.containsKey('Alice');",
+        "Classes": "class Person {\n  String name;\n  int age;\n  \n  Person(this.name, this.age);\n  \n  String greet() {\n    return 'Hi, I\\'m $name';\n  }\n}\n\nvar p = Person('Alice', 25);\nprint(p.greet());",
+        "Async/Await": "Future<String> fetchData() async {\n  await Future.delayed(Duration(seconds: 2));\n  return 'Data loaded';\n}\n\nvoid main() async {\n  var data = await fetchData();\n  print(data);\n}",
+        "Null Safety": "String? name;  // Nullable\nString name2 = 'John';  // Non-nullable\n\n// Null-aware operators\nvar length = name?.length;  // null if name is null\nvar value = name ?? 'Default';  // Default if null\nname ??= 'John';  // Assign if null",
+        "Collections": "// List comprehension\nvar squares = [for (var i in [1, 2, 3]) i * i];\n\n// Spread operator\nvar list1 = [1, 2, 3];\nvar list2 = [0, ...list1, 4];\n\n// Conditional\nvar nav = ['Home', if (isLoggedIn) 'Profile'];"
+    }
+}

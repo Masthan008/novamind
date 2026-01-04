@@ -1,0 +1,13 @@
+﻿{
+    "id":  "chmod",
+    "description":  "Quick reference guide for Chmod",
+    "icon":  "ðŸ”’",
+    "snippets":  {
+                     "Getting Started":  "# Chmod Quick Reference\n\nBasic commands and usage for Chmod.\nVisit https://quickref.me/chmod for complete documentation.",
+                     "Examples":  "# Practical examples for Chmod\n\n# More examples at https://quickref.me/chmod",
+                     "Common Commands":  "# Essential Chmod commands\n\n# Check documentation at https://quickref.me/chmod"
+                 },
+    "category":  "linux",
+    "title":  "Chmod",
+    "url":  "https://quickref.me/chmod"
+}

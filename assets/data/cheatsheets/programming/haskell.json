@@ -1,0 +1,13 @@
+﻿{
+    "id":  "haskell",
+    "description":  "Quick reference guide for Haskell",
+    "icon":  "Î»",
+    "snippets":  {
+                     "Getting Started":  "# Haskell Quick Reference\n\nBasic commands and usage for Haskell.\nVisit https://quickref.me/haskell for complete documentation.",
+                     "Examples":  "# Practical examples for Haskell\n\n# More examples at https://quickref.me/haskell",
+                     "Common Commands":  "# Essential Haskell commands\n\n# Check documentation at https://quickref.me/haskell"
+                 },
+    "category":  "programming",
+    "title":  "Haskell",
+    "url":  "https://quickref.me/haskell"
+}

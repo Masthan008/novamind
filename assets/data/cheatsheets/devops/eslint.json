@@ -1,0 +1,13 @@
+﻿{
+    "id":  "eslint",
+    "description":  "Quick reference guide for ESLint",
+    "icon":  "ðŸ”",
+    "snippets":  {
+                     "Getting Started":  "# ESLint Quick Reference\n\nBasic commands and usage for ESLint.\nVisit https://quickref.me/eslint for complete documentation.",
+                     "Examples":  "# Practical examples for ESLint\n\n# More examples at https://quickref.me/eslint",
+                     "Common Commands":  "# Essential ESLint commands\n\n# Check documentation at https://quickref.me/eslint"
+                 },
+    "category":  "devops",
+    "title":  "ESLint",
+    "url":  "https://quickref.me/eslint"
+}

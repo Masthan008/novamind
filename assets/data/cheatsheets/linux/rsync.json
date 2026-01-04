@@ -1,0 +1,13 @@
+﻿{
+    "id":  "rsync",
+    "description":  "Quick reference guide for Rsync",
+    "icon":  "ðŸ”„",
+    "snippets":  {
+                     "Getting Started":  "# Rsync Quick Reference\n\nBasic commands and usage for Rsync.\nVisit https://quickref.me/rsync for complete documentation.",
+                     "Examples":  "# Practical examples for Rsync\n\n# More examples at https://quickref.me/rsync",
+                     "Common Commands":  "# Essential Rsync commands\n\n# Check documentation at https://quickref.me/rsync"
+                 },
+    "category":  "linux",
+    "title":  "Rsync",
+    "url":  "https://quickref.me/rsync"
+}

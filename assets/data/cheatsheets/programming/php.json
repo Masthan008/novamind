@@ -1,0 +1,13 @@
+﻿{
+    "id":  "php",
+    "description":  "Quick reference guide for PHP",
+    "icon":  "ðŸ˜",
+    "snippets":  {
+                     "Getting Started":  "# PHP Quick Reference\n\nBasic commands and usage for PHP.\nVisit https://quickref.me/php for complete documentation.",
+                     "Examples":  "# Practical examples for PHP\n\n# More examples at https://quickref.me/php",
+                     "Common Commands":  "# Essential PHP commands\n\n# Check documentation at https://quickref.me/php"
+                 },
+    "category":  "programming",
+    "title":  "PHP",
+    "url":  "https://quickref.me/php"
+}

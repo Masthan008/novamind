@@ -1,0 +1,13 @@
+﻿{
+    "id":  "ansible",
+    "description":  "Quick reference guide for Ansible",
+    "icon":  "ðŸ”§",
+    "snippets":  {
+                     "Getting Started":  "# Ansible Quick Reference\n\nBasic commands and usage for Ansible.\nVisit https://quickref.me/ansible for complete documentation.",
+                     "Examples":  "# Practical examples for Ansible\n\n# More examples at https://quickref.me/ansible",
+                     "Common Commands":  "# Essential Ansible commands\n\n# Check documentation at https://quickref.me/ansible"
+                 },
+    "category":  "devops",
+    "title":  "Ansible",
+    "url":  "https://quickref.me/ansible"
+}

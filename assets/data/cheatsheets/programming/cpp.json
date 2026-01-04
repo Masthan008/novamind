@@ -1,0 +1,20 @@
+{
+    "id": "cpp",
+    "title": "C++",
+    "icon": "⚙️",
+    "category": "programming",
+    "url": "https://quickref.me/cpp",
+    "description": "C++ is a powerful general-purpose programming language supporting procedural, object-oriented, and generic programming.",
+    "snippets": {
+        "Variables": "int x = 5;\nstring name = \"John\";\ndouble price = 19.99;\nbool isValid = true;\nauto y = 10;  // Type inference",
+        "Arrays & Vectors": "// Array\nint arr[5] = {1, 2, 3, 4, 5};\n\n// Vector\nvector<int> vec = {1, 2, 3};\nvec.push_back(4);\nvec[0];  // Access\nvec.size();  // Size",
+        "Loops": "// For loop\nfor (int i = 0; i < 5; i++) {\n    cout << i << endl;\n}\n\n// Range-based for\nfor (auto& item : vec) {\n    cout << item << endl;\n}\n\n// While\nwhile (x < 10) {\n    x++;\n}",
+        "Functions": "int add(int a, int b) {\n    return a + b;\n}\n\n// Function overloading\nint add(int a, int b, int c) {\n    return a + b + c;\n}\n\n// Lambda\nauto square = [](int x) { return x * x; };",
+        "If/Else": "if (x > 0) {\n    cout << \"Positive\" << endl;\n} else if (x < 0) {\n    cout << \"Negative\" << endl;\n} else {\n    cout << \"Zero\" << endl;\n}",
+        "Classes": "class Person {\nprivate:\n    string name;\n    int age;\npublic:\n    Person(string n, int a) : name(n), age(a) {}\n    \n    string greet() {\n        return \"Hi, I'm \" + name;\n    }\n};\n\nPerson p(\"Alice\", 25);",
+        "Pointers": "int x = 10;\nint* ptr = &x;  // Pointer to x\n*ptr = 20;  // Dereference\n\n// Dynamic memory\nint* arr = new int[5];\ndelete[] arr;",
+        "STL Containers": "// Map\nmap<string, int> ages;\nages[\"John\"] = 30;\n\n// Set\nset<int> numbers = {1, 2, 3};\nnumbers.insert(4);\n\n// Queue\nqueue<int> q;\nq.push(1);\nq.pop();",
+        "File I/O": "#include <fstream>\n\n// Write\nofstream file(\"data.txt\");\nfile << \"Hello World\";\nfile.close();\n\n// Read\nifstream infile(\"data.txt\");\nstring line;\nwhile (getline(infile, line)) {\n    cout << line << endl;\n}",
+        "Templates": "template <typename T>\nT max(T a, T b) {\n    return (a > b) ? a : b;\n}\n\nint result = max(5, 10);\ndouble result2 = max(3.14, 2.71);"
+    }
+}

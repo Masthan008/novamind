@@ -1,0 +1,13 @@
+﻿{
+    "id":  "svelte",
+    "description":  "Quick reference guide for Svelte",
+    "icon":  "ðŸ”¥",
+    "snippets":  {
+                     "Getting Started":  "# Svelte Quick Reference\n\nBasic commands and usage for Svelte.\nVisit https://quickref.me/svelte for complete documentation.",
+                     "Examples":  "# Practical examples for Svelte\n\n# More examples at https://quickref.me/svelte",
+                     "Common Commands":  "# Essential Svelte commands\n\n# Check documentation at https://quickref.me/svelte"
+                 },
+    "category":  "frameworks",
+    "title":  "Svelte",
+    "url":  "https://quickref.me/svelte"
+}

@@ -1,0 +1,13 @@
+﻿{
+    "id":  "grafana",
+    "description":  "Quick reference guide for Grafana",
+    "icon":  "ðŸ“ˆ",
+    "snippets":  {
+                     "Getting Started":  "# Grafana Quick Reference\n\nBasic commands and usage for Grafana.\nVisit https://quickref.me/grafana for complete documentation.",
+                     "Examples":  "# Practical examples for Grafana\n\n# More examples at https://quickref.me/grafana",
+                     "Common Commands":  "# Essential Grafana commands\n\n# Check documentation at https://quickref.me/grafana"
+                 },
+    "category":  "devops",
+    "title":  "Grafana",
+    "url":  "https://quickref.me/grafana"
+}

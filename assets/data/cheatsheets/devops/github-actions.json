@@ -1,0 +1,13 @@
+﻿{
+    "id":  "github-actions",
+    "description":  "Quick reference guide for GitHub Actions",
+    "icon":  "âš¡",
+    "snippets":  {
+                     "Getting Started":  "# GitHub Actions Quick Reference\n\nBasic commands and usage for GitHub Actions.\nVisit https://quickref.me/github-actions for complete documentation.",
+                     "Examples":  "# Practical examples for GitHub Actions\n\n# More examples at https://quickref.me/github-actions",
+                     "Common Commands":  "# Essential GitHub Actions commands\n\n# Check documentation at https://quickref.me/github-actions"
+                 },
+    "category":  "devops",
+    "title":  "GitHub Actions",
+    "url":  "https://quickref.me/github-actions"
+}

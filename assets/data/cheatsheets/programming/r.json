@@ -1,0 +1,13 @@
+﻿{
+    "id":  "r",
+    "description":  "Quick reference guide for R",
+    "icon":  "ðŸ“Š",
+    "snippets":  {
+                     "Getting Started":  "# R Quick Reference\n\nBasic commands and usage for R.\nVisit https://quickref.me/r for complete documentation.",
+                     "Examples":  "# Practical examples for R\n\n# More examples at https://quickref.me/r",
+                     "Common Commands":  "# Essential R commands\n\n# Check documentation at https://quickref.me/r"
+                 },
+    "category":  "programming",
+    "title":  "R",
+    "url":  "https://quickref.me/r"
+}

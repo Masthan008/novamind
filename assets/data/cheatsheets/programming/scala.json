@@ -1,0 +1,13 @@
+﻿{
+    "id":  "scala",
+    "description":  "Quick reference guide for Scala",
+    "icon":  "ðŸ”´",
+    "snippets":  {
+                     "Getting Started":  "# Scala Quick Reference\n\nBasic commands and usage for Scala.\nVisit https://quickref.me/scala for complete documentation.",
+                     "Examples":  "# Practical examples for Scala\n\n# More examples at https://quickref.me/scala",
+                     "Common Commands":  "# Essential Scala commands\n\n# Check documentation at https://quickref.me/scala"
+                 },
+    "category":  "programming",
+    "title":  "Scala",
+    "url":  "https://quickref.me/scala"
+}

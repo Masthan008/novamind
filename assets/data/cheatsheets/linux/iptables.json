@@ -1,0 +1,13 @@
+﻿{
+    "id":  "iptables",
+    "description":  "Quick reference guide for Iptables",
+    "icon":  "ðŸ›¡ï¸",
+    "snippets":  {
+                     "Getting Started":  "# Iptables Quick Reference\n\nBasic commands and usage for Iptables.\nVisit https://quickref.me/iptables for complete documentation.",
+                     "Examples":  "# Practical examples for Iptables\n\n# More examples at https://quickref.me/iptables",
+                     "Common Commands":  "# Essential Iptables commands\n\n# Check documentation at https://quickref.me/iptables"
+                 },
+    "category":  "linux",
+    "title":  "Iptables",
+    "url":  "https://quickref.me/iptables"
+}

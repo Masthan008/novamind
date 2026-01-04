@@ -1,0 +1,69 @@
+{
+  "version": "2.0.0",
+  "last_updated": "2026-01-02",
+  "total_cheatsheets": 80,
+  "categories": [
+    {
+      "id": "programming",
+      "name": "Programming Languages",
+      "icon": "💻",
+      "count": 24,
+      "cheatsheets": [
+        {"id": "python", "title": "Python", "icon": "assets/images/logos/python.png", "file": "programming/python.json", "has_snippets": true, "url": "https://quickref.me/python"},
+        {"id": "javascript", "title": "JavaScript", "icon": "assets/images/logos/javascript.png", "file": "programming/javascript.json", "has_snippets": true, "url": "https://quickref.me/javascript"},
+        {"id": "java", "title": "Java", "icon": "assets/images/logos/java.png", "file": "programming/java.json", "has_snippets": true, "url": "https://quickref.me/java"},
+        {"id": "cpp", "title": "C++", "icon": "assets/images/logos/cpp.png", "file": "programming/cpp.json", "has_snippets": true, "url": "https://quickref.me/cpp"},
+        {"id": "c", "title": "C", "icon": "🔧", "file": "programming/c.json", "has_snippets": true, "url": "https://quickref.me/c"},
+        {"id": "dart", "title": "Dart", "icon": "assets/images/logos/dart.png", "file": "programming/dart.json", "has_snippets": true, "url": "https://quickref.me/dart"},
+        {"id": "go", "title": "Go", "icon": "🐹", "file": "programming/go.json", "has_snippets": true, "url": "https://quickref.me/golang"},
+        {"id": "rust", "title": "Rust", "icon": "🦀", "file": "programming/rust.json", "has_snippets": true, "url": "https://quickref.me/rust"},
+        {"id": "swift", "title": "Swift", "icon": "🍎", "file": "programming/swift.json", "has_snippets": true, "url": "https://quickref.me/swift"},
+        {"id": "kotlin", "title": "Kotlin", "icon": "🅺", "file": "programming/kotlin.json", "has_snippets": true, "url": "https://quickref.me/kotlin"}
+      ]
+    },
+    {
+      "id": "frameworks",
+      "name": "Frameworks & Libraries",
+      "icon": "🎨",
+      "count": 10,
+      "cheatsheets": [
+        {"id": "react", "title": "React", "icon": "assets/images/logos/react.png", "file": "frameworks/react.json", "has_snippets": true, "url": "https://quickref.me/react"},
+        {"id": "vue", "title": "Vue.js", "icon": "💚", "file": "frameworks/vue.json", "has_snippets": true, "url": "https://quickref.me/vue"},
+        {"id": "angular", "title": "Angular", "icon": "🅰️", "file": "frameworks/angular.json", "has_snippets": true, "url": "https://quickref.me/angular"},
+        {"id": "flutter", "title": "Flutter", "icon": "🦋", "file": "frameworks/flutter.json", "has_snippets": true, "url": "https://quickref.me/flutter"}
+      ]
+    },
+    {
+      "id": "devops",
+      "name": "DevOps & Tools",
+      "icon": "🔧",
+      "count": 15,
+      "cheatsheets": [
+        {"id": "docker", "title": "Docker", "icon": "🐳", "file": "devops/docker.json", "has_snippets": true, "url": "https://quickref.me/docker"},
+        {"id": "kubernetes", "title": "Kubernetes", "icon": "☸️", "file": "devops/kubernetes.json", "has_snippets": true, "url": "https://quickref.me/kubernetes"},
+        {"id": "git", "title": "Git", "icon": "📦", "file": "devops/git.json", "has_snippets": true, "url": "https://quickref.me/git"}
+      ]
+    },
+    {
+      "id": "linux",
+      "name": "Linux & Commands",
+      "icon": "🐧",
+      "count": 17,
+      "cheatsheets": [
+        {"id": "bash", "title": "Bash", "icon": "💻", "file": "linux/bash.json", "has_snippets": true, "url": "https://quickref.me/bash"},
+        {"id": "ssh", "title": "SSH", "icon": "🔐", "file": "linux/ssh.json", "has_snippets": true, "url": "https://quickref.me/ssh"}
+      ]
+    },
+    {
+      "id": "databases",
+      "name": "Databases",
+      "icon": "🗄️",
+      "count": 5,
+      "cheatsheets": [
+        {"id": "mysql", "title": "MySQL", "icon": "🐬", "file": "databases/mysql.json", "has_snippets": true, "url": "https://quickref.me/mysql"},
+        {"id": "postgresql", "title": "PostgreSQL", "icon": "🐘", "file": "databases/postgresql.json", "has_snippets": true, "url": "https://quickref.me/postgres"},
+        {"id": "mongodb", "title": "MongoDB", "icon": "🍃", "file": "databases/mongodb.json", "has_snippets": true, "url": "https://quickref.me/mongodb"}
+      ]
+    }
+  ]
+}

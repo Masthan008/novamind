@@ -1,0 +1,13 @@
+﻿{
+    "id":  "rails",
+    "description":  "Quick reference guide for Ruby on Rails",
+    "icon":  "ðŸ›¤ï¸",
+    "snippets":  {
+                     "Getting Started":  "# Ruby on Rails Quick Reference\n\nBasic commands and usage for Ruby on Rails.\nVisit https://quickref.me/rails for complete documentation.",
+                     "Examples":  "# Practical examples for Ruby on Rails\n\n# More examples at https://quickref.me/rails",
+                     "Common Commands":  "# Essential Ruby on Rails commands\n\n# Check documentation at https://quickref.me/rails"
+                 },
+    "category":  "frameworks",
+    "title":  "Ruby on Rails",
+    "url":  "https://quickref.me/rails"
+}

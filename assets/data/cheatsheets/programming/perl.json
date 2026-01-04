@@ -1,0 +1,13 @@
+﻿{
+    "id":  "perl",
+    "description":  "Quick reference guide for Perl",
+    "icon":  "ðŸª",
+    "snippets":  {
+                     "Getting Started":  "# Perl Quick Reference\n\nBasic commands and usage for Perl.\nVisit https://quickref.me/perl for complete documentation.",
+                     "Examples":  "# Practical examples for Perl\n\n# More examples at https://quickref.me/perl",
+                     "Common Commands":  "# Essential Perl commands\n\n# Check documentation at https://quickref.me/perl"
+                 },
+    "category":  "programming",
+    "title":  "Perl",
+    "url":  "https://quickref.me/perl"
+}

@@ -1,0 +1,13 @@
+﻿{
+    "id":  "nextjs",
+    "description":  "Quick reference guide for Next.js",
+    "icon":  "â–²",
+    "snippets":  {
+                     "Getting Started":  "# Next.js Quick Reference\n\nBasic commands and usage for Next.js.\nVisit https://quickref.me/nextjs for complete documentation.",
+                     "Examples":  "# Practical examples for Next.js\n\n# More examples at https://quickref.me/nextjs",
+                     "Common Commands":  "# Essential Next.js commands\n\n# Check documentation at https://quickref.me/nextjs"
+                 },
+    "category":  "frameworks",
+    "title":  "Next.js",
+    "url":  "https://quickref.me/nextjs"
+}

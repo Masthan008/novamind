@@ -1,0 +1,22 @@
+{
+    "id": "javascript",
+    "title": "JavaScript",
+    "icon": "🟨",
+    "category": "programming",
+    "url": "https://quickref.me/javascript",
+    "description": "JavaScript is a versatile programming language primarily used for web development.",
+    "snippets": {
+        "Variables": "let x = 5;\nconst y = \"Hello\";\nvar z = 3.14;\nlet isValid = true;",
+        "Arrays": "const fruits = ['apple', 'banana', 'orange'];\nfruits.push('grape');\nfruits[0];  // 'apple'\nfruits.length;  // 4",
+        "Loops": "// For loop\nfor (let i = 0; i < 5; i++) {\n    console.log(i);\n}\n\n// For...of\nfor (const item of array) {\n    console.log(item);\n}\n\n// forEach\narray.forEach(item => console.log(item));",
+        "Functions": "// Function declaration\nfunction greet(name) {\n    return `Hello ${name}`;\n}\n\n// Arrow function\nconst greet = (name) => `Hello ${name}`;\n\n// Call\nconst result = greet(\"World\");",
+        "If/Else": "if (x > 0) {\n    console.log(\"Positive\");\n} else if (x < 0) {\n    console.log(\"Negative\");\n} else {\n    console.log(\"Zero\");\n}",
+        "Objects": "const person = {\n    name: 'John',\n    age: 30,\n    city: 'NYC',\n    greet() {\n        return `Hi, I'm ${this.name}`;\n    }\n};\n\nconsole.log(person.name);\nperson.email = 'john@example.com';",
+        "Promises": "// Create promise\nconst promise = new Promise((resolve, reject) => {\n    if (success) {\n        resolve(data);\n    } else {\n        reject(error);\n    }\n});\n\n// Use promise\npromise\n    .then(data => console.log(data))\n    .catch(error => console.error(error));",
+        "Async/Await": "async function fetchData() {\n    try {\n        const response = await fetch(url);\n        const data = await response.json();\n        return data;\n    } catch (error) {\n        console.error(error);\n    }\n}",
+        "Classes": "class Person {\n    constructor(name, age) {\n        this.name = name;\n        this.age = age;\n    }\n    \n    greet() {\n        return `Hi, I'm ${this.name}`;\n    }\n}\n\nconst p = new Person(\"Alice\", 25);\nconsole.log(p.greet());",
+        "Array Methods": "const numbers = [1, 2, 3, 4, 5];\n\n// Map\nconst doubled = numbers.map(x => x * 2);\n\n// Filter\nconst evens = numbers.filter(x => x % 2 === 0);\n\n// Reduce\nconst sum = numbers.reduce((acc, x) => acc + x, 0);",
+        "Destructuring": "// Array destructuring\nconst [a, b, ...rest] = [1, 2, 3, 4, 5];\n\n// Object destructuring\nconst {name, age} = person;\n\n// Function parameters\nfunction greet({name, age}) {\n    return `${name} is ${age}`;\n}",
+        "Spread Operator": "// Array spread\nconst arr1 = [1, 2, 3];\nconst arr2 = [...arr1, 4, 5];\n\n// Object spread\nconst obj1 = {a: 1, b: 2};\nconst obj2 = {...obj1, c: 3};\n\n// Function arguments\nMath.max(...numbers);"
+    }
+}

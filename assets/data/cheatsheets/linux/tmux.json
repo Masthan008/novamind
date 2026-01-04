@@ -1,0 +1,13 @@
+﻿{
+    "id":  "tmux",
+    "description":  "Quick reference guide for Tmux",
+    "icon":  "ðŸ–¥ï¸",
+    "snippets":  {
+                     "Getting Started":  "# Tmux Quick Reference\n\nBasic commands and usage for Tmux.\nVisit https://quickref.me/tmux for complete documentation.",
+                     "Examples":  "# Practical examples for Tmux\n\n# More examples at https://quickref.me/tmux",
+                     "Common Commands":  "# Essential Tmux commands\n\n# Check documentation at https://quickref.me/tmux"
+                 },
+    "category":  "linux",
+    "title":  "Tmux",
+    "url":  "https://quickref.me/tmux"
+}

@@ -1,0 +1,13 @@
+﻿{
+    "id":  "spring",
+    "description":  "Quick reference guide for Spring",
+    "icon":  "ðŸƒ",
+    "snippets":  {
+                     "Getting Started":  "# Spring Quick Reference\n\nBasic commands and usage for Spring.\nVisit https://quickref.me/spring for complete documentation.",
+                     "Examples":  "# Practical examples for Spring\n\n# More examples at https://quickref.me/spring",
+                     "Common Commands":  "# Essential Spring commands\n\n# Check documentation at https://quickref.me/spring"
+                 },
+    "category":  "frameworks",
+    "title":  "Spring",
+    "url":  "https://quickref.me/spring"
+}

@@ -1,0 +1,13 @@
+﻿{
+    "id":  "grep",
+    "description":  "Quick reference guide for Grep",
+    "icon":  "ðŸ”",
+    "snippets":  {
+                     "Getting Started":  "# Grep Quick Reference\n\nBasic commands and usage for Grep.\nVisit https://quickref.me/grep for complete documentation.",
+                     "Examples":  "# Practical examples for Grep\n\n# More examples at https://quickref.me/grep",
+                     "Common Commands":  "# Essential Grep commands\n\n# Check documentation at https://quickref.me/grep"
+                 },
+    "category":  "linux",
+    "title":  "Grep",
+    "url":  "https://quickref.me/grep"
+}

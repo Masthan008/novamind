@@ -1,0 +1,13 @@
+﻿{
+    "id":  "systemd",
+    "description":  "Quick reference guide for Systemd",
+    "icon":  "âš™ï¸",
+    "snippets":  {
+                     "Getting Started":  "# Systemd Quick Reference\n\nBasic commands and usage for Systemd.\nVisit https://quickref.me/systemd for complete documentation.",
+                     "Examples":  "# Practical examples for Systemd\n\n# More examples at https://quickref.me/systemd",
+                     "Common Commands":  "# Essential Systemd commands\n\n# Check documentation at https://quickref.me/systemd"
+                 },
+    "category":  "linux",
+    "title":  "Systemd",
+    "url":  "https://quickref.me/systemd"
+}

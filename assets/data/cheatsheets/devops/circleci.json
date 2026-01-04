@@ -1,0 +1,13 @@
+﻿{
+    "id":  "circleci",
+    "description":  "Quick reference guide for CircleCI",
+    "icon":  "â­•",
+    "snippets":  {
+                     "Getting Started":  "# CircleCI Quick Reference\n\nBasic commands and usage for CircleCI.\nVisit https://quickref.me/circleci for complete documentation.",
+                     "Examples":  "# Practical examples for CircleCI\n\n# More examples at https://quickref.me/circleci",
+                     "Common Commands":  "# Essential CircleCI commands\n\n# Check documentation at https://quickref.me/circleci"
+                 },
+    "category":  "devops",
+    "title":  "CircleCI",
+    "url":  "https://quickref.me/circleci"
+}

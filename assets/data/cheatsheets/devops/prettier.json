@@ -1,0 +1,13 @@
+﻿{
+    "id":  "prettier",
+    "description":  "Quick reference guide for Prettier",
+    "icon":  "âœ¨",
+    "snippets":  {
+                     "Getting Started":  "# Prettier Quick Reference\n\nBasic commands and usage for Prettier.\nVisit https://quickref.me/prettier for complete documentation.",
+                     "Examples":  "# Practical examples for Prettier\n\n# More examples at https://quickref.me/prettier",
+                     "Common Commands":  "# Essential Prettier commands\n\n# Check documentation at https://quickref.me/prettier"
+                 },
+    "category":  "devops",
+    "title":  "Prettier",
+    "url":  "https://quickref.me/prettier"
+}

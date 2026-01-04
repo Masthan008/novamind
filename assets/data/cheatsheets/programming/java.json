@@ -1,0 +1,20 @@
+{
+    "id": "java",
+    "title": "Java",
+    "icon": "☕",
+    "category": "programming",
+    "url": "https://quickref.me/java",
+    "description": "Java is a popular object-oriented programming language used for enterprise applications.",
+    "snippets": {
+        "Variables": "int x = 5;\nString name = \"John\";\ndouble price = 19.99;\nboolean isValid = true;",
+        "Arrays": "int[] numbers = {1, 2, 3, 4, 5};\nString[] fruits = new String[3];\nfruits[0] = \"Apple\";\nSystem.out.println(numbers[0]);",
+        "Loops": "// For loop\nfor (int i = 0; i < 5; i++) {\n    System.out.println(i);\n}\n\n// For-each\nfor (String fruit : fruits) {\n    System.out.println(fruit);\n}\n\n// While\nwhile (x < 10) {\n    x++;\n}",
+        "Methods": "public static int add(int a, int b) {\n    return a + b;\n}\n\npublic static void greet(String name) {\n    System.out.println(\"Hello \" + name);\n}\n\nint result = add(5, 3);",
+        "If/Else": "if (x > 0) {\n    System.out.println(\"Positive\");\n} else if (x < 0) {\n    System.out.println(\"Negative\");\n} else {\n    System.out.println(\"Zero\");\n}",
+        "Collections": "// ArrayList\nArrayList<String> list = new ArrayList<>();\nlist.add(\"Apple\");\nlist.get(0);\nlist.size();\n\n// HashMap\nHashMap<String, Integer> map = new HashMap<>();\nmap.put(\"John\", 30);\nmap.get(\"John\");",
+        "Classes": "public class Person {\n    private String name;\n    private int age;\n    \n    public Person(String name, int age) {\n        this.name = name;\n        this.age = age;\n    }\n    \n    public String greet() {\n        return \"Hi, I'm \" + name;\n    }\n}\n\nPerson p = new Person(\"Alice\", 25);",
+        "Exception Handling": "try {\n    int result = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"Error: \" + e.getMessage());\n} finally {\n    System.out.println(\"Cleanup\");\n}",
+        "File I/O": "// Read file\ntry (BufferedReader br = new BufferedReader(new FileReader(\"file.txt\"))) {\n    String line;\n    while ((line = br.readLine()) != null) {\n        System.out.println(line);\n    }\n} catch (IOException e) {\n    e.printStackTrace();\n}",
+        "Streams": "List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);\n\n// Filter\nList<Integer> evens = numbers.stream()\n    .filter(n -> n % 2 == 0)\n    .collect(Collectors.toList());\n\n// Map\nList<Integer> doubled = numbers.stream()\n    .map(n -> n * 2)\n    .collect(Collectors.toList());"
+    }
+}

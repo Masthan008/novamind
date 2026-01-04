@@ -1,0 +1,18 @@
+{
+    "id": "git",
+    "title": "Git",
+    "icon": "📦",
+    "category": "devops",
+    "url": "https://quickref.me/git",
+    "description": "Git is a distributed version control system for tracking changes in source code.",
+    "snippets": {
+        "Basic Commands": "# Initialize repo\ngit init\n\n# Clone repo\ngit clone url\n\n# Check status\ngit status\n\n# View history\ngit log\ngit log --oneline\n\n# Show changes\ngit diff",
+        "Staging & Committing": "# Stage files\ngit add .\ngit add filename\n\n# Commit\ngit commit -m \"message\"\n\n# Commit all changes\ngit commit -am \"message\"\n\n# Amend last commit\ngit commit --amend",
+        "Branching": "# List branches\ngit branch\n\n# Create branch\ngit branch branch-name\n\n# Switch branch\ngit checkout branch-name\ngit switch branch-name\n\n# Create and switch\ngit checkout -b branch-name\n\n# Delete branch\ngit branch -d branch-name",
+        "Merging": "# Merge branch\ngit merge branch-name\n\n# Abort merge\ngit merge --abort\n\n# Rebase\ngit rebase branch-name\n\n# Interactive rebase\ngit rebase -i HEAD~3",
+        "Remote": "# Add remote\ngit remote add origin url\n\n# View remotes\ngit remote -v\n\n# Push\ngit push\ngit push -u origin main\n\n# Pull\ngit pull\ngit pull origin main\n\n# Fetch\ngit fetch",
+        "Undoing Changes": "# Discard changes\ngit checkout -- filename\ngit restore filename\n\n# Unstage\ngit reset HEAD filename\ngit restore --staged filename\n\n# Reset commit\ngit reset --soft HEAD~1\ngit reset --hard HEAD~1",
+        "Stashing": "# Stash changes\ngit stash\ngit stash save \"message\"\n\n# List stashes\ngit stash list\n\n# Apply stash\ngit stash apply\ngit stash pop\n\n# Drop stash\ngit stash drop",
+        "Tags": "# Create tag\ngit tag v1.0.0\ngit tag -a v1.0.0 -m \"Version 1.0\"\n\n# List tags\ngit tag\n\n# Push tags\ngit push --tags\n\n# Delete tag\ngit tag -d v1.0.0"
+    }
+}

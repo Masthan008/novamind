@@ -1,0 +1,13 @@
+﻿{
+    "id":  "lua",
+    "description":  "Quick reference guide for Lua",
+    "icon":  "ðŸŒ™",
+    "snippets":  {
+                     "Getting Started":  "# Lua Quick Reference\n\nBasic commands and usage for Lua.\nVisit https://quickref.me/lua for complete documentation.",
+                     "Examples":  "# Practical examples for Lua\n\n# More examples at https://quickref.me/lua",
+                     "Common Commands":  "# Essential Lua commands\n\n# Check documentation at https://quickref.me/lua"
+                 },
+    "category":  "programming",
+    "title":  "Lua",
+    "url":  "https://quickref.me/lua"
+}

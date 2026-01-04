@@ -1,0 +1,18 @@
+{
+    "id": "bash",
+    "title": "Bash",
+    "icon": "💻",
+    "category": "linux",
+    "url": "https://quickref.me/bash",
+    "description": "Bash is a Unix shell and command language for interacting with the operating system.",
+    "snippets": {
+        "Variables": "# Define variable\nname=\"John\"\nage=30\n\n# Use variable\necho $name\necho \"Hello $name\"\necho \"Age: ${age}\"\n\n# Environment variable\nexport PATH=\"/usr/local/bin:$PATH\"",
+        "Conditionals": "# If statement\nif [ $age -gt 18 ]; then\n    echo \"Adult\"\nelif [ $age -eq 18 ]; then\n    echo \"Just turned 18\"\nelse\n    echo \"Minor\"\nfi\n\n# File tests\nif [ -f \"file.txt\" ]; then\n    echo \"File exists\"\nfi",
+        "Loops": "# For loop\nfor i in {1..5}; do\n    echo $i\ndone\n\n# For each\nfor file in *.txt; do\n    echo $file\ndone\n\n# While loop\nwhile [ $count -lt 10 ]; do\n    echo $count\n    ((count++))\ndone",
+        "Functions": "# Define function\ngreet() {\n    echo \"Hello $1\"\n}\n\n# Call function\ngreet \"World\"\n\n# Return value\nadd() {\n    return $(($1 + $2))\n}\n\nadd 5 3\nresult=$?",
+        "File Operations": "# Read file\nwhile IFS= read -r line; do\n    echo \"$line\"\ndone < file.txt\n\n# Write file\necho \"Hello\" > file.txt\necho \"World\" >> file.txt\n\n# Check if file exists\n[ -f file.txt ] && echo \"Exists\"",
+        "String Operations": "# Length\necho ${#name}\n\n# Substring\necho ${name:0:3}\n\n# Replace\necho ${name/John/Jane}\n\n# Uppercase/Lowercase\necho ${name^^}\necho ${name,,}",
+        "Arrays": "# Define array\nfruits=(\"apple\" \"banana\" \"orange\")\n\n# Access elements\necho ${fruits[0]}\necho ${fruits[@]}  # All elements\necho ${#fruits[@]}  # Length\n\n# Add element\nfruits+=(\"grape\")",
+        "Command Substitution": "# Capture output\nfiles=$(ls)\ndate_str=`date +%Y-%m-%d`\n\n# Use in string\necho \"Today is $(date)\"\n\n# Arithmetic\nresult=$((5 + 3))\nresult=$[5 + 3]"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "id": "vim",
+    "title": "Vim",
+    "icon": "📝",
+    "category": "linux",
+    "url": "https://quickref.me/vim",
+    "description": "Vim is a highly configurable text editor built for efficient text editing.",
+    "snippets": {
+        "Modes": "# Normal mode (default)\nPress Esc\n\n# Insert mode\ni - Insert before cursor\nI - Insert at beginning of line\na - Append after cursor\nA - Append at end of line\no - Open new line below\nO - Open new line above\n\n# Visual mode\nv - Character-wise visual\nV - Line-wise visual\nCtrl+v - Block-wise visual\n\n# Command mode\n: - Enter command mode",
+        "Navigation": "# Basic movement\nh - Left\nj - Down\nk - Up\nl - Right\n\n# Word movement\nw - Next word\nb - Previous word\ne - End of word\n\n# Line movement\n0 - Start of line\n$ - End of line\n^ - First non-blank character\n\n# File movement\ngg - Go to first line\nG - Go to last line\n:42 - Go to line 42",
+        "Editing": "# Delete\nx - Delete character\ndw - Delete word\ndd - Delete line\nD - Delete to end of line\n\n# Copy (yank)\nyy - Copy line\nyw - Copy word\ny$ - Copy to end of line\n\n# Paste\np - Paste after cursor\nP - Paste before cursor\n\n# Undo/Redo\nu - Undo\nCtrl+r - Redo",
+        "Search & Replace": "# Search\n/pattern - Search forward\n?pattern - Search backward\nn - Next match\nN - Previous match\n\n# Replace\n:s/old/new/ - Replace first in line\n:s/old/new/g - Replace all in line\n:%s/old/new/g - Replace all in file\n:%s/old/new/gc - Replace with confirmation",
+        "Save & Quit": "# Save\n:w - Write (save)\n:w filename - Save as\n\n# Quit\n:q - Quit\n:q! - Quit without saving\n:wq - Save and quit\n:x - Save and quit\nZZ - Save and quit\n\n# Save all and quit\n:wqa",
+        "Multiple Files": "# Open files\n:e filename - Edit file\n:tabnew filename - New tab\n\n# Buffers\n:ls - List buffers\n:b2 - Switch to buffer 2\n:bn - Next buffer\n:bp - Previous buffer\n\n# Tabs\ngt - Next tab\ngT - Previous tab\n:tabc - Close tab",
+        "Visual Mode": "# Select\nv - Start visual mode\nV - Select line\nCtrl+v - Select block\n\n# Operations\nd - Delete selection\ny - Copy selection\nc - Change selection\n> - Indent\n< - Unindent",
+        "Advanced": "# Macros\nqa - Start recording macro 'a'\nq - Stop recording\n@a - Play macro 'a'\n@@ - Repeat last macro\n\n# Marks\nma - Set mark 'a'\n'a - Jump to mark 'a'\n\n# Fold\nzf - Create fold\nzo - Open fold\nzc - Close fold"
+    }
+}

@@ -1,0 +1,13 @@
+﻿{
+    "id":  "awk",
+    "description":  "Quick reference guide for Awk",
+    "icon":  "ðŸ”§",
+    "snippets":  {
+                     "Getting Started":  "# Awk Quick Reference\n\nBasic commands and usage for Awk.\nVisit https://quickref.me/awk for complete documentation.",
+                     "Examples":  "# Practical examples for Awk\n\n# More examples at https://quickref.me/awk",
+                     "Common Commands":  "# Essential Awk commands\n\n# Check documentation at https://quickref.me/awk"
+                 },
+    "category":  "linux",
+    "title":  "Awk",
+    "url":  "https://quickref.me/awk"
+}

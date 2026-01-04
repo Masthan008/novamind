@@ -1,0 +1,13 @@
+﻿{
+    "id":  "vite",
+    "description":  "Quick reference guide for Vite",
+    "icon":  "âš¡",
+    "snippets":  {
+                     "Getting Started":  "# Vite Quick Reference\n\nBasic commands and usage for Vite.\nVisit https://quickref.me/vite for complete documentation.",
+                     "Examples":  "# Practical examples for Vite\n\n# More examples at https://quickref.me/vite",
+                     "Common Commands":  "# Essential Vite commands\n\n# Check documentation at https://quickref.me/vite"
+                 },
+    "category":  "devops",
+    "title":  "Vite",
+    "url":  "https://quickref.me/vite"
+}

@@ -1,0 +1,13 @@
+﻿{
+    "id":  "find",
+    "description":  "Quick reference guide for Find",
+    "icon":  "ðŸ”Ž",
+    "snippets":  {
+                     "Getting Started":  "# Find Quick Reference\n\nBasic commands and usage for Find.\nVisit https://quickref.me/find for complete documentation.",
+                     "Examples":  "# Practical examples for Find\n\n# More examples at https://quickref.me/find",
+                     "Common Commands":  "# Essential Find commands\n\n# Check documentation at https://quickref.me/find"
+                 },
+    "category":  "linux",
+    "title":  "Find",
+    "url":  "https://quickref.me/find"
+}

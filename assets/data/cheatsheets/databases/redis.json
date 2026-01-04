@@ -1,0 +1,18 @@
+{
+    "id": "redis",
+    "title": "Redis",
+    "icon": "🔴",
+    "category": "databases",
+    "url": "https://quickref.me/redis",
+    "description": "Redis is an in-memory data structure store used as a database, cache, and message broker.",
+    "snippets": {
+        "Basic Commands": "# Start Redis CLI\nredis-cli\n\n# Connect to specific host/port\nredis-cli -h hostname -p 6379\n\n# Ping server\nPING\n\n# Select database\nSELECT 1\n\n# Clear database\nFLUSHDB\n\n# Clear all databases\nFLUSHALL",
+        "Strings": "# Set value\nSET key \"value\"\n\n# Get value\nGET key\n\n# Set with expiration (seconds)\nSETEX key 60 \"value\"\n\n# Set if not exists\nSETNX key \"value\"\n\n# Increment\nINCR counter\nINCRBY counter 5\n\n# Decrement\nDECR counter\nDECRBY counter 3",
+        "Lists": "# Push to list\nLPUSH mylist \"item1\"\nRPUSH mylist \"item2\"\n\n# Pop from list\nLPOP mylist\nRPOP mylist\n\n# Get range\nLRANGE mylist 0 -1\n\n# Get length\nLLEN mylist\n\n# Get by index\nLINDEX mylist 0",
+        "Sets": "# Add to set\nSADD myset \"member1\"\nSADD myset \"member2\"\n\n# Get all members\nSMEMBERS myset\n\n# Check membership\nSISMEMBER myset \"member1\"\n\n# Remove member\nSREM myset \"member1\"\n\n# Set operations\nSUNION set1 set2\nSINTER set1 set2\nSDIFF set1 set2",
+        "Hashes": "# Set hash field\nHSET user:1 name \"John\"\nHSET user:1 age 30\n\n# Get hash field\nHGET user:1 name\n\n# Get all fields\nHGETALL user:1\n\n# Set multiple fields\nHMSET user:1 name \"John\" age 30 email \"john@example.com\"\n\n# Delete field\nHDEL user:1 age",
+        "Sorted Sets": "# Add to sorted set\nZADD leaderboard 100 \"player1\"\nZADD leaderboard 200 \"player2\"\n\n# Get range by rank\nZRANGE leaderboard 0 -1\nZRANGE leaderboard 0 -1 WITHSCORES\n\n# Get range by score\nZRANGEBYSCORE leaderboard 100 200\n\n# Get rank\nZRANK leaderboard \"player1\"\n\n# Increment score\nZINCRBY leaderboard 10 \"player1\"",
+        "Keys": "# Get all keys\nKEYS *\nKEYS user:*\n\n# Check if key exists\nEXISTS key\n\n# Delete key\nDEL key\n\n# Set expiration\nEXPIRE key 60\n\n# Get TTL\nTTL key\n\n# Rename key\nRENAME oldkey newkey",
+        "Pub/Sub": "# Subscribe to channel\nSUBSCRIBE channel1\n\n# Publish message\nPUBLISH channel1 \"message\"\n\n# Pattern subscribe\nPSUBSCRIBE news:*\n\n# Unsubscribe\nUNSUBSCRIBE channel1"
+    }
+}

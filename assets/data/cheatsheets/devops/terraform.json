@@ -1,0 +1,13 @@
+﻿{
+    "id":  "terraform",
+    "description":  "Quick reference guide for Terraform",
+    "icon":  "ðŸ—ï¸",
+    "snippets":  {
+                     "Getting Started":  "# Terraform Quick Reference\n\nBasic commands and usage for Terraform.\nVisit https://quickref.me/terraform for complete documentation.",
+                     "Examples":  "# Practical examples for Terraform\n\n# More examples at https://quickref.me/terraform",
+                     "Common Commands":  "# Essential Terraform commands\n\n# Check documentation at https://quickref.me/terraform"
+                 },
+    "category":  "devops",
+    "title":  "Terraform",
+    "url":  "https://quickref.me/terraform"
+}

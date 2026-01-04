@@ -1,0 +1,22 @@
+{
+    "id": "python",
+    "title": "Python",
+    "icon": "🐍",
+    "category": "programming",
+    "url": "https://quickref.me/python",
+    "description": "Python is a high-level, interpreted programming language known for its simplicity and readability.",
+    "snippets": {
+        "Variables": "x = 5\ny = \"Hello\"\nz = 3.14\nis_valid = True",
+        "Lists": "fruits = ['apple', 'banana', 'orange']\nfruits.append('grape')\nfruits[0]  # 'apple'\nfruits[-1]  # last item",
+        "Loops": "# For loop\nfor i in range(5):\n    print(i)\n\n# While loop\nwhile x < 10:\n    x += 1\n\n# List iteration\nfor item in list:\n    print(item)",
+        "Functions": "def greet(name):\n    return f\"Hello {name}\"\n\nresult = greet(\"World\")\nprint(result)",
+        "If/Else": "if x > 0:\n    print(\"Positive\")\nelif x < 0:\n    print(\"Negative\")\nelse:\n    print(\"Zero\")",
+        "Dictionary": "person = {\n    'name': 'John',\n    'age': 30,\n    'city': 'NYC'\n}\n\nprint(person['name'])\nperson['email'] = 'john@example.com'",
+        "File I/O": "# Read file\nwith open('file.txt', 'r') as f:\n    content = f.read()\n\n# Write file\nwith open('file.txt', 'w') as f:\n    f.write('Hello World')",
+        "Classes": "class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def greet(self):\n        return f\"Hi, I'm {self.name}\"\n\np = Person(\"Alice\", 25)\nprint(p.greet())",
+        "List Comprehension": "# Basic\nsquares = [x**2 for x in range(10)]\n\n# With condition\nevens = [x for x in range(20) if x % 2 == 0]\n\n# Nested\nmatrix = [[i*j for j in range(3)] for i in range(3)]",
+        "Exception Handling": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero\")\nexcept Exception as e:\n    print(f\"Error: {e}\")\nfinally:\n    print(\"Cleanup\")",
+        "String Methods": "text = \"Hello World\"\ntext.upper()  # 'HELLO WORLD'\ntext.lower()  # 'hello world'\ntext.split()  # ['Hello', 'World']\ntext.replace('World', 'Python')",
+        "Lambda Functions": "# Simple lambda\nsquare = lambda x: x**2\n\n# With map\nnumbers = [1, 2, 3, 4]\nsquared = list(map(lambda x: x**2, numbers))\n\n# With filter\nevens = list(filter(lambda x: x % 2 == 0, numbers))"
+    }
+}

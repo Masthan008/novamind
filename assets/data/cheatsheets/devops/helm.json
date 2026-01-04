@@ -1,0 +1,13 @@
+﻿{
+    "id":  "helm",
+    "description":  "Quick reference guide for Helm",
+    "icon":  "âŽˆ",
+    "snippets":  {
+                     "Getting Started":  "# Helm Quick Reference\n\nBasic commands and usage for Helm.\nVisit https://quickref.me/helm for complete documentation.",
+                     "Examples":  "# Practical examples for Helm\n\n# More examples at https://quickref.me/helm",
+                     "Common Commands":  "# Essential Helm commands\n\n# Check documentation at https://quickref.me/helm"
+                 },
+    "category":  "devops",
+    "title":  "Helm",
+    "url":  "https://quickref.me/helm"
+}

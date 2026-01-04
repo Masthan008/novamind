@@ -1,0 +1,18 @@
+{
+    "id": "angular",
+    "title": "Angular",
+    "icon": "🅰️",
+    "category": "frameworks",
+    "url": "https://quickref.me/angular",
+    "description": "Angular is a platform for building mobile and desktop web applications.",
+    "snippets": {
+        "Component": "@Component({\n  selector: 'app-hello',\n  template: `<h1>{{ title }}</h1>`\n})\nexport class HelloComponent {\n  title = 'Hello Angular';\n}",
+        "Data Binding": "<!-- Interpolation -->\n<h1>{{ title }}</h1>\n\n<!-- Property binding -->\n<img [src]=\"imageUrl\">\n\n<!-- Event binding -->\n<button (click)=\"onClick()\">Click</button>\n\n<!-- Two-way binding -->\n<input [(ngModel)]=\"name\">",
+        "Directives": "<!-- *ngIf -->\n<div *ngIf=\"isVisible\">Visible</div>\n\n<!-- *ngFor -->\n<li *ngFor=\"let item of items\">{{ item }}</li>\n\n<!-- *ngSwitch -->\n<div [ngSwitch]=\"value\">\n  <p *ngSwitchCase=\"'A'\">Case A</p>\n  <p *ngSwitchDefault>Default</p>\n</div>",
+        "Services": "@Injectable({\n  providedIn: 'root'\n})\nexport class DataService {\n  getData() {\n    return this.http.get('/api/data');\n  }\n}\n\n// Usage in component\nconstructor(private dataService: DataService) {}\n\nngOnInit() {\n  this.dataService.getData().subscribe(data => {\n    this.data = data;\n  });\n}",
+        "Forms": "// Template-driven\n<form #form=\"ngForm\" (ngSubmit)=\"onSubmit(form)\">\n  <input name=\"name\" ngModel required>\n  <button type=\"submit\">Submit</button>\n</form>\n\n// Reactive\nthis.form = this.fb.group({\n  name: ['', Validators.required],\n  email: ['', [Validators.required, Validators.email]]\n});",
+        "Routing": "const routes: Routes = [\n  { path: '', component: HomeComponent },\n  { path: 'about', component: AboutComponent },\n  { path: 'user/:id', component: UserComponent }\n];\n\n// Navigation\nthis.router.navigate(['/about']);\n\n// RouterLink\n<a routerLink=\"/about\">About</a>",
+        "Pipes": "<!-- Built-in pipes -->\n{{ date | date:'short' }}\n{{ price | currency:'USD' }}\n{{ text | uppercase }}\n\n<!-- Custom pipe -->\n@Pipe({ name: 'exponential' })\nexport class ExponentialPipe implements PipeTransform {\n  transform(value: number): number {\n    return Math.pow(value, 2);\n  }\n}",
+        "HTTP": "constructor(private http: HttpClient) {}\n\n// GET\nthis.http.get('/api/users').subscribe(data => {\n  console.log(data);\n});\n\n// POST\nthis.http.post('/api/users', user).subscribe();\n\n// PUT\nthis.http.put('/api/users/1', user).subscribe();\n\n// DELETE\nthis.http.delete('/api/users/1').subscribe();"
+    }
+}

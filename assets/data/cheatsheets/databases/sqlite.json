@@ -1,0 +1,18 @@
+{
+    "id": "sqlite",
+    "title": "SQLite",
+    "icon": "💾",
+    "category": "databases",
+    "url": "https://quickref.me/sqlite",
+    "description": "SQLite is a lightweight, serverless, self-contained SQL database engine.",
+    "snippets": {
+        "Basic Commands": "# Open database\nsqlite3 database.db\n\n# Show tables\n.tables\n\n# Show schema\n.schema table_name\n\n# Exit\n.quit\n\n# Import CSV\n.mode csv\n.import file.csv table_name\n\n# Export to CSV\n.mode csv\n.output data.csv\nSELECT * FROM table_name;",
+        "Create Table": "CREATE TABLE users (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    name TEXT NOT NULL,\n    email TEXT UNIQUE,\n    age INTEGER,\n    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n);",
+        "Insert Data": "-- Insert single row\nINSERT INTO users (name, email, age)\nVALUES ('John', 'john@example.com', 30);\n\n-- Insert multiple rows\nINSERT INTO users (name, email, age)\nVALUES \n    ('Alice', 'alice@example.com', 25),\n    ('Bob', 'bob@example.com', 35);",
+        "Select Data": "-- Select all\nSELECT * FROM users;\n\n-- Select specific columns\nSELECT name, email FROM users;\n\n-- With condition\nSELECT * FROM users WHERE age > 25;\n\n-- Order by\nSELECT * FROM users ORDER BY age DESC;\n\n-- Limit\nSELECT * FROM users LIMIT 10 OFFSET 20;",
+        "Update Data": "-- Update single row\nUPDATE users\nSET age = 31\nWHERE name = 'John';\n\n-- Update multiple columns\nUPDATE users\nSET age = 26, email = 'newemail@example.com'\nWHERE id = 1;",
+        "Delete Data": "-- Delete specific rows\nDELETE FROM users WHERE age < 18;\n\n-- Delete all rows\nDELETE FROM users;\n\n-- Drop table\nDROP TABLE users;",
+        "Joins": "-- Inner join\nSELECT users.name, orders.total\nFROM users\nINNER JOIN orders ON users.id = orders.user_id;\n\n-- Left join\nSELECT users.name, orders.total\nFROM users\nLEFT JOIN orders ON users.id = orders.user_id;",
+        "Aggregate Functions": "-- Count\nSELECT COUNT(*) FROM users;\n\n-- Sum\nSELECT SUM(age) FROM users;\n\n-- Average\nSELECT AVG(age) FROM users;\n\n-- Group by\nSELECT age, COUNT(*) as count\nFROM users\nGROUP BY age\nHAVING count > 1;"
+    }
+}

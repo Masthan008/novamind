@@ -1,0 +1,13 @@
+﻿{
+    "id":  "nodejs",
+    "description":  "Quick reference guide for Node.js",
+    "icon":  "ðŸŸ¢",
+    "snippets":  {
+                     "Getting Started":  "# Node.js Quick Reference\n\nBasic commands and usage for Node.js.\nVisit https://quickref.me/nodejs for complete documentation.",
+                     "Examples":  "# Practical examples for Node.js\n\n# More examples at https://quickref.me/nodejs",
+                     "Common Commands":  "# Essential Node.js commands\n\n# Check documentation at https://quickref.me/nodejs"
+                 },
+    "category":  "programming",
+    "title":  "Node.js",
+    "url":  "https://quickref.me/nodejs"
+}

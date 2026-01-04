@@ -1,0 +1,13 @@
+﻿{
+    "id":  "wget",
+    "description":  "Quick reference guide for Wget",
+    "icon":  "â¬‡ï¸",
+    "snippets":  {
+                     "Getting Started":  "# Wget Quick Reference\n\nBasic commands and usage for Wget.\nVisit https://quickref.me/wget for complete documentation.",
+                     "Examples":  "# Practical examples for Wget\n\n# More examples at https://quickref.me/wget",
+                     "Common Commands":  "# Essential Wget commands\n\n# Check documentation at https://quickref.me/wget"
+                 },
+    "category":  "linux",
+    "title":  "Wget",
+    "url":  "https://quickref.me/wget"
+}

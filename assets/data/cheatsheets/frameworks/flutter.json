@@ -1,0 +1,18 @@
+{
+    "id": "flutter",
+    "title": "Flutter",
+    "icon": "🦋",
+    "category": "frameworks",
+    "url": "https://quickref.me/flutter",
+    "description": "Flutter is Google's UI toolkit for building natively compiled applications.",
+    "snippets": {
+        "Widgets": "// StatelessWidget\nclass MyWidget extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return Text('Hello');\n  }\n}\n\n// StatefulWidget\nclass Counter extends StatefulWidget {\n  @override\n  _CounterState createState() => _CounterState();\n}\n\nclass _CounterState extends State<Counter> {\n  int count = 0;\n  \n  @override\n  Widget build(BuildContext context) {\n    return Text('$count');\n  }\n}",
+        "Layout": "// Column\nColumn(\n  children: [\n    Text('Item 1'),\n    Text('Item 2'),\n  ],\n)\n\n// Row\nRow(\n  children: [\n    Icon(Icons.star),\n    Text('Star'),\n  ],\n)\n\n// Container\nContainer(\n  padding: EdgeInsets.all(16),\n  margin: EdgeInsets.all(8),\n  child: Text('Hello'),\n)",
+        "Navigation": "// Push\nNavigator.push(\n  context,\n  MaterialPageRoute(builder: (context) => SecondScreen()),\n);\n\n// Pop\nNavigator.pop(context);\n\n// Named routes\nNavigator.pushNamed(context, '/second');\n\n// Routes\nMaterialApp(\n  routes: {\n    '/': (context) => HomeScreen(),\n    '/second': (context) => SecondScreen(),\n  },\n)",
+        "State Management": "// setState\nsetState(() {\n  count++;\n});\n\n// Provider\nChangeNotifierProvider(\n  create: (context) => Counter(),\n  child: MyApp(),\n)\n\n// Consumer\nConsumer<Counter>(\n  builder: (context, counter, child) {\n    return Text('${counter.count}');\n  },\n)",
+        "Forms": "final _formKey = GlobalKey<FormState>();\n\nForm(\n  key: _formKey,\n  child: Column(\n    children: [\n      TextFormField(\n        validator: (value) {\n          if (value == null || value.isEmpty) {\n            return 'Please enter text';\n          }\n          return null;\n        },\n      ),\n      ElevatedButton(\n        onPressed: () {\n          if (_formKey.currentState!.validate()) {\n            // Process data\n          }\n        },\n        child: Text('Submit'),\n      ),\n    ],\n  ),\n)",
+        "HTTP": "import 'package:http/http.dart' as http;\nimport 'dart:convert';\n\nFuture<Album> fetchAlbum() async {\n  final response = await http.get(\n    Uri.parse('https://api.example.com/album')\n  );\n  \n  if (response.statusCode == 200) {\n    return Album.fromJson(jsonDecode(response.body));\n  } else {\n    throw Exception('Failed to load');\n  }\n}",
+        "ListView": "// ListView.builder\nListView.builder(\n  itemCount: items.length,\n  itemBuilder: (context, index) {\n    return ListTile(\n      title: Text(items[index]),\n    );\n  },\n)\n\n// ListView.separated\nListView.separated(\n  itemCount: items.length,\n  itemBuilder: (context, index) => Text(items[index]),\n  separatorBuilder: (context, index) => Divider(),\n)",
+        "Async": "// FutureBuilder\nFutureBuilder<String>(\n  future: fetchData(),\n  builder: (context, snapshot) {\n    if (snapshot.hasData) {\n      return Text(snapshot.data!);\n    } else if (snapshot.hasError) {\n      return Text('Error: ${snapshot.error}');\n    }\n    return CircularProgressIndicator();\n  },\n)"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "id": "go",
+    "title": "Go",
+    "icon": "🐹",
+    "category": "programming",
+    "url": "https://quickref.me/golang",
+    "description": "Go is a statically typed, compiled language designed for simplicity and efficiency.",
+    "snippets": {
+        "Variables": "var x int = 5\nvar name string = \"John\"\ny := 10  // Short declaration\nconst PI = 3.14",
+        "Arrays & Slices": "// Array\nvar arr [5]int = [5]int{1, 2, 3, 4, 5}\n\n// Slice\nslice := []int{1, 2, 3}\nslice = append(slice, 4)\nlen(slice)  // Length\nslice[0:2]  // Subslice",
+        "Loops": "// For loop\nfor i := 0; i < 5; i++ {\n    fmt.Println(i)\n}\n\n// Range\nfor index, value := range slice {\n    fmt.Println(index, value)\n}\n\n// While-style\nfor x < 10 {\n    x++\n}",
+        "Functions": "func add(a int, b int) int {\n    return a + b\n}\n\n// Multiple returns\nfunc divide(a, b int) (int, error) {\n    if b == 0 {\n        return 0, errors.New(\"division by zero\")\n    }\n    return a / b, nil\n}\n\nresult := add(5, 3)",
+        "If/Else": "if x > 0 {\n    fmt.Println(\"Positive\")\n} else if x < 0 {\n    fmt.Println(\"Negative\")\n} else {\n    fmt.Println(\"Zero\")\n}\n\n// If with statement\nif err := doSomething(); err != nil {\n    fmt.Println(err)\n}",
+        "Maps": "ages := map[string]int{\n    \"John\": 30,\n    \"Alice\": 25,\n}\n\nages[\"Bob\"] = 35\nvalue, exists := ages[\"John\"]\ndelete(ages, \"Alice\")",
+        "Structs": "type Person struct {\n    Name string\n    Age  int\n}\n\np := Person{Name: \"John\", Age: 30}\nfmt.Println(p.Name)\n\n// Method\nfunc (p Person) Greet() string {\n    return \"Hi, I'm \" + p.Name\n}",
+        "Goroutines": "// Start goroutine\ngo func() {\n    fmt.Println(\"Hello from goroutine\")\n}()\n\n// Channel\nch := make(chan int)\ngo func() {\n    ch <- 42\n}()\nvalue := <-ch",
+        "Error Handling": "result, err := divide(10, 0)\nif err != nil {\n    fmt.Println(\"Error:\", err)\n    return\n}\nfmt.Println(result)",
+        "Interfaces": "type Shape interface {\n    Area() float64\n}\n\ntype Circle struct {\n    Radius float64\n}\n\nfunc (c Circle) Area() float64 {\n    return 3.14 * c.Radius * c.Radius\n}\n\nvar s Shape = Circle{Radius: 5}"
+    }
+}

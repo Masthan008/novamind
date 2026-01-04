@@ -1,0 +1,18 @@
+{
+    "id": "postgresql",
+    "title": "PostgreSQL",
+    "icon": "🐘",
+    "category": "databases",
+    "url": "https://quickref.me/postgres",
+    "description": "PostgreSQL is a powerful open-source relational database system.",
+    "snippets": {
+        "Basic Commands": "-- Connect to database\n\\c database_name\n\n-- List databases\n\\l\n\n-- List tables\n\\dt\n\n-- Describe table\n\\d table_name\n\n-- Quit\n\\q",
+        "Create Table": "CREATE TABLE users (\n    id SERIAL PRIMARY KEY,\n    name VARCHAR(100) NOT NULL,\n    email VARCHAR(100) UNIQUE,\n    age INTEGER,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);",
+        "Insert Data": "-- Insert single row\nINSERT INTO users (name, email, age)\nVALUES ('John', 'john@example.com', 30);\n\n-- Insert multiple rows\nINSERT INTO users (name, email, age)\nVALUES \n    ('Alice', 'alice@example.com', 25),\n    ('Bob', 'bob@example.com', 35);",
+        "Select Data": "-- Select all\nSELECT * FROM users;\n\n-- Select specific columns\nSELECT name, email FROM users;\n\n-- With condition\nSELECT * FROM users WHERE age > 25;\n\n-- Order by\nSELECT * FROM users ORDER BY age DESC;\n\n-- Limit\nSELECT * FROM users LIMIT 10 OFFSET 20;",
+        "Update Data": "-- Update single row\nUPDATE users\nSET age = 31\nWHERE name = 'John';\n\n-- Update multiple columns\nUPDATE users\nSET age = 26, email = 'newemail@example.com'\nWHERE id = 1;",
+        "Delete Data": "-- Delete specific rows\nDELETE FROM users WHERE age < 18;\n\n-- Delete all rows\nDELETE FROM users;\n\n-- Truncate table\nTRUNCATE TABLE users;",
+        "Joins": "-- Inner join\nSELECT users.name, orders.total\nFROM users\nINNER JOIN orders ON users.id = orders.user_id;\n\n-- Left join\nSELECT users.name, orders.total\nFROM users\nLEFT JOIN orders ON users.id = orders.user_id;",
+        "Aggregate Functions": "-- Count\nSELECT COUNT(*) FROM users;\n\n-- Sum\nSELECT SUM(age) FROM users;\n\n-- Average\nSELECT AVG(age) FROM users;\n\n-- Group by\nSELECT age, COUNT(*) as count\nFROM users\nGROUP BY age\nHAVING count > 1;"
+    }
+}

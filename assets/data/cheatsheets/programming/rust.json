@@ -1,0 +1,20 @@
+{
+    "id": "rust",
+    "title": "Rust",
+    "icon": "🦀",
+    "category": "programming",
+    "url": "https://quickref.me/rust",
+    "description": "Rust is a systems programming language focused on safety, speed, and concurrency.",
+    "snippets": {
+        "Variables": "let x = 5;  // Immutable\nlet mut y = 10;  // Mutable\nconst MAX: u32 = 100;\n\n// Type annotation\nlet z: i32 = 20;",
+        "Data Types": "let integer: i32 = 42;\nlet float: f64 = 3.14;\nlet boolean: bool = true;\nlet character: char = 'A';\nlet string: &str = \"Hello\";",
+        "Vectors": "let mut vec = vec![1, 2, 3];\nvec.push(4);\nvec[0];  // Access\nvec.len();  // Length\nvec.pop();  // Remove last",
+        "Loops": "// For loop\nfor i in 0..5 {\n    println!(\"{}\", i);\n}\n\n// For each\nfor item in &vec {\n    println!(\"{}\", item);\n}\n\n// While\nwhile x < 10 {\n    x += 1;\n}",
+        "Functions": "fn add(a: i32, b: i32) -> i32 {\n    a + b  // No semicolon = return\n}\n\nlet result = add(5, 3);",
+        "If/Else": "if x > 0 {\n    println!(\"Positive\");\n} else if x < 0 {\n    println!(\"Negative\");\n} else {\n    println!(\"Zero\");\n}\n\n// If as expression\nlet result = if x > 0 { \"Positive\" } else { \"Negative\" };",
+        "Structs": "struct Person {\n    name: String,\n    age: u32,\n}\n\nlet p = Person {\n    name: String::from(\"Alice\"),\n    age: 25,\n};\n\nimpl Person {\n    fn greet(&self) -> String {\n        format!(\"Hi, I'm {}\", self.name)\n    }\n}",
+        "Ownership": "// Move\nlet s1 = String::from(\"hello\");\nlet s2 = s1;  // s1 is no longer valid\n\n// Clone\nlet s3 = s2.clone();\n\n// Borrow\nlet len = calculate_length(&s3);\n\nfn calculate_length(s: &String) -> usize {\n    s.len()\n}",
+        "Match": "match x {\n    1 => println!(\"One\"),\n    2 | 3 => println!(\"Two or Three\"),\n    4..=10 => println!(\"Four to Ten\"),\n    _ => println!(\"Other\"),\n}\n\n// Option\nlet value: Option<i32> = Some(5);\nmatch value {\n    Some(v) => println!(\"{}\", v),\n    None => println!(\"No value\"),\n}",
+        "Error Handling": "use std::fs::File;\n\nlet f = File::open(\"file.txt\");\nlet f = match f {\n    Ok(file) => file,\n    Err(error) => panic!(\"Error: {:?}\", error),\n};\n\n// ? operator\nfn read_file() -> Result<String, std::io::Error> {\n    let content = std::fs::read_to_string(\"file.txt\")?;\n    Ok(content)\n}"
+    }
+}

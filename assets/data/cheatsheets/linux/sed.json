@@ -1,0 +1,13 @@
+﻿{
+    "id":  "sed",
+    "description":  "Quick reference guide for Sed",
+    "icon":  "âœ‚ï¸",
+    "snippets":  {
+                     "Getting Started":  "# Sed Quick Reference\n\nBasic commands and usage for Sed.\nVisit https://quickref.me/sed for complete documentation.",
+                     "Examples":  "# Practical examples for Sed\n\n# More examples at https://quickref.me/sed",
+                     "Common Commands":  "# Essential Sed commands\n\n# Check documentation at https://quickref.me/sed"
+                 },
+    "category":  "linux",
+    "title":  "Sed",
+    "url":  "https://quickref.me/sed"
+}
