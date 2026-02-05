@@ -9,8 +9,8 @@ class ClassNotificationService {
 
   // 🚀 1. Initialize
   static Future<void> init() async {
-    tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Asia/Kolkata')); // Set to Indian timezone
+    // Platform check specific logic if needed
+    // Timezone is already initialized in main.dart
     
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const settings = InitializationSettings(android: androidSettings);

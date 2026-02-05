@@ -56,9 +56,15 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: ShaderMask(
-          shaderCallback: (bounds) => LinearGradient(
-            colors: [Colors.cyanAccent, Colors.white, Colors.cyanAccent],
-          ).createShader(bounds),
+          shaderCallback: (bounds) {
+            if (bounds.isEmpty) {
+              return const LinearGradient(colors: [Colors.cyanAccent, Colors.cyanAccent])
+                  .createShader(bounds);
+            }
+            return const LinearGradient(
+              colors: [Colors.cyanAccent, Colors.white, Colors.cyanAccent],
+            ).createShader(bounds);
+          },
           child: Text(
             'About FluxFlow OS',
             style: GoogleFonts.orbitron(
@@ -143,8 +149,8 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         shape: BoxShape.circle,
                         gradient: RadialGradient(
                           colors: [
-                            Colors.cyanAccent.withOpacity(0.4 * sin(phase * pi)),
-                            Colors.purple.withOpacity(0.3 * cos(phase * pi)),
+                            Colors.cyanAccent.withOpacity(0.4 * (sin(phase * pi) * 0.5 + 0.5)),
+                            Colors.purple.withOpacity(0.3 * (cos(phase * pi) * 0.5 + 0.5)),
                             Colors.transparent,
                           ],
                         ),
@@ -172,8 +178,8 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
                             colors: [
-                              Colors.cyanAccent.withOpacity(0.4 + sin(_logoController.value * 2 * pi) * 0.2),
-                              Colors.purple.withOpacity(0.3 + cos(_logoController.value * 2 * pi) * 0.2),
+                              Colors.cyanAccent.withOpacity(0.4 + (sin(_logoController.value * 2 * pi) * 0.5 + 0.5) * 0.2),
+                              Colors.purple.withOpacity(0.3 + (cos(_logoController.value * 2 * pi) * 0.5 + 0.5) * 0.2),
                               Colors.pink.withOpacity(0.2),
                               Colors.transparent,
                             ],
@@ -211,7 +217,11 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                   
                   // App Title with Holographic Effect
                   ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
+                    shaderCallback: (bounds) {
+                      if (bounds.isEmpty) {
+                        return const LinearGradient(colors: [Colors.cyanAccent, Colors.cyanAccent]).createShader(bounds);
+                      }
+                      return LinearGradient(
                       colors: [
                         Colors.cyanAccent,
                         Colors.white,
@@ -220,7 +230,8 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         Colors.cyanAccent,
                       ],
                       stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
-                    ).createShader(bounds),
+                    ).createShader(bounds);
+                    },
                     child: Text(
                       'FluxFlow OS',
                       style: GoogleFonts.orbitron(
@@ -381,9 +392,14 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                             const SizedBox(width: 15),
                             Expanded(
                               child: ShaderMask(
-                                shaderCallback: (bounds) => LinearGradient(
+                                shaderCallback: (bounds) {
+                                  if (bounds.isEmpty) {
+                                    return const LinearGradient(colors: [Colors.cyanAccent, Colors.cyanAccent]).createShader(bounds);
+                                  }
+                                  return const LinearGradient(
                                   colors: [Colors.cyanAccent, Colors.white, Colors.cyanAccent],
-                                ).createShader(bounds),
+                                ).createShader(bounds);
+                                },
                                 child: Text(
                                   'ADVANCED SYSTEM MODULES',
                                   style: GoogleFonts.orbitron(
@@ -583,7 +599,11 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         const SizedBox(height: 20),
                         
                         ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
+                          shaderCallback: (bounds) {
+                            if (bounds.isEmpty) {
+                              return const LinearGradient(colors: [Colors.amber, Colors.amber]).createShader(bounds);
+                            }
+                            return LinearGradient(
                             colors: [
                               Colors.amber,
                               Colors.white,
@@ -592,7 +612,8 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                               Colors.amber,
                             ],
                             stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
-                          ).createShader(bounds),
+                          ).createShader(bounds);
+                          },
                           child: Text(
                             'DEVELOPMENT TEAM',
                             style: GoogleFonts.orbitron(
@@ -707,7 +728,10 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         const SizedBox(height: 25),
                         
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width - 100,
+                          ),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
@@ -746,25 +770,33 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                                 child: const Icon(
                                   Icons.rocket_launch_outlined,
                                   color: Colors.amber,
-                                  size: 22,
+                                  size: 20,
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              ShaderMask(
-                                shaderCallback: (bounds) => LinearGradient(
-                                  colors: [
-                                    Colors.white,
-                                    Colors.amber,
-                                    Colors.white,
-                                  ],
-                                ).createShader(bounds),
-                                child: Text(
-                                  'Core Innovation Team',
-                                  style: GoogleFonts.orbitron(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 1.5,
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: ShaderMask(
+                                  shaderCallback: (bounds) {
+                                    if (bounds.isEmpty) {
+                                      return const LinearGradient(colors: [Colors.white, Colors.white]).createShader(bounds);
+                                    }
+                                    return const LinearGradient(
+                                    colors: [
+                                      Colors.white,
+                                      Colors.amber,
+                                      Colors.white,
+                                    ],
+                                  ).createShader(bounds);
+                                  },
+                                  child: Text(
+                                    'Core Innovation Team',
+                                    style: GoogleFonts.orbitron(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 1,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
@@ -833,9 +865,14 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         ),
                         const SizedBox(height: 15),
                         ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
-                            colors: [Colors.cyanAccent, Colors.white, Colors.cyanAccent],
-                          ).createShader(bounds),
+                          shaderCallback: (bounds) {
+                            if (bounds.isEmpty) {
+                              return const LinearGradient(colors: [Colors.transparent, Colors.transparent]).createShader(bounds);
+                            }
+                            return const LinearGradient(
+                              colors: [Colors.cyanAccent, Colors.white, Colors.cyanAccent],
+                            ).createShader(bounds);
+                          },
                           child: Text(
                             'RGMCET',
                             style: GoogleFonts.orbitron(
@@ -905,14 +942,19 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         ),
                         const SizedBox(height: 15),
                         ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
-                            colors: [
-                              Colors.cyanAccent,
-                              Colors.white,
-                              Colors.purple,
-                              Colors.cyanAccent,
-                            ],
-                          ).createShader(bounds),
+                          shaderCallback: (bounds) {
+                             if (bounds.isEmpty) {
+                               return const LinearGradient(colors: [Colors.transparent, Colors.transparent]).createShader(bounds);
+                             }
+                             return const LinearGradient(
+                              colors: [
+                                Colors.cyanAccent,
+                                Colors.white,
+                                Colors.purple,
+                                Colors.cyanAccent,
+                              ],
+                            ).createShader(bounds);
+                          },
                           child: Text(
                             'Masthan Valli',
                             style: GoogleFonts.greatVibes(

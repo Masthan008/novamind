@@ -170,13 +170,20 @@ class _QuickStatsWidgetState extends State<QuickStatsWidget>
                   
                   Expanded(
                     child: ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: [
-                          Colors.cyanAccent,
-                          Colors.white,
-                          Colors.cyanAccent,
-                        ],
-                      ).createShader(bounds),
+                      shaderCallback: (bounds) {
+                        if (bounds.isEmpty) {
+                          return const LinearGradient(
+                            colors: [Colors.cyanAccent, Colors.cyanAccent],
+                          ).createShader(Rect.fromLTWH(0, 0, 1, 1));
+                        }
+                        return LinearGradient(
+                          colors: [
+                            Colors.cyanAccent,
+                            Colors.white,
+                            Colors.cyanAccent,
+                          ],
+                        ).createShader(bounds);
+                      },
                       child: Text(
                         'Quick Stats',
                         style: GoogleFonts.orbitron(
@@ -327,9 +334,16 @@ class _QuickStatsWidgetState extends State<QuickStatsWidget>
                         double displayValue = animatedValue * _counterController.value;
                         
                         return ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
-                            colors: [color, Colors.white, color],
-                          ).createShader(bounds),
+                          shaderCallback: (bounds) {
+                            if (bounds.isEmpty) {
+                              return LinearGradient(
+                                colors: [color, color],
+                              ).createShader(const Rect.fromLTWH(0, 0, 1, 1));
+                            }
+                            return LinearGradient(
+                              colors: [color, Colors.white, color],
+                            ).createShader(bounds);
+                          },
                           child: Text(
                             '${displayValue.toStringAsFixed(suffix == '%' ? 1 : 0)}$suffix',
                             style: GoogleFonts.orbitron(

@@ -36,7 +36,7 @@ class StudentAuthService {
         
         if (data != null) {
           _currentStudent = Student.fromMap(data);
-          debugPrint('✅ Auto-login: ${_currentStudent!.name}');
+          debugPrint('✅ Auto-login: ${_currentStudent?.name ?? "Unknown"}');
           return _currentStudent;
         }
       }
@@ -72,10 +72,10 @@ class StudentAuthService {
       
       // Save login state
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('currentUserRegd', _currentStudent!.regdNo);
-      await prefs.setString('currentUserName', _currentStudent!.name);
+      await prefs.setString('currentUserRegd', _currentStudent?.regdNo ?? '');
+      await prefs.setString('currentUserName', _currentStudent?.name ?? '');
       
-      debugPrint('✅ Login success: ${_currentStudent!.name}');
+      debugPrint('✅ Login success: ${_currentStudent?.name ?? "Unknown"}');
       return (student: _currentStudent, error: null);
     } catch (e) {
       debugPrint('⚠️ Login error: $e');
@@ -183,23 +183,24 @@ class StudentAuthService {
 
   /// Refresh current student data from Supabase
   static Future<Student?> refreshCurrentStudent() async {
-    if (_currentStudent == null) return null;
+    final student = _currentStudent;
+    if (student == null) return null;
     
     try {
-      debugPrint('🔄 Refreshing student data for: ${_currentStudent!.regdNo}');
+      debugPrint('🔄 Refreshing student data for: ${student.regdNo}');
       
       final data = await _supabase
           .from('students')
           .select()
-          .eq('regd_no', _currentStudent!.regdNo)
+          .eq('regd_no', student.regdNo)
           .maybeSingle();
       
       if (data != null) {
         _currentStudent = Student.fromMap(data);
-        debugPrint('✅ Student data refreshed: ${_currentStudent!.name}, Mobile: ${_currentStudent!.mobileNumber}');
+        debugPrint('✅ Student data refreshed: ${_currentStudent?.name ?? "Unknown"}, Mobile: ${_currentStudent?.mobileNumber ?? "N/A"}');
         return _currentStudent;
       } else {
-        debugPrint('⚠️ No data found for student: ${_currentStudent!.regdNo}');
+        debugPrint('⚠️ No data found for student: ${student.regdNo}');
       }
     } catch (e) {
       debugPrint('⚠️ Refresh error: $e');
@@ -233,7 +234,7 @@ class StudentAuthService {
       // 4. Update the global variable
       if (data != null) {
         _currentStudent = Student.fromMap(data);
-        debugPrint("AuthService: Profile refreshed for ${_currentStudent!.name}");
+        debugPrint("AuthService: Profile refreshed for ${_currentStudent?.name ?? 'Unknown'}");
         return _currentStudent;
       }
       
@@ -254,7 +255,8 @@ class StudentAuthService {
     String? section,
     String? year,
   }) async {
-    if (_currentStudent == null) return false;
+    final student = _currentStudent;
+    if (student == null || student.id == null) return false;
     
     try {
       final updates = <String, dynamic>{};
@@ -273,7 +275,7 @@ class StudentAuthService {
       await _supabase
           .from('students')
           .update(updates)
-          .eq('id', _currentStudent!.id!);
+          .eq('id', student.id!);
       
       // Refresh local data
       await refreshCurrentStudent();
@@ -288,10 +290,11 @@ class StudentAuthService {
   /// Upload profile image to Supabase Storage
   /// Returns the public URL of the uploaded image, or null on error
   static Future<String?> uploadProfileImage(File imageFile) async {
-    if (_currentStudent == null) return null;
+    final student = _currentStudent;
+    if (student == null) return null;
     
     try {
-      final fileName = '${_currentStudent!.id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final fileName = '${student.id ?? "unknown"}_${DateTime.now().millisecondsSinceEpoch}.jpg';
       final filePath = 'profile-images/$fileName';
       
       debugPrint('📤 Uploading profile image: $filePath');

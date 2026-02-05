@@ -60,7 +60,7 @@ class BatteryService {
           'For reliable alarms:\n'
           '1. Go to Settings\n'
           '2. Battery → Battery Optimization\n'
-          '3. Find "FluxFlow" and disable optimization',
+          '3. Find "Sentinel" and disable optimization',
           style: TextStyle(fontSize: 16),
         ),
         actions: [

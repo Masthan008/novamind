@@ -5,10 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Dynamic drawer that shows user's name and email from Supabase
 class FluxDrawer extends StatefulWidget {
-  final VoidCallback? onCodeCompiler;
   final VoidCallback? onLibrary;
   final VoidCallback? onVideoLibrary;
-  final VoidCallback? onCodingContests;
   final VoidCallback? onLeaderboard;
   final VoidCallback? onSettings;
   final VoidCallback? onLogout;
@@ -16,10 +14,8 @@ class FluxDrawer extends StatefulWidget {
 
   const FluxDrawer({
     super.key,
-    this.onCodeCompiler,
     this.onLibrary,
     this.onVideoLibrary,
-    this.onCodingContests,
     this.onLeaderboard,
     this.onSettings,
     this.onLogout,
@@ -31,7 +27,7 @@ class FluxDrawer extends StatefulWidget {
 }
 
 class _FluxDrawerState extends State<FluxDrawer> {
-  String _userName = 'FluxFlow Student';
+  String _userName = 'Sentinel Student';
   String _userEmail = '';
   bool _isLoading = true;
 
@@ -59,12 +55,12 @@ class _FluxDrawerState extends State<FluxDrawer> {
               _userName = data['full_name'] ?? 
                           data['username'] ?? 
                           user.email?.split('@').first ?? 
-                          'FluxFlow Student';
+                          'Sentinel Student';
               _userEmail = data['email'] ?? user.email ?? '';
             });
           } else if (mounted) {
             setState(() {
-              _userName = user.email?.split('@').first ?? 'FluxFlow Student';
+              _userName = user.email?.split('@').first ?? 'Sentinel Student';
               _userEmail = user.email ?? '';
             });
           }
@@ -72,7 +68,7 @@ class _FluxDrawerState extends State<FluxDrawer> {
           // Table might not exist, use auth user info
           if (mounted) {
             setState(() {
-              _userName = user.email?.split('@').first ?? 'FluxFlow Student';
+              _userName = user.email?.split('@').first ?? 'Sentinel Student';
               _userEmail = user.email ?? '';
             });
           }
@@ -102,15 +98,6 @@ class _FluxDrawerState extends State<FluxDrawer> {
               padding: EdgeInsets.zero,
               children: [
                 const SizedBox(height: 8),
-                _buildMenuItem(
-                  icon: Icons.code,
-                  title: 'Code Compiler',
-                  color: Colors.cyan,
-                  onTap: () {
-                    Navigator.pop(context);
-                    widget.onCodeCompiler?.call();
-                  },
-                ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2),
                 
                 _buildMenuItem(
                   icon: Icons.menu_book,
@@ -131,16 +118,6 @@ class _FluxDrawerState extends State<FluxDrawer> {
                     widget.onVideoLibrary?.call();
                   },
                 ).animate().fadeIn(delay: 175.ms).slideX(begin: -0.2),
-                
-                _buildMenuItem(
-                  icon: Icons.emoji_events,
-                  title: 'Coding Contests',
-                  color: Colors.orange,
-                  onTap: () {
-                    Navigator.pop(context);
-                    widget.onCodingContests?.call();
-                  },
-                ).animate().fadeIn(delay: 188.ms).slideX(begin: -0.2),
                 
                 _buildMenuItem(
                   icon: Icons.leaderboard,

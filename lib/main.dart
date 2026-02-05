@@ -1,3 +1,5 @@
+import 'dart:async'; // For runZonedGuarded
+import 'package:flutter/foundation.dart'; // For kDebugMode
 import 'package:flutter/material.dart';
 import 'dart:io'; // For Platform check
 import 'package:flutter/services.dart';
@@ -6,7 +8,8 @@ import 'package:supabase_flutter/supabase_flutter.dart'; // Critical Import
 import 'package:provider/provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
@@ -87,6 +90,13 @@ void main() async {
   // 2. Initialize Environment Configuration
   await EnvConfig.initialize();
   print("✅ Environment Configuration Initialized");
+  
+  // DEBUG: Check API keys
+  if (kDebugMode) {
+    print("DEBUG - Groq Key: ${EnvConfig.hasGroqKey ? 'LOADED' : 'MISSING'}");
+    print("DEBUG - OpenRouter Key: ${EnvConfig.hasOpenRouterKey ? 'LOADED' : 'MISSING'}");
+    print("DEBUG - Bytez Key: ${EnvConfig.hasBytezKey ? 'LOADED' : 'MISSING'}");
+  }
 
   // 3. Fix White Bar UI Bug - Set System UI Overlay
   SystemChrome.setSystemUIOverlayStyle(
@@ -106,6 +116,8 @@ void main() async {
 
   // 3. Wrap EVERYTHING in a safety block
   try {
+    print("🔧 Starting Hive initialization...");
+    
     // --- Hive Init ---
     await Hive.initFlutter();
     
@@ -113,11 +125,13 @@ void main() async {
     try {
       if (!Hive.isAdapterRegistered(ClassSessionAdapter().typeId)) {
         Hive.registerAdapter(ClassSessionAdapter());
+        print("✅ ClassSession adapter registered");
       }
 
       // Register CheatSheet adapter
       if (!Hive.isAdapterRegistered(10)) { // CheatSheet typeId is 10
         Hive.registerAdapter(CheatSheetAdapter());
+        print("✅ CheatSheet adapter registered");
       }
 
     } catch (e) {
@@ -126,24 +140,31 @@ void main() async {
     
     // Open Boxes SAFELY - Check if already open first
     // This fixes "Box is already open" crash
+    print("🔧 Opening Hive boxes...");
+    
     if (!Hive.isBoxOpen('calculator_history')) {
       await Hive.openBox('calculator_history');
+      print("✅ Calculator history box opened");
     }
     
     if (!Hive.isBoxOpen('class_sessions')) {
       await Hive.openBox<ClassSession>('class_sessions');
+      print("✅ Class sessions box opened");
     }
     
     if (!Hive.isBoxOpen('user_prefs')) {
       await Hive.openBox('user_prefs');
+      print("✅ User prefs box opened");
     }
     
     if (!Hive.isBoxOpen('books_notes')) {
       await Hive.openBox('books_notes');
+      print("✅ Books notes box opened");
     }
     
     if (!Hive.isBoxOpen('cheatsheets')) {
       await Hive.openBox<CheatSheet>('cheatsheets');
+      print("✅ Cheatsheets box opened");
     }
     
     print("✅ Hive Initialized Successfully");
@@ -178,8 +199,26 @@ void main() async {
 
     // --- Notification Service Init ---
     // Initialize timezone database BEFORE notification service
-    tz.initializeTimeZones();
-    print('✅ Timezone Database Initialized');
+    try {
+      tzdata.initializeTimeZones();
+      // Set default location using new API (timezone package 0.9+)
+      // Use tz.local which is automatically set based on device timezone
+      // or we can use getLocation from the data
+      final location = tz.getLocation('Asia/Kolkata');
+      tz.setLocalLocation(location);
+      print('✅ Timezone Database Initialized (Asia/Kolkata set)');
+    } catch (e) {
+      print('⚠️ Timezone Init Error: $e');
+      // Fallback - just initialize without setting location
+      try {
+        tzdata.initializeTimeZones();
+        // Use UTC as fallback if location setting fails
+        tz.setLocalLocation(tz.getLocation('UTC'));
+        print('⚠️ Fallback to UTC Timezone');
+      } catch (e2) {
+        print('❌ Critical Timezone Error: $e2');
+      }
+    }
     
     await NotificationService.init();
     print('✅ Notification Service Initialized');
@@ -189,12 +228,20 @@ void main() async {
     print('✅ Class Notification Service Initialized');
     
     // Request notification permissions (Android 13+)
-    await ClassNotificationService.requestPermissions();
-    print('✅ Notification Permissions Requested');
+    // Skip on Web to avoid crash
+    if (!kIsWeb) {
+      await ClassNotificationService.requestPermissions();
+      print('✅ Notification Permissions Requested');
+    }
     
     // Schedule all timetable classes automatically
-    await NotificationService.scheduleTimetable();
-    print('✅ Timetable Notifications Scheduled');
+    // On Web, persistent notifications might not be supported/reliable same way
+    if (!kIsWeb) {
+      await NotificationService.scheduleTimetable();
+      print('✅ Timetable Notifications Scheduled');
+    } else {
+      print('ℹ️ Skipping Timetable Scheduling on Web');
+    }
     
     // Start listening for news updates
     NewsService.listenForUpdates();
@@ -207,8 +254,10 @@ void main() async {
     // --- Permissions ---
     // Using a separate try-catch because permissions can be finicky on some Android versions
     try {
-      await _requestPermissions();
-      print("✅ Permissions Requested");
+      if (!kIsWeb) {
+        await _requestPermissions();
+        print("✅ Permissions Requested");
+      }
     } catch (e) {
       print("⚠️ Permission Request Warning: $e");
     }
@@ -220,21 +269,88 @@ void main() async {
     print("Stack trace: $stackTrace");
   }
 
-  // 5. Launch App (This runs even if Init failed)
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => AccessibilityProvider()),
-        ChangeNotifierProvider(create: (_) => DashboardProvider()),
-        ChangeNotifierProvider(create: (_) => NotificationProvider()),
-        ChangeNotifierProvider(create: (_) => CalculatorProvider()),
+  // 5. Global Error Boundary & App Launch
+  // This catches errors that would otherwise crash the app (Red Screen)
+  runZonedGuarded(() {
+    // Prevent Red Screen of Death in Production
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details); // Log to console
+      // Don't show red screen in release mode
+      if (!kDebugMode) {
+        // Optional: Send to crash analytics
+      }
+    };
+    
+    // Custom Error Widget for Build Phase Errors
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      // Print detailed error info for debugging
+      debugPrint("⛔ BUILD ERROR CAUGHT: ${details.exceptionAsString()}");
+      debugPrint("⛔ ERROR CONTEXT: ${details.context?.toDescription() ?? 'No context'}");
+      debugPrint("⛔ ERROR LIBRARY: ${details.library ?? 'Unknown'}");
+      debugPrint("⛔ STACK TRACE:\n${details.stack}");
+      
+      return Material(
+        color: Colors.black,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.orange, size: 48),
+                const SizedBox(height: 16),
+                const Text(
+                  'Something went wrong',
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'We avoided a crash. Please restart the app.',
+                  style: TextStyle(color: Colors.grey[400], fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                // Show error message in debug mode to help diagnose
+                if (kDebugMode) ...[
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.red.withOpacity(0.3)),
+                    ),
+                    child: Text(
+                      details.exceptionAsString(),
+                      style: const TextStyle(color: Colors.redAccent, fontSize: 12, fontFamily: 'monospace'),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      );
+    };
 
-        ChangeNotifierProvider(create: (_) => FocusProvider()),
-      ],
-      child: const FluxFlowApp(),
-    ),
-  );
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+          ChangeNotifierProvider(create: (_) => AccessibilityProvider()),
+          ChangeNotifierProvider(create: (_) => DashboardProvider()),
+          ChangeNotifierProvider(create: (_) => NotificationProvider()),
+          ChangeNotifierProvider(create: (_) => CalculatorProvider()),
+          ChangeNotifierProvider(create: (_) => FocusProvider()),
+        ],
+        child: const FluxFlowApp(),
+      ),
+    );
+  }, (error, stack) {
+    // 6. Catch Async Errors (Futures, Streams) here
+    debugPrint("🔴 GLOBAL ASYNC ERROR: $error");
+    debugPrint("Stack: $stack");
+  });
 }
 
 class FluxFlowApp extends StatefulWidget {

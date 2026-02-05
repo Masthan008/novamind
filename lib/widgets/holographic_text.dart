@@ -59,6 +59,12 @@ class _HolographicTextState extends State<HolographicText>
       builder: (context, child) {
         return ShaderMask(
           shaderCallback: (bounds) {
+            // Prevent assertion error when bounds are empty or invalid
+            if (bounds.isEmpty || bounds.width <= 0 || bounds.height <= 0) {
+              return LinearGradient(
+                colors: widget.colors.isNotEmpty ? widget.colors : [Colors.white, Colors.white],
+              ).createShader(const Rect.fromLTWH(0, 0, 1, 1));
+            }
             return LinearGradient(
               colors: widget.colors,
               stops: [

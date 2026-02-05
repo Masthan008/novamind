@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:fluxflow/modules/cybersecurity/models/scan_result.dart';
+import 'package:sentinel/modules/cybersecurity/models/scan_result.dart';
 
 class PortScannerService {
   // Common ports and their services

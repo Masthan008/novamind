@@ -199,8 +199,8 @@ class _DevRefHubScreenState extends State<DevRefHubScreen> {
   // 🖼️ PROFESSIONAL LOGO RENDERER
   // Uses real logo images from assets with intelligent fallback
   Widget _buildIcon(String iconData, {double size = 24, Color? color}) {
-    // If it's already a full path, use it directly
-    if (iconData.contains('/') && (iconData.endsWith('.png') || iconData.endsWith('.jpg'))) {
+    // If it's already a full path to an image, use it directly
+    if (iconData.startsWith('assets/') && (iconData.endsWith('.png') || iconData.endsWith('.jpg'))) {
       return Image.asset(
         iconData,
         width: size,
@@ -209,7 +209,15 @@ class _DevRefHubScreenState extends State<DevRefHubScreen> {
       );
     }
     
-    // Map icon data to logo file names
+    // If it's an emoji, display it as text
+    if (iconData.length <= 4 && RegExp(r'[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]', unicode: true).hasMatch(iconData)) {
+      return Text(
+        iconData,
+        style: TextStyle(fontSize: size),
+      );
+    }
+    
+    // Map icon data to logo file names for backward compatibility
     final logoMap = {
       // Programming Languages
       'python': 'python.png',
@@ -368,6 +376,8 @@ class _DevRefHubScreenState extends State<DevRefHubScreen> {
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -476,6 +486,8 @@ class _DevRefHubScreenState extends State<DevRefHubScreen> {
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 8),
                       _buildTag(sheet['category'] as String, Colors.deepPurple),

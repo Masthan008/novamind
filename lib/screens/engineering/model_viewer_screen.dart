@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:fluxflow/data/model_data.dart';
+import 'package:sentinel/data/model_data.dart';
 
 class ModelViewerScreen extends StatefulWidget {
   final EngineeringModel model;

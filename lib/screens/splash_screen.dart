@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   late Animation<double> _waveAnimation;
   
   double _loadingProgress = 0.0;
-  String _loadingText = '🚀 Initializing FluxFlow...';
+  String _loadingText = '🚀 Initializing Sentinel...';
   String _subText = 'Preparing your learning experience';
   bool _isLoading = true;
   
@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     '🌟 Optimizing performance...',
     '🎨 Preparing beautiful UI...',
     '✨ Almost ready...',
-    '🎉 Welcome to FluxFlow!'
+    '🎉 Welcome to Sentinel!'
   ];
   
   final List<String> _subMessages = [
@@ -513,17 +513,24 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 children: [
                   // Animated App Title with Holographic Effect
                   ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: [
-                        Colors.cyanAccent,
-                        Colors.purple,
-                        Colors.pink,
-                        Colors.cyanAccent,
-                      ],
-                      stops: const [0.0, 0.3, 0.7, 1.0],
-                    ).createShader(bounds),
+                    shaderCallback: (bounds) {
+                      if (bounds.isEmpty) {
+                        return const LinearGradient(
+                          colors: [Colors.cyanAccent, Colors.cyanAccent],
+                        ).createShader(Rect.fromLTWH(0, 0, 1, 1));
+                      }
+                      return LinearGradient(
+                        colors: [
+                          Colors.cyanAccent,
+                          Colors.purple,
+                          Colors.pink,
+                          Colors.cyanAccent,
+                        ],
+                        stops: const [0.0, 0.3, 0.7, 1.0],
+                      ).createShader(bounds);
+                    },
                     child: Text(
-                      'FluxFlow',
+                      'Sentinel',
                       style: GoogleFonts.orbitron(
                         fontSize: 42,
                         fontWeight: FontWeight.w900,
@@ -878,14 +885,21 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               right: 0,
               child: Center(
                 child: ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
-                    colors: [
-                      Colors.cyanAccent,
-                      Colors.purple,
-                      Colors.pink,
-                      Colors.orange,
-                    ],
-                  ).createShader(bounds),
+                  shaderCallback: (bounds) {
+                    if (bounds.isEmpty) {
+                      return const LinearGradient(
+                        colors: [Colors.cyanAccent, Colors.cyanAccent],
+                      ).createShader(Rect.fromLTWH(0, 0, 1, 1));
+                    }
+                    return LinearGradient(
+                      colors: [
+                        Colors.cyanAccent,
+                        Colors.purple,
+                        Colors.pink,
+                        Colors.orange,
+                      ],
+                    ).createShader(bounds);
+                  },
                   child: Text(
                     "✨ Crafted with ❤️ by MASTHAN VALLI ✨",
                     style: GoogleFonts.greatVibes(

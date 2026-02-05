@@ -941,7 +941,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                   child: ListTile(
                     leading: Icon(Icons.code, color: themeProvider.getCurrentPrimaryColor()),
                     title: const Text(
-                      'FluxFlow - Ultimate Student OS',
+                      'Sentinel - Ultimate Student OS',
                       style: TextStyle(color: Colors.white),
                     ),
                     subtitle: const Text(

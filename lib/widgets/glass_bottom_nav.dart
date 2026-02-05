@@ -82,7 +82,7 @@ class _GlassBottomNavState extends State<GlassBottomNav>
             builder: (context, child) {
               return Container(
                 width: double.infinity,
-                height: 70,
+                height: 85,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   gradient: LinearGradient(
@@ -109,9 +109,9 @@ class _GlassBottomNavState extends State<GlassBottomNav>
           // Main Glass Container
           GlassContainer(
             width: double.infinity,
-            height: 70,
+            height: 85,
             borderRadius: 30,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Stack(
               children: [
                 // Animated Selection Indicator
@@ -122,10 +122,10 @@ class _GlassBottomNavState extends State<GlassBottomNav>
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeOutCubic,
                       left: (MediaQuery.of(context).size.width - 40) / 3 * widget.currentIndex + 8,
-                      top: 8,
+                      top: 6,
                       child: Container(
                         width: (MediaQuery.of(context).size.width - 40) / 3 - 16,
-                        height: 54,
+                        height: 70,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           gradient: RadialGradient(
@@ -175,15 +175,16 @@ class _GlassBottomNavState extends State<GlassBottomNav>
           animation: _itemControllers[index],
           builder: (context, child) {
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Animated Icon Container
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOutCubic,
-                    padding: EdgeInsets.all(isSelected ? 8 : 6),
+                    padding: EdgeInsets.all(isSelected ? 6 : 4),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: isSelected
@@ -261,26 +262,26 @@ class _GlassBottomNavState extends State<GlassBottomNav>
                     ),
                   ),
                   
-                  // Animated Label
-                  AnimatedContainer(
+                  const SizedBox(height: 2),
+                  // Animated Label - always show but fade
+                  AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
-                    height: isSelected ? 16 : 0,
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 300),
-                      opacity: isSelected ? 1.0 : 0.0,
+                    opacity: isSelected ? 1.0 : 0.5,
+                    child: SizedBox(
+                      height: 14,
                       child: Text(
                         label,
                         style: GoogleFonts.poppins(
-                          color: color,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 10,
-                          shadows: [
+                          color: isSelected ? color : Colors.white70,
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                          fontSize: 9,
+                          shadows: isSelected ? [
                             Shadow(
                               color: color.withOpacity(0.5),
                               blurRadius: 5,
                               offset: const Offset(0, 0),
                             ),
-                          ],
+                          ] : null,
                         ),
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,

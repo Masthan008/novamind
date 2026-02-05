@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:math' as math;
-import 'package:fluxflow/modules/cybersecurity/models/scan_result.dart';
+import 'package:sentinel/modules/cybersecurity/models/scan_result.dart';
 import 'port_scanner_service.dart';
 import 'widgets/radar_widget.dart';
 import 'widgets/scan_result_card.dart';

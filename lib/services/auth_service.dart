@@ -35,7 +35,7 @@ class AuthService {
 
       // Trigger the Dialog
       final result = await _auth.authenticate(
-        localizedReason: 'Authenticate to access FluxFlow',
+        localizedReason: 'Authenticate to access Sentinel',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: false, // Allows PIN backup if biometric fails
@@ -113,7 +113,7 @@ class _SetupDialogState extends State<SetupDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Welcome to FluxFlow'),
+      title: const Text('Welcome to Sentinel'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

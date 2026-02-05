@@ -75,6 +75,21 @@ class _CheatsheetViewerScreenState extends State<CheatsheetViewerScreen> {
     }
   }
 
+  // Helper method to build icon - handles both emoji and asset paths
+  Widget _buildIcon(String iconData, {double size = 20}) {
+    // If it's an asset path, use Image.asset
+    if (iconData.startsWith('assets/') && (iconData.endsWith('.png') || iconData.endsWith('.jpg'))) {
+      return Image.asset(
+        iconData,
+        width: size,
+        height: size,
+        errorBuilder: (c, o, s) => Text('📄', style: TextStyle(fontSize: size)),
+      );
+    }
+    // Otherwise treat as emoji or text
+    return Text(iconData, style: TextStyle(fontSize: size));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +99,7 @@ class _CheatsheetViewerScreenState extends State<CheatsheetViewerScreen> {
         elevation: 0,
         title: Row(
           children: [
-            Text(widget.cheatsheet.icon, style: TextStyle(fontSize: 20)),
+            _buildIcon(widget.cheatsheet.icon, size: 20),
             const SizedBox(width: 10),
             Expanded(
               child: Text(

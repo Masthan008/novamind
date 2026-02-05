@@ -100,13 +100,14 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
   }
 
   Future<void> _saveChanges() async {
-    if (_student == null) return;
+    final student = _student;
+    if (student == null) return;
     
     final mobile = _mobileController.text.trim();
     final email = _emailController.text.trim();
     
     debugPrint('💾 Profile Screen: Attempting FORCE SAVE...');
-    debugPrint('   RegdNo: ${_student!.regdNo}');
+    debugPrint('   RegdNo: ${student.regdNo}');
     debugPrint('   Mobile: $mobile');
     debugPrint('   Email: $email');
     
@@ -127,7 +128,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
       // NUCLEAR OPTION: Call the "Force Save" Function (RPC)
       // This bypasses ALL RLS policies using security definer privileges
       await StudentAuthService.supabase.rpc('force_update_profile', params: {
-        'p_regd_no': _student!.regdNo,  // The ID to find
+        'p_regd_no': student.regdNo,  // The ID to find
         'p_mobile': mobile,              // The new data
         'p_email': email,                // The new data
       });
@@ -229,6 +230,9 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
       );
     }
 
+    // Use local variable for null-safety after the guard at line 205
+    final student = _student!;
+    
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
       appBar: AppBar(
@@ -302,10 +306,10 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                     child: CircleAvatar(
                       radius: 60,
                       backgroundColor: Colors.grey[900],
-                      backgroundImage: _student!.imageUrl != null
-                          ? NetworkImage(_student!.imageUrl!)
+                      backgroundImage: student.imageUrl != null
+                          ? NetworkImage(student.imageUrl!)
                           : null,
-                      child: _student!.imageUrl == null
+                      child: student.imageUrl == null
                           ? const Icon(Icons.person, size: 60, color: Colors.white54)
                           : null,
                     ),
@@ -345,7 +349,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
 
             // Badge
             UserBadge(
-              tier: _student!.subscriptionTier,
+              tier: student.subscriptionTier,
               compact: false,
             ),
 
@@ -355,20 +359,20 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
             _buildHeader('Student Information', Icons.school),
             const SizedBox(height: 16),
             
-            _buildReadOnly('Full Name', _student!.name, Icons.person),
+            _buildReadOnly('Full Name', student.name, Icons.person),
             const SizedBox(height: 12),
-            _buildReadOnly('Registration No', _student!.regdNo, Icons.badge),
+            _buildReadOnly('Registration No', student.regdNo, Icons.badge),
             const SizedBox(height: 12),
             
             Row(
               children: [
-                Expanded(child: _buildReadOnly('Group', _student!.group, Icons.group)),
+                Expanded(child: _buildReadOnly('Group', student.group, Icons.group)),
                 const SizedBox(width: 12),
-                Expanded(child: _buildReadOnly('Section', _student!.section, Icons.class_)),
+                Expanded(child: _buildReadOnly('Section', student.section, Icons.class_)),
               ],
             ),
             const SizedBox(height: 12),
-            _buildReadOnly('Year', _student!.year, Icons.calendar_today),
+            _buildReadOnly('Year', student.year, Icons.calendar_today),
 
             const SizedBox(height: 30),
             Divider(color: Colors.grey[800], thickness: 1),

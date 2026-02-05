@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluxflow/data/engineering_data.dart';
-import 'package:fluxflow/screens/engineering/topic_viewer_screen.dart';
-import 'package:fluxflow/data/model_data.dart';
-import 'package:fluxflow/screens/engineering/model_viewer_screen.dart';
+import 'package:sentinel/data/engineering_data.dart';
+import 'package:sentinel/screens/engineering/topic_viewer_screen.dart';
+import 'package:sentinel/data/model_data.dart';
+import 'package:sentinel/screens/engineering/model_viewer_screen.dart';
 
 class EngineeringHub extends StatelessWidget {
   const EngineeringHub({super.key});

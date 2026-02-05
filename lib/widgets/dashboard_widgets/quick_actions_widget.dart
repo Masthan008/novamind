@@ -98,13 +98,20 @@ class _QuickActionsWidgetState extends State<QuickActionsWidget>
                   
                   Expanded(
                     child: ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: [
-                          Colors.orange,
-                          Colors.white,
-                          Colors.orange,
-                        ],
-                      ).createShader(bounds),
+                      shaderCallback: (bounds) {
+                        if (bounds.isEmpty) {
+                          return const LinearGradient(
+                            colors: [Colors.orange, Colors.orange],
+                          ).createShader(Rect.fromLTWH(0, 0, 1, 1));
+                        }
+                        return LinearGradient(
+                          colors: [
+                            Colors.orange,
+                            Colors.white,
+                            Colors.orange,
+                          ],
+                        ).createShader(bounds);
+                      },
                       child: Text(
                         'Quick Actions',
                         style: GoogleFonts.orbitron(
@@ -296,9 +303,16 @@ class _QuickActionsWidgetState extends State<QuickActionsWidget>
                         
                         // Enhanced Label
                         ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
-                            colors: [color, Colors.white, color],
-                          ).createShader(bounds),
+                          shaderCallback: (bounds) {
+                            if (bounds.isEmpty) {
+                              return LinearGradient(
+                                colors: [color, color],
+                              ).createShader(const Rect.fromLTWH(0, 0, 1, 1));
+                            }
+                            return LinearGradient(
+                              colors: [color, Colors.white, color],
+                            ).createShader(bounds);
+                          },
                           child: Text(
                             label,
                             style: GoogleFonts.poppins(

@@ -18,10 +18,7 @@ import '../modules/games/enhanced_tictactoe_screen.dart';
 import '../modules/focus/focus_forest_screen.dart';
 import '../modules/sleep/sleep_screen.dart';
 import '../modules/cyber/cyber_vault_screen.dart';
-import '../modules/coding/coding_lab_screen.dart';
-import '../modules/coding/compiler_screen.dart';
-import '../modules/coding/jdoodle_compiler_screen.dart';
-import '../modules/coding/leetcode_screen.dart';
+
 import '../modules/news/news_screen.dart';
 import '../modules/academic/syllabus_screen.dart';
 import '../modules/academic/books_notes_screen.dart';
@@ -29,7 +26,6 @@ import '../modules/roadmaps/roadmaps_screen.dart';
 import '../modules/programming_hub/programming_hub_screen.dart';
 import '../modules/ai/nova_chat_screen.dart';
 import '../screens/engineering/engineering_hub.dart';
-import '../screens/tools/digital_drafter_screen.dart';
 import '../screens/flowcharts_screen.dart';
 import '../screens/devref/devref_hub_screen.dart';
 import '../modules/community/community_books_screen.dart';
@@ -40,10 +36,10 @@ import 'timetable_screen.dart';
 import 'calendar_screen.dart';
 import 'library_screen.dart';
 import 'video_library_screen.dart';
-import 'coding_contest_screen.dart';
+
 import 'leaderboard_screen.dart';
 import 'subscription_screen.dart';
-import 'projects_screen.dart';
+import 'shop/projects_screen.dart';
 import 'student_profile_screen.dart';
 import 'login_screen.dart';
 
@@ -107,37 +103,45 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
   }
 
-  // Sync user profile from Supabase (Source of Truth)
   Future<void> syncUserProfile() async {
     try {
       // Use the centralized Auth Service to refresh data from 'students' table
       final updatedStudent = await StudentAuthService.refreshCurrentStudent();
       
-      if (updatedStudent != null) {
+      if (updatedStudent != null && mounted) {
         // Also update Hive for fallback (though UI uses StudentAuthService mostly)
-        var box = Hive.box('user_prefs');
-        await box.put('user_name', updatedStudent.name);
-        if (updatedStudent.imageUrl != null) {
-           await box.put('user_photo', updatedStudent.imageUrl);
+        try {
+          var box = Hive.box('user_prefs');
+          await box.put('user_name', updatedStudent.name);
+          if (updatedStudent.imageUrl != null) {
+             await box.put('user_photo', updatedStudent.imageUrl);
+          }
+        } catch (e) {
+          print("⚠️ Hive update error: $e");
         }
 
         if (mounted) {
           setState(() {}); // Force UI rebuild with new data
           
           // Debug feedback for user
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("✅ Profile Synced: ${updatedStudent.name}"),
-              backgroundColor: Colors.green.withOpacity(0.8),
-              duration: const Duration(seconds: 2),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
+          try {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("✅ Profile Synced: ${updatedStudent.name}"),
+                backgroundColor: Colors.green.withOpacity(0.8),
+                duration: const Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          } catch (e) {
+            print("⚠️ SnackBar error: $e");
+          }
         }
         print("✅ Profile synced via StudentAuthService!");
       }
     } catch (e) {
       print("⚠️ Sync error: $e");
+      // Don't crash the app, just log the error
     }
   }
 
@@ -149,29 +153,69 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> _checkFirstRun() async {
-    // Check if user is logged in using the new service
-    final student = await StudentAuthService.init();
-    
-    if (student == null) {
-      // If not logged in, redirect to login
-      if (mounted) {
-         Navigator.pushReplacementNamed(context, '/auth');
+  // Helper method to safely get student name
+  String _getSafeStudentName() {
+    try {
+      return StudentAuthService.currentStudent?.name ?? 'Student';
+    } catch (e) {
+      print("⚠️ Error getting student name: $e");
+      return 'Student';
+    }
+  }
+
+  // Helper method to safely build user badge
+  Widget _buildSafeUserBadge() {
+    try {
+      final student = StudentAuthService.currentStudent;
+      if (student != null && student.subscriptionTier != null) {
+        return UserBadge(
+          tier: student.subscriptionTier!,
+          compact: false,
+        );
       }
-      return; // Exit if not logged in
-    } else {
-      // Check if biometric is enabled
-      final box = Hive.box('user_prefs');
-      final isBiometricEnabled = box.get('biometric_enabled', defaultValue: false);
+      return const SizedBox.shrink();
+    } catch (e) {
+      print("⚠️ Error building user badge: $e");
+      return const SizedBox.shrink();
+    }
+  }
+
+  Future<void> _checkFirstRun() async {
+    try {
+      // Check if user is logged in using the new service
+      final student = await StudentAuthService.init();
       
-      if (isBiometricEnabled) {
-        // Biometric Auth on startup
-        final authenticated = await AuthService.authenticate();
-        if (!authenticated) {
-          // Show authentication failed dialog
-          _showAuthFailedDialog();
-          return;
+      if (student == null) {
+        // If not logged in, redirect to login
+        if (mounted) {
+           Navigator.pushReplacementNamed(context, '/auth');
         }
+        return; // Exit if not logged in
+      } else {
+        // Check if biometric is enabled
+        try {
+          final box = Hive.box('user_prefs');
+          final isBiometricEnabled = box.get('biometric_enabled', defaultValue: false);
+          
+          if (isBiometricEnabled) {
+            // Biometric Auth on startup
+            final authenticated = await AuthService.authenticate();
+            if (!authenticated && mounted) {
+              // Show authentication failed dialog
+              _showAuthFailedDialog();
+              return;
+            }
+          }
+        } catch (e) {
+          print("⚠️ Biometric check error: $e");
+          // Continue without biometric if there's an error
+        }
+      }
+    } catch (e) {
+      print("⚠️ First run check error: $e");
+      // If there's any error, redirect to login as safety measure
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/auth');
       }
     }
   }
@@ -187,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           style: TextStyle(color: Colors.redAccent),
         ),
         content: const Text(
-          'Please authenticate to access FluxFlow',
+          'Please authenticate to access Sentinel',
           style: TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -307,8 +351,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   shape: BoxShape.circle,
                                   gradient: RadialGradient(
                                     colors: [
-                                      Colors.white.withOpacity(0.6 * sin(phase * pi)),
-                                      Colors.cyanAccent.withOpacity(0.4 * cos(phase * pi)),
+                                      Colors.white.withOpacity((sin(phase * pi) * 0.5 + 0.5).clamp(0.0, 1.0) * 0.6),
+                                      Colors.cyanAccent.withOpacity((cos(phase * pi) * 0.5 + 0.5).clamp(0.0, 1.0) * 0.4),
                                       Colors.transparent,
                                     ],
                                   ),
@@ -354,40 +398,75 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: Row(
                                   children: [
                                     // Profile Avatar
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: StudentAuthService.currentStudent?.imageUrl == null
-                                            ? RadialGradient(
+                                    Builder(
+                                      builder: (context) {
+                                        try {
+                                          final student = StudentAuthService.currentStudent;
+                                          final imageUrl = student?.imageUrl;
+                                          final hasImage = imageUrl != null && imageUrl.isNotEmpty;
+                                          
+                                          return Container(
+                                            width: 60,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              gradient: !hasImage
+                                                  ? RadialGradient(
+                                                      colors: [
+                                                        Colors.white.withOpacity(0.9),
+                                                        Colors.cyanAccent.withOpacity(0.7),
+                                                      ],
+                                                    )
+                                                  : null,
+                                              image: hasImage
+                                                  ? DecorationImage(
+                                                      image: NetworkImage(imageUrl),
+                                                      fit: BoxFit.cover,
+                                                      onError: (exception, stackTrace) {
+                                                        // Handle image loading error
+                                                        print("Image loading error: $exception");
+                                                      },
+                                                    )
+                                                  : null,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.white.withOpacity(0.5),
+                                                  blurRadius: 15,
+                                                  spreadRadius: 3,
+                                                ),
+                                              ],
+                                            ),
+                                            child: !hasImage
+                                                ? Icon(
+                                                    Icons.person,
+                                                    color: Colors.black,
+                                                    size: 30,
+                                                  )
+                                                : null,
+                                          );
+                                        } catch (e) {
+                                          print("⚠️ Profile avatar error: $e");
+                                          // Return fallback avatar
+                                          return Container(
+                                            width: 60,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              gradient: RadialGradient(
                                                 colors: [
                                                   Colors.white.withOpacity(0.9),
                                                   Colors.cyanAccent.withOpacity(0.7),
                                                 ],
-                                              )
-                                            : null,
-                                        image: StudentAuthService.currentStudent?.imageUrl != null
-                                            ? DecorationImage(
-                                                image: NetworkImage(StudentAuthService.currentStudent!.imageUrl!),
-                                                fit: BoxFit.cover,
-                                              )
-                                            : null,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.white.withOpacity(0.5),
-                                            blurRadius: 15,
-                                            spreadRadius: 3,
-                                          ),
-                                        ],
-                                      ),
-                                      child: StudentAuthService.currentStudent?.imageUrl == null
-                                          ? Icon(
+                                              ),
+                                            ),
+                                            child: Icon(
                                               Icons.person,
                                               color: Colors.black,
                                               size: 30,
-                                            )
-                                          : null,
+                                            ),
+                                          );
+                                        }
+                                      },
                                     )
                                       .animate()
                                       .scale(delay: 200.ms, duration: 600.ms, curve: Curves.elasticOut)
@@ -402,7 +481,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            StudentAuthService.currentStudent?.name ?? 'Student',
+                                            _getSafeStudentName(),
                                             style: GoogleFonts.sourceCodePro(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -412,11 +491,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(height: 4),
-                                          if (StudentAuthService.currentStudent != null)
-                                            UserBadge(
-                                              tier: StudentAuthService.currentStudent!.subscriptionTier,
-                                              compact: false,
-                                            ),
+                                          _buildSafeUserBadge(),
                                         ],
                                       ),
                                     ),
@@ -440,11 +515,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           
                           // App Title
                           ShaderMask(
-                            shaderCallback: (bounds) => LinearGradient(
-                              colors: [Colors.white, Colors.cyanAccent, Colors.white],
-                            ).createShader(bounds),
+                            shaderCallback: (bounds) {
+                              // Prevent assertion error when bounds are empty or invalid
+                              if (bounds.isEmpty || bounds.width <= 0 || bounds.height <= 0) {
+                                return const LinearGradient(colors: [Colors.white, Colors.white]).createShader(const Rect.fromLTWH(0, 0, 1, 1));
+                              }
+                              return const LinearGradient(
+                                colors: [Colors.white, Colors.cyanAccent, Colors.white],
+                              ).createShader(bounds);
+                            },
                             child: Text(
-                              'FluxFlow OS',
+                              'Sentinel OS',
                               style: GoogleFonts.orbitron(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900,
@@ -772,66 +853,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
               },
             ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.terminal_outlined,
-              title: 'C-Coding Lab',
-              color: Colors.green,
-              delay: 750,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CodingLabScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.code_outlined,
-              title: 'LeetCode Problems',
-              color: Colors.orange,
-              delay: 800,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LeetCodeScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.developer_mode_outlined,
-              title: 'Online Compilers',
-              color: Colors.cyanAccent,
-              delay: 850,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CompilerScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.play_circle_outline,
-              title: 'Practice Code',
-              color: Colors.greenAccent,
-              delay: 860,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const JDoodleCompilerScreen(),
-                  ),
-                );
-              },
-            ),
+
+
+
 
             _buildAnimatedDrawerItem(
               icon: Icons.auto_stories_outlined,
@@ -906,23 +930,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const EngineeringHub(),
-                  ),
-                );
-              },
-            ),
-            // Digital Drafter - Anti-Plagiarism Drawing Tool
-            _buildAnimatedDrawerItem(
-              icon: Icons.draw_outlined,
-              title: 'Digital Drafter 📐',
-              subtitle: 'Anti-plagiarism drawing tool',
-              color: Colors.teal,
-              delay: 1020,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DigitalDrafterScreen(),
                   ),
                 );
               },
@@ -1010,21 +1017,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 }
               },
             ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.emoji_events_outlined,
-              title: 'Coding Contests',
-              color: Colors.orange,
-              delay: 1100,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CodingContestScreen(),
-                  ),
-                );
-              },
-            ),
+
             _buildAnimatedDrawerItem(
               icon: Icons.leaderboard_outlined,
               title: 'Leaderboard',
@@ -1059,7 +1052,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
             _buildAnimatedDrawerItem(
               icon: Icons.info_outline,
-              title: 'About FluxFlow',
+              title: 'About Sentinel',
               color: Colors.cyanAccent,
               delay: 1250,
               onTap: () {
@@ -1139,12 +1132,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
 
                 if (confirm == true) {
-                  await StudentAuthService.logout();
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    );
+                  try {
+                    await StudentAuthService.logout();
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      );
+                    }
+                  } catch (e) {
+                    print("⚠️ Logout error: $e");
+                    // Force navigation to login even if logout fails
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      );
+                    }
                   }
                 }
               },
@@ -1205,13 +1209,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   .shimmer(duration: 2.seconds, color: Colors.cyanAccent),
                 
                 title: ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
-                    colors: [
-                      Colors.cyanAccent,
-                      Colors.white,
-                      Colors.cyanAccent,
-                    ],
-                  ).createShader(bounds),
+                  shaderCallback: (bounds) {
+                    // Prevent assertion error when bounds are empty or invalid
+                    if (bounds.isEmpty || bounds.width <= 0 || bounds.height <= 0) {
+                      return const LinearGradient(
+                        colors: [Colors.cyanAccent, Colors.cyanAccent],
+                      ).createShader(const Rect.fromLTWH(0, 0, 1, 1));
+                    }
+                    return LinearGradient(
+                      colors: [
+                        Colors.cyanAccent,
+                        Colors.white,
+                        Colors.cyanAccent,
+                      ],
+                    ).createShader(bounds);
+                  },
                   child: Text(
                     userName,
                     style: GoogleFonts.orbitron(
@@ -1235,9 +1247,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       final unreadCount = snapshot.data ?? 0;
                       
                       // Listen for badge updates
-                      NotificationService.setOnUnreadCountChanged((count) {
-                        if (mounted) setState(() {});
-                      });
+                      try {
+                        NotificationService.setOnUnreadCountChanged((count) {
+                          if (mounted) {
+                            try {
+                              setState(() {});
+                            } catch (e) {
+                              print("⚠️ setState error in notification listener: $e");
+                            }
+                          }
+                        });
+                      } catch (e) {
+                        print("⚠️ Notification listener setup error: $e");
+                      }
                       
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -1380,8 +1402,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             shape: BoxShape.circle,
                             gradient: RadialGradient(
                               colors: [
-                                Colors.cyanAccent.withOpacity(0.3 * sin(phase * pi)),
-                                Colors.purple.withOpacity(0.2 * cos(phase * pi)),
+                                Colors.cyanAccent.withOpacity((sin(phase * pi) * 0.5 + 0.5).clamp(0.0, 1.0) * 0.3),
+                                Colors.purple.withOpacity((cos(phase * pi) * 0.5 + 0.5).clamp(0.0, 1.0) * 0.2),
                                 Colors.transparent,
                               ],
                             ),
@@ -1397,7 +1419,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               SafeArea(
                 bottom: false,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 110),
+                  padding: const EdgeInsets.only(bottom: 125),
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
                     transitionBuilder: (child, animation) {
@@ -1533,29 +1555,33 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 end: const Offset(1.05, 1.05),
                 duration: 2.seconds,
               ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-                if (subtitle != null)
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.poppins(
-                      color: Colors.white70,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
+            title: Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-              ],
-            ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
+              ),
             trailing: Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(

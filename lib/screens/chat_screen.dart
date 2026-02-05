@@ -12,6 +12,7 @@ import '../widgets/poll_widget.dart';
 import '../widgets/disappearing_message_dialog.dart';
 import '../widgets/pinned_messages_banner.dart';
 import '../widgets/typing_indicator.dart';
+import 'chat/widgets/chat_widgets.dart' hide TypingIndicator;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -900,194 +901,170 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               SafeArea(
                 top: false,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade900,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    color: const Color(0xFF1E1E1E), // Dark container
+                    border: Border(top: BorderSide(color: Colors.white.withOpacity(0.1))),
                   ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Reply preview
-                    if (_replyingTo != null)
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.reply, color: Colors.cyanAccent, size: 16),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Replying to ${_replyingTo!['sender']}',
-                                    style: GoogleFonts.montserrat(
-                                      color: Colors.cyanAccent,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Reply preview
+                      if (_replyingTo != null)
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.reply, color: Colors.cyanAccent, size: 16),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Replying to ${_replyingTo!['sender']}',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.cyanAccent,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    _replyingTo!['message'],
-                                    style: GoogleFonts.montserrat(
-                                      color: Colors.grey,
-                                      fontSize: 12,
+                                    Text(
+                                      _replyingTo!['message'],
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close, color: Colors.grey, size: 16),
-                              onPressed: () {
-                                setState(() {
-                                  _replyingTo = null;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    
-                    // Disappearing message indicator
-                    if (_disappearingDuration != null)
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.orange),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.timer, color: Colors.orange, size: 16),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                'Message will disappear after ${_formatDuration(_disappearingDuration!)}',
-                                style: GoogleFonts.montserrat(
-                                  color: Colors.orange,
-                                  fontSize: 12,
+                                  ],
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close, color: Colors.orange, size: 16),
-                              onPressed: () {
-                                setState(() {
-                                  _disappearingDuration = null;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    
-                    // Quick emoji bar removed to save space
-                    
-                    const SizedBox(height: 8),
-                    
-                    const SizedBox(height: 8),
-                    
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        // Attachment Buttons
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _buildAttachmentButton(
-                               icon: Icons.mic,
-                               color: Colors.purple,
-                               onTap: () {
-                                 HapticFeedback.mediumImpact();
-                                 ScaffoldMessenger.of(context).showSnackBar(
-                                   const SnackBar(content: Text('Voice messages coming soon!'), backgroundColor: Colors.purple),
-                                 );
-                               }
-                            ),
-                            const SizedBox(width: 8),
-                            _buildAttachmentButton(
-                               icon: Icons.gif_box,
-                               color: Colors.green,
-                               onTap: () {
-                                 HapticFeedback.mediumImpact();
-                                 ScaffoldMessenger.of(context).showSnackBar(
-                                   const SnackBar(content: Text('GIFs & Stickers coming soon!'), backgroundColor: Colors.green),
-                                 );
-                               }
-                            ),
-                             const SizedBox(width: 8),
-                             _buildAttachmentButton(
-                               icon: Icons.timer,
-                               color: _disappearingDuration != null ? Colors.orange : Colors.grey,
-                               onTap: _showDisappearingDialog,
-                            ),
-                             const SizedBox(width: 8),
-                             _buildAttachmentButton(
-                               icon: Icons.poll,
-                               color: Colors.cyanAccent,
-                               onTap: _showPollCreator,
-                            ),
-                          ],
-                        ),
-                        
-                        const SizedBox(width: 12),
-                        
-                        // Text Input Field
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.grey.shade900.withOpacity(0.8),
-                                  Colors.black.withOpacity(0.9),
-                                ],
+                              IconButton(
+                                icon: const Icon(Icons.close, color: Colors.grey, size: 16),
+                                onPressed: () {
+                                  setState(() {
+                                    _replyingTo = null;
+                                  });
+                                },
                               ),
-                              borderRadius: BorderRadius.circular(24),
-                              border: Border.all(
-                                color: Colors.cyanAccent.withOpacity(0.2),
+                            ],
+                          ),
+                        ),
+                      
+                      // Disappearing message indicator
+                      if (_disappearingDuration != null)
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.orange),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.timer, color: Colors.orange, size: 16),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Message will disappear after ${_formatDuration(_disappearingDuration!)}',
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.orange,
+                                    fontSize: 12,
+                                  ),
+                                ),
                               ),
-                            ),
+                              IconButton(
+                                icon: const Icon(Icons.close, color: Colors.orange, size: 16),
+                                onPressed: () {
+                                  setState(() {
+                                    _disappearingDuration = null;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      
+                      // 🟢 CLEAN ROW LAYOUT (No overlapping)
+                      Row(
+                        children: [
+                          // 📎 Attachment (Keep it simple)
+                          IconButton(
+                            icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent),
+                            onPressed: () {
+                              // Show attachment options
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.grey.shade900,
+                                builder: (context) => Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Attachment Options',
+                                        style: GoogleFonts.orbitron(
+                                          color: Colors.cyanAccent,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          _buildAttachmentOption(
+                                            icon: Icons.timer,
+                                            label: 'Disappearing',
+                                            color: Colors.orange,
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              _showDisappearingDialog();
+                                            },
+                                          ),
+                                          _buildAttachmentOption(
+                                            icon: Icons.poll,
+                                            label: 'Poll',
+                                            color: Colors.cyanAccent,
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              _showPollCreator();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }, 
+                          ),
+                          
+                          // 📝 Text Field (Expanded to fill space)
+                          Expanded(
                             child: TextField(
                               controller: _messageController,
                               focusNode: _focusNode,
                               style: const TextStyle(color: Colors.white),
-                              minLines: 1,
-                              maxLines: 5,
                               decoration: InputDecoration(
-                                hintText: 'Type a message...',
-                                hintStyle: TextStyle(color: Colors.grey.shade500),
-                                filled: false,
+                                hintText: "Type a message...",
+                                hintStyle: TextStyle(color: Colors.grey[600]),
+                                filled: true,
+                                fillColor: Colors.black,
+                                isDense: true, // 🟢 Makes it smaller vertically
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(24),
                                   borderSide: BorderSide.none,
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 10,
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.emoji_emotions_outlined, color: Colors.amber, size: 20),
-                                  onPressed: () {
-                                     // TODO: Show emoji picker
-                                  },
                                 ),
                               ),
                               textInputAction: TextInputAction.send,
@@ -1095,56 +1072,29 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                               onChanged: _onTypingChanged,
                             ),
                           ),
-                        ),
-                        
-                        const SizedBox(width: 8),
-                        
-                        // Send Button
-                        AnimatedBuilder(
-                          animation: _fabScaleAnimation,
-                          builder: (context, child) {
-                            return Transform.scale(
-                              scale: _fabScaleAnimation.value,
-                              child: GestureDetector(
-                                onTap: () {
-                                  HapticFeedback.mediumImpact();
-                                  _sendMessage();
-                                },
-                                child: Container(
-                                  width: 44,
-                                  height: 44,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: const LinearGradient(
-                                      colors: [Colors.cyanAccent, Colors.blueAccent],
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.4),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    Icons.send,
-                                    color: Colors.black,
-                                    size: 20,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                          
+                          const SizedBox(width: 8),
+
+                          // 🚀 Send Button
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.cyanAccent, 
+                              shape: BoxShape.circle
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.send, color: Colors.black, size: 20),
+                              onPressed: _sendMessage,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
             ],
           ),
-          ),
+        ), // Close Positioned.fill widget
         ],
       ),
     );
@@ -1552,6 +1502,39 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Icon(icon, color: color, size: 20),
+      ),
+    );
+  }
+
+  Widget _buildAttachmentOption({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.2),
+              shape: BoxShape.circle,
+              border: Border.all(color: color.withOpacity(0.5)),
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }

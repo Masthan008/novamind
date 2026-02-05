@@ -75,7 +75,8 @@ class _PollWidgetState extends State<PollWidget> {
       );
     }
 
-    if (_pollData == null) {
+    final data = _pollData;
+    if (data == null) {
       return Container(
         padding: const EdgeInsets.all(20),
         child: Text(
@@ -85,16 +86,19 @@ class _PollWidgetState extends State<PollWidget> {
       );
     }
 
-    final question = _pollData!['question'] as String;
-    final options = List<Map<String, dynamic>>.from(_pollData!['options']);
-    final totalVotes = _pollData!['total_votes'] as int;
-    final expiresAt = _pollData!['expires_at'] as String?;
+    final question = data['question'] as String? ?? 'Unknown Question';
+    final optionsList = data['options'] as List<dynamic>? ?? [];
+    final options = optionsList.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+    final totalVotes = (data['total_votes'] as int?) ?? 0;
+    final expiresAt = data['expires_at'] as String?;
     
     // Check if expired
     bool isExpired = false;
     if (expiresAt != null) {
-      final expiry = DateTime.parse(expiresAt);
-      isExpired = expiry.isBefore(DateTime.now());
+      try {
+        final expiry = DateTime.parse(expiresAt);
+        isExpired = expiry.isBefore(DateTime.now());
+      } catch (_) {}
     }
 
     return Container(

@@ -66,11 +66,12 @@ class TimetablePreferenceService {
   static Map<String, List<String>> getAvailableTimetables() {
     return {
       'ECE': ['A', 'B', 'C', 'D'],
-      'EEE': ['A', 'B', 'C', 'D'],
+      'EEE': ['A', 'B'],
       'ME': ['A', 'B'],
+      'CIVIL': ['A'],
       'CSE': ['A', 'B', 'C', 'D', 'E', 'F'],
       'CSE-AIML': ['A', 'B', 'C', 'D'],
-      'CSE-DS': ['A', 'B', 'C'],
+      'CSE-DS': ['A', 'B', 'C', 'D'],
       'CSE-CS': ['A', 'B'],
     };
   }
@@ -81,6 +82,7 @@ class TimetablePreferenceService {
       'ECE': 'Electronics & Communication Engineering',
       'EEE': 'Electrical & Electronics Engineering',
       'ME': 'Mechanical Engineering',
+      'CIVIL': 'Civil Engineering',
       'CSE': 'Computer Science & Engineering',
       'CSE-AIML': 'CSE - Artificial Intelligence & Machine Learning',
       'CSE-DS': 'CSE - Data Science',

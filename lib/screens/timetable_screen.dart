@@ -293,8 +293,17 @@ class _TimetableScreenState extends State<TimetableScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(s.subjectName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                Text("${DateFormat('h:mm a').format(s.startTime)} - ${DateFormat('h:mm a').format(s.endTime)}", style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                Text(
+                  s.subjectName, 
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Text(
+                  "${DateFormat('h:mm a').format(s.startTime)} - ${DateFormat('h:mm a').format(s.endTime)}", 
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),

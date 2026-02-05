@@ -406,38 +406,42 @@ class _CalendarScreenState extends State<CalendarScreen>
           ),
         ),
       ),
-      floatingActionButton: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              colors: [
-                Colors.cyanAccent,
-                Colors.cyanAccent.withOpacity(0.8),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.cyanAccent,
+                  Colors.cyanAccent.withOpacity(0.8),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.cyanAccent.withOpacity(0.4),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
               ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.cyanAccent.withOpacity(0.4),
-                blurRadius: 15,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: FloatingActionButton.extended(
-            onPressed: () => _showAddReminderDialog(_selectedDay ?? DateTime.now()),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            icon: Icon(Icons.add_rounded, color: Colors.black, size: 24),
-            label: Text(
-              'Add Reminder',
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+            child: FloatingActionButton.extended(
+              onPressed: () => _showAddReminderDialog(_selectedDay ?? DateTime.now()),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              icon: Icon(Icons.add_rounded, color: Colors.black, size: 24),
+              label: Text(
+                'Add Reminder',
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
             ),
-          ),
-        ).animate().fadeIn(delay: 800.ms).scale(begin: const Offset(0.8, 0.8)),
+          ).animate().fadeIn(delay: 800.ms).scale(begin: const Offset(0.8, 0.8)),
+      ),
     );
   }
 

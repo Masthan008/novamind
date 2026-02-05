@@ -208,11 +208,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   
                   // Title
                   ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [Colors.cyanAccent, Colors.purple],
-                    ).createShader(bounds),
+                    shaderCallback: (bounds) {
+                      if (bounds.isEmpty) {
+                        return const LinearGradient(
+                          colors: [Colors.cyanAccent, Colors.cyanAccent],
+                        ).createShader(Rect.fromLTWH(0, 0, 1, 1));
+                      }
+                      return const LinearGradient(
+                        colors: [Colors.cyanAccent, Colors.purple],
+                      ).createShader(bounds);
+                    },
                     child: Text(
-                      'FluxFlow',
+                      'Sentinel',
                       style: GoogleFonts.orbitron(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,

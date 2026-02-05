@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/challenge_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/student_auth_service.dart';
 import '../widgets/user_badge.dart';
 
@@ -27,15 +27,44 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   Future<void> _loadLeaderboard() async {
     setState(() => _isLoading = true);
     
-    final leaderboard = await ChallengeService.getLeaderboard(limit: 20);
-    final rank = await ChallengeService.getStudentRank();
-    
-    if (mounted) {
-      setState(() {
-        _leaderboard = leaderboard;
-        _currentUserRank = rank;
-        _isLoading = false;
-      });
+    try {
+      // Get leaderboard from students table directly
+      final response = await Supabase.instance.client
+          .from('students')
+          .select('id, name, regd_no, image_url, weekly_points, total_points, subscription_tier')
+          .order('weekly_points', ascending: false)
+          .limit(20);
+      
+      final leaderboard = List<Map<String, dynamic>>.from(response);
+      
+      // Get current user rank
+      int rank = -1;
+      final currentStudent = StudentAuthService.currentStudent;
+      if (currentStudent?.id != null) {
+        for (int i = 0; i < leaderboard.length; i++) {
+          if (leaderboard[i]['id'] == currentStudent!.id) {
+            rank = i + 1;
+            break;
+          }
+        }
+      }
+      
+      if (mounted) {
+        setState(() {
+          _leaderboard = leaderboard;
+          _currentUserRank = rank;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading leaderboard: $e');
+      if (mounted) {
+        setState(() {
+          _leaderboard = [];
+          _currentUserRank = -1;
+          _isLoading = false;
+        });
+      }
     }
   }
 
