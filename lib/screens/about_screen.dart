@@ -58,20 +58,20 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
         title: ShaderMask(
           shaderCallback: (bounds) {
             if (bounds.isEmpty) {
-              return const LinearGradient(colors: [Colors.cyanAccent, Colors.cyanAccent])
+              return const LinearGradient(colors: [Color(0xFFFF6B6B), Color(0xFFFF6B6B)])
                   .createShader(bounds);
             }
             return const LinearGradient(
-              colors: [Colors.cyanAccent, Colors.white, Colors.cyanAccent],
+              colors: [Color(0xFFFF6B6B), Colors.white, Color(0xFFFF8E53)],
             ).createShader(bounds);
           },
           child: Text(
-            'About FluxFlow OS',
-            style: GoogleFonts.orbitron(
-              fontWeight: FontWeight.bold,
+            'About Sentinel',
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w700,
               color: Colors.white,
               fontSize: 20,
-              letterSpacing: 1,
+              letterSpacing: 0.5,
             ),
           ),
         )
@@ -80,7 +80,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
           .slideX(begin: -0.3, end: 0)
           .then()
           .shimmer(duration: 2.seconds, color: Colors.white),
-        iconTheme: const IconThemeData(color: Colors.cyanAccent),
+        iconTheme: const IconThemeData(color: Color(0xFFFF6B6B)),
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
@@ -88,19 +88,19 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  Colors.cyanAccent.withOpacity(0.3),
+                  const Color(0xFFFF6B6B).withOpacity(0.3),
                   Colors.transparent,
                 ],
               ),
             ),
-            child: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.cyanAccent),
+            child: const Icon(Icons.arrow_back_ios_new_outlined, color: Color(0xFFFF6B6B)),
           ),
           onPressed: () => Navigator.pop(context),
         )
           .animate()
           .scale(delay: 200.ms, duration: 600.ms, curve: Curves.elasticOut)
           .then()
-          .shimmer(duration: 2.seconds, color: Colors.cyanAccent),
+          .shimmer(duration: 2.seconds, color: const Color(0xFFFF6B6B)),
       ),
       body: Stack(
         children: [
@@ -233,7 +233,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                     ).createShader(bounds);
                     },
                     child: Text(
-                      'FluxFlow OS',
+                      'Sentinel',
                       style: GoogleFonts.orbitron(
                         fontSize: 42,
                         fontWeight: FontWeight.w900,
@@ -394,19 +394,21 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                               child: ShaderMask(
                                 shaderCallback: (bounds) {
                                   if (bounds.isEmpty) {
-                                    return const LinearGradient(colors: [Colors.cyanAccent, Colors.cyanAccent]).createShader(bounds);
+                                    return const LinearGradient(
+                                      colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
+                                    ).createShader(bounds);
                                   }
                                   return const LinearGradient(
-                                  colors: [Colors.cyanAccent, Colors.white, Colors.cyanAccent],
+                                  colors: [Color(0xFFFF6B6B), Colors.white, Color(0xFFFF8E53)],
                                 ).createShader(bounds);
                                 },
                                 child: Text(
                                   'ADVANCED SYSTEM MODULES',
-                                  style: GoogleFonts.orbitron(
+                                  style: GoogleFonts.poppins(
                                     color: Colors.white,
                                     fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 2,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1.5,
                                   ),
                                 ),
                               ),
@@ -441,7 +443,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           1400,
                         ),
                         _buildEnhancedFeature(
-                          'Flux AI Chat',
+                          'Sentinel AI',
                           'Multi-Provider AI Assistant for Pro & Ultra Users',
                           Icons.auto_awesome,
                           Colors.purple,
@@ -483,32 +485,32 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           1650,
                         ),
                         _buildEnhancedFeature(
-                          'Smart Calculator',
-                          'Scientific Calculator with History & Memory',
-                          Icons.calculate_outlined,
-                          Colors.cyanAccent,
-                          1700,
-                        ),
-                        _buildEnhancedFeature(
-                          'Games Arcade',
-                          '2048 & Tic-Tac-Toe for Study Breaks',
-                          Icons.sports_esports_outlined,
-                          Colors.deepPurple,
-                          1750,
-                        ),
-                        _buildEnhancedFeature(
-                          'Online Compilers',
-                          'Quick Access to Cloud-Based IDEs',
-                          Icons.developer_mode_outlined,
-                          Colors.teal,
-                          1800,
-                        ),
-                        _buildEnhancedFeature(
                           'DevRef Hub',
                           '200+ Programming Cheatsheets with Professional Logos',
                           Icons.library_books_outlined,
                           Colors.amber,
                           1850,
+                        ),
+                        _buildEnhancedFeature(
+                          'ChatHub',
+                          'Real-time Community Chat with Students',
+                          Icons.forum_outlined,
+                          const Color(0xFFFF6B6B),
+                          1900,
+                        ),
+                        _buildEnhancedFeature(
+                          'Class Timetable',
+                          'Complete Schedule for All Sections & Branches',
+                          Icons.table_chart_outlined,
+                          const Color(0xFF4ECDC4),
+                          1950,
+                        ),
+                        _buildEnhancedFeature(
+                          'Data Structures for C',
+                          '10 Topic-wise Programs with Detailed Explanations',
+                          Icons.data_array_rounded,
+                          const Color(0xFFFF8E53),
+                          2000,
                         ),
                       ],
                     ),
@@ -657,7 +659,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Text(
-                            'Exceptional minds behind FluxFlow OS, Flux AI system, and next-generation student productivity experience:',
+                            'Exceptional minds behind Sentinel, Sentinel AI system, and next-generation student productivity experience:',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.poppins(
                               color: Colors.white.withOpacity(0.95),
@@ -1020,7 +1022,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          '© 2024 FluxFlow OS • Next-Generation Learning Platform',
+                          '© 2024 Sentinel • Next-Generation Learning Platform',
                           style: GoogleFonts.poppins(
                             color: Colors.white.withOpacity(0.6),
                             fontSize: 11,

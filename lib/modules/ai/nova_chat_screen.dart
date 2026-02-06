@@ -28,7 +28,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
     
     // Welcome message
     _messages.add(ChatMessage(
-      text: 'Hello! I\'m Flux AI. How can I assist you with the latest news or creative tasks today?',
+      text: 'Hello! I\'m Sentinel AI, created by Masthan Valli. How can I assist you with your studies today?',
       isUser: false,
       timestamp: DateTime.now(),
     ));
@@ -165,7 +165,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Flux AI',
+                'Sentinel AI',
                 style: GoogleFonts.orbitron(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -396,7 +396,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
           ),
           const SizedBox(width: 12),
           Text(
-            'Flux AI is thinking...',
+            'Sentinel AI is thinking...',
             style: GoogleFonts.poppins(
               color: Colors.purpleAccent,
               fontSize: 13,

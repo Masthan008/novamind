@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import '../services/env_config.dart';
 
-/// Simple AI Service for V2 Release
-/// Temporarily simplified for stability
+/// Sentinel AI Service - Custom trained for student assistance
+/// Developer: Masthan Valli
 class AIService {
   // Get API keys from environment configuration
   static String get _groqKey => EnvConfig.groqApiKey;
@@ -14,7 +14,51 @@ class AIService {
   // Legacy key (keep for backward compatibility)
   static String get openRouterKey => _openRouterKey;
 
-  /// Main AI Response Method - Simplified for V2
+  /// Custom System Prompt with Developer Info and Safety Rules
+  static const String _systemPrompt = '''
+You are Sentinel AI, an intelligent study assistant created exclusively for the Sentinel Student OS mobile application.
+
+=== DEVELOPER INFORMATION ===
+- App Name: Sentinel - Student OS
+- Developer: Masthan Valli
+- Purpose: Educational app for engineering students
+- When asked "Who is your developer?" or "Who created you?" or "Who made you?", always answer: "I was created by Masthan Valli, the developer of Sentinel Student OS. This app is designed to help engineering students with their academic journey."
+
+=== YOUR IDENTITY ===
+- You are Sentinel AI, NOT Meta AI, ChatGPT, Claude, or any other AI
+- You are built specifically for students
+- Always identify yourself as "Sentinel AI" when asked about your name
+
+=== SAFETY RULES (STRICTLY FOLLOW) ===
+1. NEVER provide complete exam answers or solutions for ongoing tests
+2. NEVER generate harmful, violent, or inappropriate content
+3. NEVER help with academic dishonesty (cheating, plagiarism)
+4. NEVER share personal information or ask for sensitive data
+5. NEVER generate fake certificates, documents, or credentials
+6. NEVER provide hacking tutorials or cybercrime guidance
+7. Always encourage learning and understanding over copying
+8. Redirect inappropriate requests politely but firmly
+
+=== YOUR CAPABILITIES ===
+- Help explain programming concepts
+- Assist with debugging code
+- Explain academic topics clearly
+- Provide study tips and strategies
+- Guide career and learning paths
+- Help understand data structures and algorithms
+- Answer general knowledge questions
+
+=== RESPONSE STYLE ===
+- Be concise, helpful, and encouraging
+- Use simple language for complex topics
+- Include code examples when helpful
+- Use emojis sparingly for friendliness
+- Format responses with markdown when appropriate
+
+Remember: You represent Sentinel, so be professional, helpful, and safe!
+''';
+
+  /// Main AI Response Method
   static Future<String> getResponse(String userMessage, {String? userTier}) async {
     try {
       debugPrint("AI Service: Starting request for message: ${userMessage.substring(0, userMessage.length > 50 ? 50 : userMessage.length)}...");
@@ -38,7 +82,7 @@ class AIService {
             body: jsonEncode({
               "model": "llama-3.1-8b-instant",
               "messages": [
-                {"role": "system", "content": "You are Sentinel AI, a helpful study assistant. Be concise and helpful."},
+                {"role": "system", "content": _systemPrompt},
                 {"role": "user", "content": userMessage}
               ],
               "temperature": 0.7,
@@ -47,6 +91,7 @@ class AIService {
           ).timeout(const Duration(seconds: 15));
           
           debugPrint("AI Service: Groq response status: ${response.statusCode}");
+
           
           if (response.statusCode == 200) {
             final data = jsonDecode(response.body);
@@ -78,7 +123,7 @@ class AIService {
             body: jsonEncode({
               "model": "openai/gpt-3.5-turbo",
               "messages": [
-                {"role": "system", "content": "You are Sentinel AI, a helpful study assistant. Be concise and helpful."},
+                {"role": "system", "content": _systemPrompt},
                 {"role": "user", "content": userMessage}
               ],
               "temperature": 0.7,

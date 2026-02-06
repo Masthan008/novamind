@@ -198,33 +198,25 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 children: [
                   const SizedBox(height: 50),
                   
-                  // Logo
+                  // Logo - Using Launcher Icon
                   Container(
-                    padding: const EdgeInsets.all(24),
+                    width: 120,
+                    height: 120,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.cyanAccent.withOpacity(0.2),
-                          Colors.purple.withOpacity(0.2),
-                        ],
-                      ),
-                      border: Border.all(
-                        color: Colors.cyanAccent.withOpacity(0.5),
-                        width: 2,
-                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.3),
+                          color: const Color(0xFFFF6B6B).withOpacity(0.4),
                           blurRadius: 30,
                           spreadRadius: 5,
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.school,
-                      size: 50,
-                      color: Colors.cyanAccent,
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/images/launcher_icon.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
                   
@@ -235,18 +227,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     shaderCallback: (bounds) {
                       if (bounds.isEmpty) {
                         return const LinearGradient(
-                          colors: [Colors.cyanAccent, Colors.cyanAccent],
+                          colors: [Color(0xFFFF6B6B), Color(0xFFFF6B6B)],
                         ).createShader(Rect.fromLTWH(0, 0, 1, 1));
                       }
                       return const LinearGradient(
-                        colors: [Colors.cyanAccent, Colors.purple],
+                        colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
                       ).createShader(bounds);
                     },
                     child: Text(
                       'Sentinel',
-                      style: GoogleFonts.orbitron(
+                      style: GoogleFonts.poppins(
                         fontSize: 38,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
                     ),

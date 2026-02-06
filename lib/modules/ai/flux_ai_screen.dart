@@ -25,8 +25,8 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
     
     // Add welcome message
     final welcomeMessage = AIService.hasAIAccess(_userTier)
-        ? '👋 Hello! I\'m Flux AI, your intelligent study assistant powered by multi-provider AI system.\n\n${AIService.getTierFeatures(_userTier)}'
-        : '👋 Hello! I\'m Flux AI. ${AIService.getTierFeatures(_userTier)}';
+        ? '👋 Hello! I\'m Sentinel AI, your intelligent study assistant created by Masthan Valli for Sentinel Student OS.\n\n${AIService.getTierFeatures(_userTier)}'
+        : '👋 Hello! I\'m Sentinel AI. ${AIService.getTierFeatures(_userTier)}';
     
     _messages.add({
       'role': 'ai',
@@ -66,10 +66,10 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          "Flux AI",
-          style: GoogleFonts.orbitron(
-            fontWeight: FontWeight.bold,
-            color: Colors.cyanAccent,
+          "Sentinel AI",
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFFFF6B6B),
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -83,17 +83,17 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
                 colors: _userTier == 'ultra'
                     ? [Colors.purple, Colors.deepPurple]
                     : _userTier == 'pro'
-                        ? [Colors.cyan, Colors.blue]
+                        ? [const Color(0xFFFF6B6B), const Color(0xFFFF8E53)]
                         : [Colors.grey, Colors.grey.shade700],
               ),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               _userTier.toUpperCase(),
-              style: GoogleFonts.orbitron(
+              style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 10,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -118,11 +118,11 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
                     ),
                     decoration: BoxDecoration(
                       color: isUser
-                          ? Colors.cyan.withOpacity(0.2)
+                          ? const Color(0xFFFF6B6B).withOpacity(0.2)
                           : Colors.grey[900],
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isUser ? Colors.cyan : Colors.white24,
+                        color: isUser ? const Color(0xFFFF6B6B) : Colors.white24,
                       ),
                     ),
                     child: isUser
@@ -142,7 +142,7 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
             ),
           ),
           if (_isLoading)
-            const LinearProgressIndicator(color: Colors.cyanAccent),
+            const LinearProgressIndicator(color: Color(0xFFFF6B6B)),
           Container(
             padding: const EdgeInsets.all(10),
             color: Colors.grey[900],
@@ -154,7 +154,7 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
                       controller: _controller,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: "Ask Flux AI...",
+                        hintText: "Ask Sentinel AI...",
                         filled: true,
                         fillColor: Colors.black,
                         border: OutlineInputBorder(
@@ -166,7 +166,7 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.send, color: Colors.cyanAccent),
+                    icon: const Icon(Icons.send, color: Color(0xFFFF6B6B)),
                     onPressed: _sendMessage,
                   )
                 ],

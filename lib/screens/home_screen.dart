@@ -12,6 +12,7 @@ import '../providers/accessibility_provider.dart';
 import '../widgets/glass_bottom_nav.dart';
 import '../widgets/accessibility_wrapper.dart';
 import '../modules/calculator/calculator_screen.dart';
+import '../modules/data_structures/data_structures_screen.dart';
 
 import '../modules/games/enhanced_2048_screen.dart';
 import '../modules/games/enhanced_tictactoe_screen.dart';
@@ -566,16 +567,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
             _buildAnimatedDrawerItem(
-              icon: Icons.calculate_outlined,
-              title: 'Smart Calculator',
-              color: Colors.cyanAccent,
+              icon: Icons.data_array_rounded,
+              title: 'Data Structures',
+              subtitle: '10 C Programs with Explanations',
+              color: const Color(0xFFFF8E53),
               delay: 100,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CalculatorScreen(),
+                    builder: (context) => const DataStructuresScreen(),
                   ),
                 );
               },
@@ -918,12 +920,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
               },
             ),
-            // Flux AI Chat
+            // Sentinel AI Chat
             _buildAnimatedDrawerItem(
               icon: Icons.auto_awesome,
-              title: 'Flux AI Chat',
-              subtitle: 'Multi-provider AI assistant',
-              color: Colors.purple,
+              title: 'Sentinel AI',
+              subtitle: 'Your intelligent study assistant',
+              color: const Color(0xFFFF6B6B),
               delay: 1025,
               onTap: () {
                 Navigator.pop(context);

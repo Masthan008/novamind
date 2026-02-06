@@ -343,7 +343,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => CalculatorProvider()),
           ChangeNotifierProvider(create: (_) => FocusProvider()),
         ],
-        child: const FluxFlowApp(),
+        child: const SentinelApp(),
       ),
     );
   }, (error, stack) {
@@ -353,14 +353,14 @@ void main() async {
   });
 }
 
-class FluxFlowApp extends StatefulWidget {
-  const FluxFlowApp({super.key});
+class SentinelApp extends StatefulWidget {
+  const SentinelApp({super.key});
 
   @override
-  State<FluxFlowApp> createState() => _FluxFlowAppState();
+  State<SentinelApp> createState() => _SentinelAppState();
 }
 
-class _FluxFlowAppState extends State<FluxFlowApp> {
+class _SentinelAppState extends State<SentinelApp> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
@@ -370,7 +370,7 @@ class _FluxFlowAppState extends State<FluxFlowApp> {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         return MaterialApp(
-          title: 'FluxFlow',
+          title: 'Sentinel',
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: themeProvider.getCurrentTheme(),
