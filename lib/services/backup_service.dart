@@ -18,7 +18,6 @@ class BackupService {
         'user_data': await _exportUserData(),
         'app_settings': await _exportSettings(),
         'academic_data': await _exportAcademicData(),
-        'calculator_data': await _exportCalculatorData(),
         'chat_data': await _exportChatData(),
         'books_data': await _exportBooksData(),
       };
@@ -68,15 +67,6 @@ class BackupService {
     return {
       'class_sessions': sessions,
       'attendance_records': await _getAttendanceRecords(),
-    };
-  }
-
-  /// Export calculator history
-  static Future<Map<String, dynamic>> _exportCalculatorData() async {
-    final box = Hive.box('calculator_history');
-    return {
-      'history': box.values.toList(),
-      'favorites': box.get('favorites', defaultValue: []),
     };
   }
 
@@ -205,9 +195,6 @@ class BackupService {
       // Restore academic data
       await _restoreAcademicData(backup['academic_data']);
       
-      // Restore calculator data
-      await _restoreCalculatorData(backup['calculator_data']);
-      
       // Restore books data
       await _restoreBooksData(backup['books_data']);
 
@@ -248,23 +235,6 @@ class BackupService {
     final box = Hive.box('user_prefs');
     await box.put('backup_sessions', academicData['class_sessions']);
     await box.put('backup_attendance', academicData['attendance_records']);
-  }
-
-  /// Restore calculator data
-  static Future<void> _restoreCalculatorData(Map<String, dynamic>? calculatorData) async {
-    if (calculatorData == null) return;
-    
-    final box = Hive.box('calculator_history');
-    await box.clear();
-    
-    final history = calculatorData['history'] as List?;
-    if (history != null) {
-      for (int i = 0; i < history.length; i++) {
-        await box.put(i, history[i]);
-      }
-    }
-    
-    await box.put('favorites', calculatorData['favorites'] ?? []);
   }
 
   /// Restore books data
@@ -308,7 +278,6 @@ class BackupService {
     final userData = backup['user_data'] as Map<String, dynamic>?;
     final academicData = backup['academic_data'] as Map<String, dynamic>?;
     final chatData = backup['chat_data'] as Map<String, dynamic>?;
-    final calculatorData = backup['calculator_data'] as Map<String, dynamic>?;
     final booksData = backup['books_data'] as Map<String, dynamic>?;
     
     final buffer = StringBuffer();
@@ -359,18 +328,14 @@ class BackupService {
     buffer.writeln('');
     
     // Study Tools Usage
-    buffer.writeln('🧮 STUDY TOOLS USAGE:');
-    final calculatorHistory = calculatorData?['history'] as List? ?? [];
-    buffer.writeln('   Calculator Operations: ${calculatorHistory.length}');
-    
-    final favorites = calculatorData?['favorites'] as List? ?? [];
-    buffer.writeln('   Saved Calculations: ${favorites.length}');
-    
-    final notes = booksData?['notes'] as List? ?? [];
-    buffer.writeln('   Notes Created: ${notes.length}');
+    buffer.writeln('📚 STUDY TOOLS USAGE:');
+    final booksNotes = booksData?['notes'] as List? ?? [];
+    buffer.writeln('   Book Notes Created: ${booksNotes.length}');
     
     final bookmarks = booksData?['bookmarks'] as List? ?? [];
-    buffer.writeln('   Bookmarked Items: ${bookmarks.length}');
+    buffer.writeln('   Bookmarks Saved: ${bookmarks.length}');
+    
+
     buffer.writeln('');
     
     // Communication Activity
@@ -416,11 +381,9 @@ class BackupService {
   static void _generateRecommendations(StringBuffer buffer, Map<String, dynamic> backup) {
     final academicData = backup['academic_data'] as Map<String, dynamic>?;
     final chatData = backup['chat_data'] as Map<String, dynamic>?;
-    final calculatorData = backup['calculator_data'] as Map<String, dynamic>?;
     
     final attendance = academicData?['attendance_records'] as List? ?? [];
     final messageCount = chatData?['message_count'] ?? 0;
-    final calculatorUsage = (calculatorData?['history'] as List? ?? []).length;
     
     // Attendance recommendations
     if (attendance.isNotEmpty && !attendance.first.containsKey('error')) {
@@ -435,9 +398,7 @@ class BackupService {
     }
     
     // Study tools recommendations
-    if (calculatorUsage < 10) {
-      buffer.writeln('   🧮 Explore more calculator features for better problem solving');
-    }
+    buffer.writeln('   🧮 Explore more study tools for better problem solving');
     
     // Communication recommendations
     if (messageCount < 5) {
@@ -471,13 +432,11 @@ class BackupService {
     
     final academicData = backup['academic_data'] as Map<String, dynamic>?;
     final chatData = backup['chat_data'] as Map<String, dynamic>?;
-    final calculatorData = backup['calculator_data'] as Map<String, dynamic>?;
     final booksData = backup['books_data'] as Map<String, dynamic>?;
     
     if ((academicData?['class_sessions'] as List? ?? []).isNotEmpty) count++;
     if ((academicData?['attendance_records'] as List? ?? []).isNotEmpty) count++;
     if ((chatData?['message_count'] ?? 0) > 0) count++;
-    if ((calculatorData?['history'] as List? ?? []).isNotEmpty) count++;
     if ((booksData?['notes'] as List? ?? []).isNotEmpty) count++;
     
     return count;
@@ -531,7 +490,6 @@ class BackupService {
         'user_data_size': jsonEncode(backup['user_data']).length,
         'academic_records': (backup['academic_data']['class_sessions'] as List).length,
         'chat_messages': backup['chat_data']['message_count'],
-        'calculator_history': (backup['calculator_data']['history'] as List).length,
         'last_backup': DateTime.now().toIso8601String(),
       };
     } catch (e) {

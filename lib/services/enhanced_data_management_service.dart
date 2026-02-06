@@ -15,7 +15,7 @@ class EnhancedDataManagementService {
   /// Initialize all required Hive boxes with enhanced error handling
   static Future<void> initializeHiveBoxes() async {
     try {
-      final boxNames = ['user_prefs', 'books_notes', 'calculator_history', 'class_sessions', 'game_data', 'focus_data', 'calendar_reminders'];
+      final boxNames = ['user_prefs', 'books_notes', 'class_sessions', 'game_data', 'focus_data', 'calendar_reminders'];
       
       for (final boxName in boxNames) {
         try {
@@ -50,7 +50,7 @@ class EnhancedDataManagementService {
 
   /// Verify that all boxes are accessible
   static Future<void> _verifyBoxAccess() async {
-    final boxNames = ['user_prefs', 'books_notes', 'calculator_history', 'class_sessions', 'game_data', 'focus_data', 'calendar_reminders'];
+    final boxNames = ['user_prefs', 'books_notes', 'class_sessions', 'game_data', 'focus_data', 'calendar_reminders'];
     
     for (final boxName in boxNames) {
       try {
@@ -158,9 +158,6 @@ class EnhancedDataManagementService {
       
       // Books and notes
       localData['books_notes'] = _safeBoxAccess('books_notes');
-      
-      // Calculator history
-      localData['calculator_history'] = _safeBoxAccess('calculator_history');
       
       // Class sessions (special handling)
       localData['class_sessions'] = _safeClassSessionsAccess();
@@ -444,11 +441,6 @@ class EnhancedDataManagementService {
         await _safeBoxRestore('books_notes', Map<String, dynamic>.from(localData['books_notes']));
       }
       
-      // Restore calculator history
-      if (localData.containsKey('calculator_history') && localData['calculator_history'] is Map) {
-        await _safeBoxRestore('calculator_history', Map<String, dynamic>.from(localData['calculator_history']));
-      }
-      
       // Restore game data
       if (localData.containsKey('game_data') && localData['game_data'] is Map) {
         await _safeBoxRestore('game_data', Map<String, dynamic>.from(localData['game_data']));
@@ -695,7 +687,7 @@ class EnhancedDataManagementService {
   static Future<bool> clearAllData() async {
     try {
       // Clear all Hive boxes safely
-      final boxes = ['user_prefs', 'books_notes', 'calculator_history', 'class_sessions', 'game_data', 'focus_data'];
+      final boxes = ['user_prefs', 'books_notes', 'class_sessions', 'game_data', 'focus_data'];
       
       for (final boxName in boxes) {
         try {

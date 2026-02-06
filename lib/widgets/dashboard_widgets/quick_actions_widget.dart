@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../modules/calculator/calculator_screen.dart';
+import '../../modules/academic/syllabus_screen.dart';
 import '../../modules/focus/focus_forest_screen.dart';
 import '../../modules/academic/books_notes_screen.dart';
 import '../../screens/chat_screen.dart';
@@ -143,14 +143,14 @@ class _QuickActionsWidgetState extends State<QuickActionsWidget>
                   children: [
                     _buildEnhancedActionButton(
                       context,
-                      'Calculator',
-                      Icons.calculate,
+                      'Syllabus',
+                      Icons.menu_book,
                       Colors.green,
                       0,
                       () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CalculatorScreen(),
+                          builder: (context) => const SyllabusScreen(),
                         ),
                       ),
                     ),

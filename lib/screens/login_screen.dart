@@ -19,9 +19,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   // Controllers
   final _nameController = TextEditingController();
   final _regdController = TextEditingController();
-  final _groupController = TextEditingController();
-  final _sectionController = TextEditingController();
-  final _yearController = TextEditingController();
   
   // Avatar Selection
   String? _selectedAvatar;
@@ -57,9 +54,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   void dispose() {
     _nameController.dispose();
     _regdController.dispose();
-    _groupController.dispose();
-    _sectionController.dispose();
-    _yearController.dispose();
     _animController.dispose();
     super.dispose();
   }
@@ -150,61 +144,91 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                   colors: [
+                    const Color(0xFF1A0A2E),
                     const Color(0xFF0A0A0F),
-                    Colors.purple.withOpacity(0.1),
-                    const Color(0xFF0A0A0F),
+                    Colors.purple.withOpacity(0.15),
                   ],
                 ),
               ),
             ),
             
-            // Floating particles
-            ...List.generate(10, (index) {
-              return Positioned(
-                left: (index * 50.0) % MediaQuery.of(context).size.width,
-                top: (index * 80.0) % MediaQuery.of(context).size.height,
-                child: Container(
-                  width: 4,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.cyanAccent.withOpacity(0.3),
-                    shape: BoxShape.circle,
+            // Decorative circles
+            Positioned(
+              top: -50,
+              right: -50,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.purple.withOpacity(0.3),
+                      Colors.transparent,
+                    ],
                   ),
-                )
-                    .animate(onPlay: (c) => c.repeat(reverse: true))
-                    .fadeIn(duration: Duration(seconds: 2 + index % 3))
-                    .scale(begin: const Offset(0.5, 0.5), end: const Offset(1.5, 1.5)),
-              );
-            }),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 100,
+              left: -80,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.cyanAccent.withOpacity(0.2),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+            ),
             
             // Main content
             SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 50),
                   
                   // Logo
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.cyanAccent.withOpacity(0.2), Colors.purple.withOpacity(0.2)],
-                      ),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.cyanAccent.withOpacity(0.5)),
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.cyanAccent.withOpacity(0.2),
+                          Colors.purple.withOpacity(0.2),
+                        ],
+                      ),
+                      border: Border.all(
+                        color: Colors.cyanAccent.withOpacity(0.5),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.3),
+                          blurRadius: 30,
+                          spreadRadius: 5,
+                        ),
+                      ],
                     ),
                     child: const Icon(
                       Icons.school,
-                      size: 60,
+                      size: 50,
                       color: Colors.cyanAccent,
                     ),
-                  ).animate().scale(duration: 500.ms, curve: Curves.elasticOut),
+                  ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
                   
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   
                   // Title
                   ShaderMask(
@@ -221,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     child: Text(
                       'Sentinel',
                       style: GoogleFonts.orbitron(
-                        fontSize: 36,
+                        fontSize: 38,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -230,10 +254,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   
                   Text(
                     'Student OS',
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.poppins(
                       fontSize: 14,
-                      color: Colors.grey,
-                      letterSpacing: 4,
+                      color: Colors.grey.shade500,
+                      letterSpacing: 6,
                     ),
                   ).animate().fadeIn(delay: 300.ms),
                   
@@ -241,11 +265,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   
                   // Form Card
                   Container(
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade900.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.cyanAccent.withOpacity(0.2)),
+                      color: const Color(0xFF1A1A2E).withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: Colors.purple.withOpacity(0.3),
+                      ),
                     ),
                     child: Column(
                       children: [
@@ -253,26 +279,31 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(
+                              color: Colors.cyanAccent.withOpacity(0.3),
+                            ),
                           ),
                           child: Row(
                             children: [
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () => _isLogin ? null : _toggleMode(),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    padding: const EdgeInsets.symmetric(vertical: 14),
                                     decoration: BoxDecoration(
                                       color: _isLogin ? Colors.cyanAccent : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(26),
                                     ),
                                     child: Text(
                                       'Login',
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: GoogleFonts.poppins(
                                         color: _isLogin ? Colors.black : Colors.grey,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
@@ -281,18 +312,20 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () => _isLogin ? _toggleMode() : null,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    padding: const EdgeInsets.symmetric(vertical: 14),
                                     decoration: BoxDecoration(
                                       color: !_isLogin ? Colors.purple : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(26),
                                     ),
                                     child: Text(
                                       'Register',
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: GoogleFonts.poppins(
                                         color: !_isLogin ? Colors.white : Colors.grey,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
@@ -302,13 +335,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                         ),
                         
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 28),
                         
                         // Name field
                         _buildTextField(
                           controller: _nameController,
                           label: 'Full Name',
-                          icon: Icons.person,
+                          icon: Icons.person_outline,
                         ),
                         
                         const SizedBox(height: 16),
@@ -317,46 +350,54 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         _buildTextField(
                           controller: _regdController,
                           label: 'Registration Number',
-                          icon: Icons.badge,
-                          hint: 'e.g., 22B01A0501',
+                          icon: Icons.badge_outlined,
                         ),
                         
                         // Registration-only fields
                         if (!_isLogin) ...[
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
 
-                          // Avatar Selector (Optional)
+                          // Avatar Selector
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Select Avatar (Optional)',
-                              style: TextStyle(
-                                color: Colors.cyanAccent.withOpacity(0.8),
+                              style: GoogleFonts.poppins(
+                                color: Colors.purple.shade300,
                                 fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           SizedBox(
                             height: 60,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemCount: _avatars.length,
-                              separatorBuilder: (_, __) => const SizedBox(width: 12),
+                              separatorBuilder: (_, __) => const SizedBox(width: 16),
                               itemBuilder: (context, index) {
                                 final avatar = _avatars[index];
                                 final isSelected = _selectedAvatar == avatar;
                                 return GestureDetector(
                                   onTap: () => setState(() => _selectedAvatar = avatar),
-                                  child: Container(
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
                                     width: 60,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
                                         color: isSelected ? Colors.cyanAccent : Colors.transparent,
-                                        width: 2,
+                                        width: 3,
                                       ),
+                                      boxShadow: isSelected
+                                          ? [
+                                              BoxShadow(
+                                                color: Colors.cyanAccent.withOpacity(0.4),
+                                                blurRadius: 12,
+                                              )
+                                            ]
+                                          : null,
                                     ),
                                     child: CircleAvatar(
                                       backgroundImage: NetworkImage(avatar),
@@ -374,7 +415,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             value: _selectedGroup,
                             items: _groups,
                             label: 'Branch/Group',
-                            icon: Icons.school,
+                            icon: Icons.school_outlined,
                             onChanged: (val) => setState(() => _selectedGroup = val),
                           ),
                           
@@ -388,7 +429,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   value: _selectedSection,
                                   items: _sections,
                                   label: 'Section',
-                                  icon: Icons.class_,
+                                  icon: Icons.class_outlined,
                                   onChanged: (val) => setState(() => _selectedSection = val),
                                 ),
                               ),
@@ -399,7 +440,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   value: _selectedYear,
                                   items: _years,
                                   label: 'Year',
-                                  icon: Icons.calendar_today,
+                                  icon: Icons.calendar_today_outlined,
                                   onChanged: (val) => setState(() => _selectedYear = val),
                                 ),
                               ),
@@ -407,7 +448,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                         ],
                         
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 28),
                         
                         // Submit button
                         SizedBox(
@@ -419,18 +460,20 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               foregroundColor: _isLogin ? Colors.black : Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(30),
                               ),
+                              elevation: 8,
+                              shadowColor: (_isLogin ? Colors.cyanAccent : Colors.purple).withOpacity(0.5),
                             ),
                             child: _isLoading
                                 ? const SizedBox(
                                     width: 24,
                                     height: 24,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                                   )
                                 : Text(
                                     _isLogin ? 'Login' : 'Create Account',
-                                    style: const TextStyle(
+                                    style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
@@ -439,7 +482,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         ),
                       ],
                     ),
-                  ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2),
+                  ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.15),
                   
                   const SizedBox(height: 24),
                   
@@ -448,7 +491,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     _isLogin
                         ? "Don't have an account? Tap Register above"
                         : "Already have an account? Tap Login above",
-                    style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+                    style: GoogleFonts.poppins(
+                      color: Colors.purple.shade300,
+                      fontSize: 13,
+                    ),
                   ),
                   
                   const SizedBox(height: 40),
@@ -465,26 +511,27 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     required TextEditingController controller,
     required String label,
     required IconData icon,
-    String? hint,
   }) {
     return TextField(
       controller: controller,
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.poppins(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
-        hintText: hint,
-        labelStyle: TextStyle(color: Colors.grey.shade500),
-        hintStyle: TextStyle(color: Colors.grey.shade700),
+        labelStyle: GoogleFonts.poppins(color: Colors.grey.shade500),
         prefixIcon: Icon(icon, color: Colors.cyanAccent),
         filled: true,
-        fillColor: Colors.black,
+        fillColor: Colors.black.withOpacity(0.4),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.cyanAccent),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.cyanAccent, width: 1.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.cyanAccent.withOpacity(0.3)),
         ),
       ),
     );
@@ -504,17 +551,21 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         child: Text(item),
       )).toList(),
       onChanged: onChanged,
-      style: const TextStyle(color: Colors.white),
-      dropdownColor: Colors.grey.shade900,
+      style: GoogleFonts.poppins(color: Colors.white),
+      dropdownColor: const Color(0xFF1A1A2E),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: Colors.grey.shade500),
+        labelStyle: GoogleFonts.poppins(color: Colors.grey.shade500),
         prefixIcon: Icon(icon, color: Colors.purple),
         filled: true,
-        fillColor: Colors.black,
+        fillColor: Colors.black.withOpacity(0.4),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.purple.withOpacity(0.3)),
         ),
       ),
     );

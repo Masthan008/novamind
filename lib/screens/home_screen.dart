@@ -23,7 +23,6 @@ import '../modules/news/news_screen.dart';
 import '../modules/academic/syllabus_screen.dart';
 import '../modules/academic/books_notes_screen.dart';
 import '../modules/roadmaps/roadmaps_screen.dart';
-import '../modules/programming_hub/programming_hub_screen.dart';
 import '../modules/ai/nova_chat_screen.dart';
 import '../screens/engineering/engineering_hub.dart';
 import '../screens/flowcharts_screen.dart';
@@ -899,21 +898,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const RoadmapsScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.developer_board,
-              title: 'Programming Hub',
-              color: Colors.purpleAccent,
-              delay: 1000,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProgrammingHubScreen(),
                   ),
                 );
               },

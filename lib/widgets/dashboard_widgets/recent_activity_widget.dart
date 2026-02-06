@@ -29,9 +29,9 @@ class RecentActivityWidget extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                _buildActivityItem('Calculator used', '2h ago', Icons.calculate),
                 _buildActivityItem('Message sent', '3h ago', Icons.chat),
                 _buildActivityItem('Focus session', '5h ago', Icons.timer),
+                _buildActivityItem('Study session', '1d ago', Icons.book),
               ],
             ),
           ),

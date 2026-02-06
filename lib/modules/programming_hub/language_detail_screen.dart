@@ -221,31 +221,26 @@ class _LanguageDetailScreenState extends State<LanguageDetailScreen>
               ),
             ),
             const SizedBox(height: 16),
-            // Stats row
-            Row(
+            // Stats - using Wrap to prevent overflow
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 _buildStatChip(
                   Icons.calendar_today,
                   'Created ${lang.yearCreated}',
                   lang.primaryColor,
                 ),
-                const SizedBox(width: 10),
                 _buildStatChip(
                   Icons.person,
                   lang.creator.isNotEmpty ? lang.creator : 'Unknown',
                   lang.secondaryColor,
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
                 _buildStatChip(
                   Icons.topic,
                   '${lang.topics.length} Topics',
                   Colors.cyan,
                 ),
-                const SizedBox(width: 10),
                 _buildStatChip(
                   Icons.signal_cellular_alt,
                   lang.difficulty,
@@ -261,6 +256,7 @@ class _LanguageDetailScreenState extends State<LanguageDetailScreen>
 
   Widget _buildStatChip(IconData icon, String text, Color color) {
     return Container(
+      constraints: const BoxConstraints(maxWidth: 180),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -275,12 +271,16 @@ class _LanguageDetailScreenState extends State<LanguageDetailScreen>
         children: [
           Icon(icon, size: 14, color: color),
           const SizedBox(width: 6),
-          Text(
-            text,
-            style: GoogleFonts.sourceCodePro(
-              fontSize: 11,
-              color: color,
-              fontWeight: FontWeight.w500,
+          Flexible(
+            child: Text(
+              text,
+              style: GoogleFonts.sourceCodePro(
+                fontSize: 11,
+                color: color,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ],

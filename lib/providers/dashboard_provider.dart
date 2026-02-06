@@ -141,11 +141,11 @@ class DashboardProvider extends ChangeNotifier {
   void _createDefaultItems() {
     _dashboardItems = [
       DashboardItem(
-        id: 'calculator',
-        title: 'Calculator',
-        icon: Icons.calculate,
-        route: '/calculator',
-        color: Colors.blue,
+        id: 'alarm',
+        title: 'Alarm',
+        icon: Icons.alarm,
+        route: '/alarm',
+        color: Colors.orange,
         position: 0,
       ),
       DashboardItem(

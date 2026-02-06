@@ -200,9 +200,9 @@ class DashboardService {
       final attendedClasses = attendanceBox.get('attended_classes', defaultValue: 0);
       final attendanceRate = totalClasses > 0 ? (attendedClasses / totalClasses * 100) : 0.0;
 
-      // Get study time from calculator usage (proxy)
-      final calculatorBox = Hive.box('calculator_history');
-      final calculatorUsage = calculatorBox.length;
+      // Get study time from focus sessions
+      final focusBox = Hive.box('focus_data');
+      final focusUsage = focusBox.length;
 
       // Get messages count
       int messageCount = 0;
@@ -220,7 +220,7 @@ class DashboardService {
       return {
         'attendance_rate': attendanceRate.toStringAsFixed(1),
         'total_classes': totalClasses,
-        'study_sessions': calculatorUsage,
+        'study_sessions': focusUsage,
         'messages_sent': messageCount,
         'current_streak': _calculateStreak(),
       };
@@ -298,7 +298,6 @@ class DashboardService {
   Map<String, dynamic> _getQuickActionsData() {
     return {
       'actions': [
-        {'name': 'Calculator', 'icon': 'calculate', 'route': '/calculator'},
         {'name': 'Timer', 'icon': 'timer', 'route': '/focus'},
         {'name': 'Notes', 'icon': 'note', 'route': '/notes'},
         {'name': 'Chat', 'icon': 'chat', 'route': '/chat'},
@@ -349,14 +348,14 @@ class DashboardService {
     try {
       final activities = <Map<String, dynamic>>[];
       
-      // Get recent calculator usage
-      final calculatorBox = Hive.box('calculator_history');
-      if (calculatorBox.isNotEmpty) {
+      // Get recent focus sessions
+      final focusBox = Hive.box('focus_data');
+      if (focusBox.isNotEmpty) {
         activities.add({
-          'type': 'calculator',
-          'description': 'Used calculator',
+          'type': 'focus',
+          'description': 'Focus session completed',
           'time': '2 hours ago',
-          'icon': 'calculate',
+          'icon': 'timer',
         });
       }
 

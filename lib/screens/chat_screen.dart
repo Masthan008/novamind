@@ -369,10 +369,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           children: [
             Text(
               'Bookmarked Messages',
-              style: GoogleFonts.orbitron(
-                color: Colors.cyanAccent,
+              style: GoogleFonts.poppins(
+                color: const Color(0xFFFFB347),
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 16),
@@ -384,7 +384,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   return ListTile(
                     title: Text(
                       msg['sender'],
-                      style: const TextStyle(color: Colors.cyanAccent),
+                      style: const TextStyle(color: Color(0xFFFFB347)),
                     ),
                     subtitle: Text(
                       msg['message'],
@@ -523,26 +523,27 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
-                              colors: [Colors.cyanAccent, Colors.blue],
+                              colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
                             ),
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.cyanAccent.withOpacity(0.3),
+                                color: const Color(0xFFFF6B6B).withOpacity(0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
                             ],
                           ),
-                          child: const Icon(Icons.chat_bubble, color: Colors.white, size: 20),
+                          child: const Icon(Icons.chat_bubble_rounded, color: Colors.white, size: 20),
                         ),
                         const SizedBox(width: 12),
                         Text(
                           'ChatHub',
-                          style: GoogleFonts.orbitron(
-                            color: Colors.cyanAccent,
-                            fontWeight: FontWeight.bold,
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xFFFF6B6B),
+                            fontWeight: FontWeight.w700,
                             fontSize: 20,
+                            letterSpacing: 0.5,
                           ),
                         ),
                       ],
@@ -580,10 +581,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.cyanAccent.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(8),
+              color: const Color(0xFFFF6B6B).withOpacity(0.15),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.arrow_back, color: Colors.cyanAccent),
+            child: const Icon(Icons.arrow_back_ios_rounded, color: Color(0xFFFF6B6B), size: 18),
           ),
           onPressed: () {
             HapticFeedback.lightImpact();
@@ -601,13 +602,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.blue.withOpacity(0.8),
-                    Colors.blueAccent.withOpacity(0.6),
+                    const Color(0xFFFFB347).withOpacity(0.8),
+                    const Color(0xFFFFCC80).withOpacity(0.6),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.bookmark_border, color: Colors.white),
+              child: const Icon(Icons.bookmark_rounded, color: Colors.white, size: 18),
             ),
             onPressed: () {
               HapticFeedback.lightImpact();
@@ -621,13 +622,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.purple.withOpacity(0.8),
-                    Colors.purpleAccent.withOpacity(0.6),
+                    const Color(0xFFE891DC).withOpacity(0.8),
+                    const Color(0xFFB794F6).withOpacity(0.6),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.white),
+              child: Icon(_isSearching ? Icons.close_rounded : Icons.search_rounded, color: Colors.white, size: 18),
             ),
             onPressed: () {
               HapticFeedback.lightImpact();
@@ -671,10 +672,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               left: (index * 60.0) % MediaQuery.of(context).size.width,
               top: (index * 100.0) % MediaQuery.of(context).size.height,
               child: Container(
-                width: 3,
-                height: 3,
+                width: 4,
+                height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.cyanAccent.withOpacity(0.2),
+                  color: const Color(0xFFFF8E53).withOpacity(0.15),
                   shape: BoxShape.circle,
                 ),
               )
@@ -735,11 +736,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Colors.purple, Colors.purpleAccent],
+                                  colors: [Color(0xFFE891DC), Color(0xFFB794F6)],
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(Icons.search, color: Colors.white, size: 20),
+                              child: const Icon(Icons.search_rounded, color: Colors.white, size: 18),
                             ),
                             suffixIcon: _searchQuery.isNotEmpty
                                 ? IconButton(
@@ -917,11 +918,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
+                            border: Border.all(color: const Color(0xFFFF6B6B).withOpacity(0.3)),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.reply, color: Colors.cyanAccent, size: 16),
+                              const Icon(Icons.reply_rounded, color: Color(0xFFFF6B6B), size: 16),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Column(
@@ -929,10 +930,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                   children: [
                                     Text(
                                       'Replying to ${_replyingTo!['sender']}',
-                                      style: GoogleFonts.montserrat(
-                                        color: Colors.cyanAccent,
+                                      style: GoogleFonts.poppins(
+                                        color: const Color(0xFFFF6B6B),
                                         fontSize: 12,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     Text(
@@ -999,7 +1000,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         children: [
                           // 📎 Attachment (Keep it simple)
                           IconButton(
-                            icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent),
+                            icon: const Icon(Icons.add_circle_outline_rounded, color: Color(0xFFFF6B6B)),
                             onPressed: () {
                               // Show attachment options
                               showModalBottomSheet(
@@ -1012,10 +1013,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                     children: [
                                       Text(
                                         'Attachment Options',
-                                        style: GoogleFonts.orbitron(
-                                          color: Colors.cyanAccent,
+                                        style: GoogleFonts.poppins(
+                                          color: const Color(0xFFFF6B6B),
                                           fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       const SizedBox(height: 20),
@@ -1032,9 +1033,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                             },
                                           ),
                                           _buildAttachmentOption(
-                                            icon: Icons.poll,
+                                            icon: Icons.poll_rounded,
                                             label: 'Poll',
-                                            color: Colors.cyanAccent,
+                                            color: const Color(0xFFFF6B6B),
                                             onTap: () {
                                               Navigator.pop(context);
                                               _showPollCreator();
@@ -1077,12 +1078,21 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
                           // 🚀 Send Button
                           Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.cyanAccent, 
-                              shape: BoxShape.circle
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
+                              ),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFF6B6B).withOpacity(0.4),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
                             child: IconButton(
-                              icon: const Icon(Icons.send, color: Colors.black, size: 20),
+                              icon: const Icon(Icons.send_rounded, color: Colors.white, size: 20),
                               onPressed: _sendMessage,
                             ),
                           ),
@@ -1134,7 +1144,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
-                  leading: const Icon(Icons.reply, color: Colors.cyanAccent),
+                  leading: const Icon(Icons.reply_rounded, color: Color(0xFFFF6B6B)),
                   title: const Text('Reply', style: TextStyle(color: Colors.white)),
                   onTap: () {
                     Navigator.pop(context);
@@ -1208,7 +1218,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   child: Text(
                     sender[0].toUpperCase(),
                     style: TextStyle(
-                      color: isTeacher ? Colors.white : Colors.cyanAccent,
+                      color: isTeacher ? Colors.white : const Color(0xFFFF6B6B),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -1259,7 +1269,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                       gradient: isMe
                           ? const LinearGradient(
-                              colors: [Color(0xFF00BCD4), Color(0xFF2196F3)],
+                              colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             )
@@ -1283,7 +1293,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             )
                           : Border.all(
                               color: isMe 
-                                ? Colors.cyanAccent.withOpacity(0.3)
+                                ? const Color(0xFFFF8E53).withOpacity(0.3)
                                 : Colors.grey.withOpacity(0.2),
                               width: 1,
                             ),
@@ -1296,11 +1306,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       boxShadow: [
                         BoxShadow(
                           color: isMe 
-                            ? Colors.cyanAccent.withOpacity(0.4)
+                            ? const Color(0xFFFF6B6B).withOpacity(0.3)
                             : isTeacher
-                                ? Colors.orange.withOpacity(0.3)
-                                : Colors.black.withOpacity(0.4),
-                          blurRadius: 12,
+                                ? Colors.orange.withOpacity(0.2)
+                                : Colors.black.withOpacity(0.3),
+                          blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
                       ],
@@ -1370,12 +1380,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: hasReacted 
-                                          ? Colors.cyanAccent.withOpacity(0.3)
+                                          ? const Color(0xFFFF6B6B).withOpacity(0.25)
                                           : Colors.black.withOpacity(0.3),
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
                                         color: hasReacted 
-                                            ? Colors.cyanAccent
+                                            ? const Color(0xFFFF6B6B)
                                             : Colors.white.withOpacity(0.2),
                                         width: 1,
                                       ),
@@ -1450,11 +1460,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: const LinearGradient(
-                    colors: [Colors.cyanAccent, Colors.blue],
+                    colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.4),
+                      color: const Color(0xFFFF6B6B).withOpacity(0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),

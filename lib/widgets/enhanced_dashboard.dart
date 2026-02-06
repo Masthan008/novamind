@@ -98,7 +98,6 @@ class EnhancedDashboard extends StatelessWidget {
     AccessibilityProvider accessibilityProvider,
   ) {
     final quickActions = [
-      {'icon': Icons.calculate, 'label': 'Calculator', 'route': '/calculator'},
       {'icon': Icons.alarm, 'label': 'Set Alarm', 'route': '/alarm'},
       {'icon': Icons.book, 'label': 'Study', 'route': '/books'},
       {'icon': Icons.chat, 'label': 'Chat', 'route': '/chat'},
@@ -453,7 +452,6 @@ class EnhancedDashboard extends StatelessWidget {
     AccessibilityProvider accessibilityProvider,
   ) {
     final activities = [
-      {'title': 'Completed Calculator Exercise', 'time': '2 hours ago'},
       {'title': 'Read Chapter 5 - Data Structures', 'time': '1 day ago'},
       {'title': 'Solved 5 LeetCode Problems', 'time': '2 days ago'},
     ];
