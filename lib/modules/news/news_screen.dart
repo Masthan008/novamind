@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../services/news_service.dart';
 import '../../services/notification_service.dart';
+import 'tech_news_screen.dart';
+import 'campus_buzz_screen.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -14,6 +16,7 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
   late AnimationController _refreshAnimationController;
   bool _isRefreshing = false;
 
@@ -22,6 +25,7 @@ class _NewsScreenState extends State<NewsScreen> with TickerProviderStateMixin {
     super.initState();
     NotificationService.clearUnreadCount();
     
+    _tabController = TabController(length: 3, vsync: this);
     _refreshAnimationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -30,6 +34,7 @@ class _NewsScreenState extends State<NewsScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _tabController.dispose();
     _refreshAnimationController.dispose();
     super.dispose();
   }
@@ -56,15 +61,15 @@ class _NewsScreenState extends State<NewsScreen> with TickerProviderStateMixin {
         backgroundColor: const Color(0xFF0D0D0D),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white54),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white54),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'NEWS FEED',
+          'NEWS HUB',
           style: GoogleFonts.orbitron(
             color: Colors.cyanAccent,
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 16,
             letterSpacing: 2,
           ),
         ),
@@ -86,38 +91,77 @@ class _NewsScreenState extends State<NewsScreen> with TickerProviderStateMixin {
             },
           ),
         ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: _handleRefresh,
-        color: Colors.cyanAccent,
-        backgroundColor: const Color(0xFF1A1A1A),
-        child: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: NewsService.getNewsStream(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return _buildLoadingState();
-            }
-
-            if (snapshot.hasError) {
-              return _buildErrorState(snapshot.error.toString());
-            }
-
-            final newsList = snapshot.data ?? [];
-
-            if (newsList.isEmpty) {
-              return _buildEmptyState();
-            }
-
-            return ListView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-              itemCount: newsList.length,
-              itemBuilder: (context, index) {
-                final news = newsList[index];
-                return _NewsCard(news: news, index: index);
-              },
-            );
-          },
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.cyanAccent,
+          indicatorWeight: 3,
+          labelColor: Colors.cyanAccent,
+          unselectedLabelColor: Colors.white38,
+          labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 11),
+          unselectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontSize: 11),
+          tabs: const [
+            Tab(
+              icon: Icon(Icons.school, size: 18),
+              text: 'College',
+            ),
+            Tab(
+              icon: Icon(Icons.flash_on, size: 18, color: Colors.amber),
+              text: 'Buzz',
+            ),
+            Tab(
+              icon: Icon(Icons.trending_up, size: 18),
+              text: 'Tech',
+            ),
+          ],
         ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          // Tab 1: College/Admin News
+          _buildCollegeNewsTab(),
+          
+          // Tab 2: Campus Buzz (Student Doubts Feed)
+          const CampusBuzzScreen(),
+          
+          // Tab 3: Tech News
+          const TechNewsScreen(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCollegeNewsTab() {
+    return RefreshIndicator(
+      onRefresh: _handleRefresh,
+      color: Colors.cyanAccent,
+      backgroundColor: const Color(0xFF1A1A1A),
+      child: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: NewsService.getNewsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _buildLoadingState();
+          }
+
+          if (snapshot.hasError) {
+            return _buildErrorState(snapshot.error.toString());
+          }
+
+          final newsList = snapshot.data ?? [];
+
+          if (newsList.isEmpty) {
+            return _buildEmptyState();
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
+            itemCount: newsList.length,
+            itemBuilder: (context, index) {
+              final news = newsList[index];
+              return _NewsCard(news: news, index: index);
+            },
+          );
+        },
       ),
     );
   }

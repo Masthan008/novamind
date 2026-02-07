@@ -20,6 +20,7 @@ import 'screens/splash_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
+import 'screens/community/doubt_detail_screen.dart'; // Added import
 import 'animations/slide_up_route.dart';
 import 'modules/calculator/calculator_provider.dart';
 
@@ -386,6 +387,10 @@ class _SentinelAppState extends State<SentinelApp> {
                 break;
               case '/home':
                 page = const HomeScreen();
+                break;
+              case '/doubt-detail':
+                final doubt = settings.arguments as Map<String, dynamic>;
+                page = DoubtDetailScreen(doubt: doubt);
                 break;
               default:
                 page = const SplashScreen();

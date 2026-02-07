@@ -56,6 +56,7 @@ dependencies:
   # flutter_inset_box_shadow: ^1.0.8 # Removed due to build errors
   # flutter_week_view: ^1.4.4 # REMOVED - 5MB+ (duplicate calendar functionality)
   table_calendar: ^3.1.1
+  timeago: ^3.6.1
   
   # Tools - OPTIMIZED
   # flutter_quill: ^10.8.3 # REMOVED - 8MB+ (use simple text editor)

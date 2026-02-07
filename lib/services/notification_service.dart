@@ -6,6 +6,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive/hive.dart';
 import '../models/class_session.dart';
+import 'student_auth_service.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notifications =
@@ -13,6 +14,7 @@ class NotificationService {
   
   // Callback to notify listeners of badge count changes
   static Function(int)? _onUnreadCountChanged;
+  static RealtimeChannel? _notificationsChannel;
 
   static Future<void> init() async {
     // Using the transparent notification icon for status bar
@@ -29,6 +31,9 @@ class NotificationService {
     
     // Setup notification channels
     await setupNotificationChannels();
+
+    // Start listening for Campus Buzz notifications
+    listenForBuzzNotifications();
     
     // Note: FCM push notifications require Firebase setup:
     // 1. Add firebase_core and firebase_messaging to pubspec.yaml
@@ -70,6 +75,54 @@ class NotificationService {
     
     print('✅ Notification channels created');
   }
+
+  /// Start listening for Campus Buzz notifications
+  static void listenForBuzzNotifications() {
+    try {
+      final studentId = StudentAuthService.currentStudent?.id;
+      if (studentId == null) {
+        print('⏳ Waiting for login to listen for buzz notifications...');
+        return;
+      }
+
+      // Unsubscribe existing if any (to avoid duplicates on re-login)
+      _notificationsChannel?.unsubscribe();
+
+      print('👂 Listening for buzz notifications for $studentId');
+      _notificationsChannel = Supabase.instance.client
+          .channel('public:student_notifications:$studentId')
+          .onPostgresChanges(
+            event: PostgresChangeEvent.insert,
+            schema: 'public',
+            table: 'student_notifications',
+            filter: PostgresChangeFilter(
+              type: PostgresChangeFilterType.eq,
+              column: 'recipient_id',
+              value: studentId,
+            ),
+            callback: (payload) async {
+              // New notification!
+              final message = payload.newRecord['message'] as String? ?? 'New notification';
+              final senderName = payload.newRecord['sender_name'] as String? ?? 'Someone';
+              
+              print("🔔 New Buzz Notification received!");
+
+              // Show system notification
+              await _showNotification(
+                'Sentinel Buzz', 
+                '$senderName $message'
+              );
+              
+              // Update badge count
+              final unreadCount = await getUnreadCount();
+              _onUnreadCountChanged?.call(unreadCount);
+            },
+          )
+          .subscribe();
+    } catch (e) {
+      print('⚠️ Error listening for buzz notifications: $e');
+    }
+  }
   
   /// Get the last notified news ID from Hive
   static String _getLastNotifiedId() {
@@ -90,24 +143,42 @@ class NotificationService {
     return DateTime.parse(timeStr);
   }
   
-  /// Save current time as last news open time (clears badge)
+  /// Save current time as last news open time
   static Future<void> markNewsAsRead() async {
     final box = Hive.box('user_prefs');
     await box.put('last_news_open_time', DateTime.now().toIso8601String());
-    _onUnreadCountChanged?.call(0);
+    
+    // Update count (will still show buzz notifications if any)
+    final count = await getUnreadCount();
+    _onUnreadCountChanged?.call(count);
   }
   
-  /// Get unread news count (news posted AFTER last open time)
+  /// Get TOTAL unread count (News + Campus Buzz)
   static Future<int> getUnreadCount() async {
     try {
+      // 1. Unread News Count
       final lastSeenTime = _getLastNewsOpenTime();
-      
-      final response = await Supabase.instance.client
+      final newsResponse = await Supabase.instance.client
           .from('news')
           .select('id')
           .gt('created_at', lastSeenTime.toIso8601String());
+      final newsCount = (newsResponse as List).length;
       
-      return (response as List).length;
+      // 2. Unread Campus Buzz Count
+      int buzzCount = 0;
+      final studentId = StudentAuthService.currentStudent?.id;
+      
+      if (studentId != null) {
+         final buzzResponse = await Supabase.instance.client
+          .from('student_notifications')
+          .select('id')
+          .eq('recipient_id', studentId)
+          .eq('is_read', false);
+         buzzCount = (buzzResponse as List).length;
+      }
+      
+      // print('🔔 Unread Count: News=$newsCount, Buzz=$buzzCount');
+      return newsCount + buzzCount;
     } catch (e) {
       print('Error getting unread count: $e');
       return 0;
@@ -117,10 +188,14 @@ class NotificationService {
   /// Set listener for unread count changes
   static void setOnUnreadCountChanged(Function(int)? callback) {
     _onUnreadCountChanged = callback;
+    // Immediately calculate and send current count
+    getUnreadCount().then((count) => callback?.call(count));
   }
   
-  /// Clear unread count (call when user opens News screen)
+  /// Clear unread count for NEWS only (called when user opens News screen)
   static Future<void> clearUnreadCount() async {
+    // We only clear "News" count by updating the last open time.
+    // Buzz notifications are cleared individually when read or "mark all read" in that tab.
     await markNewsAsRead();
   }
 

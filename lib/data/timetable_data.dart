@@ -3,7 +3,6 @@ class TimetableData {
   // 🔑 Helper to get schedule safely
   static Map<String, List<String>> getSchedule(String branch, String section) {
     // 1. Normalize Keys (Remove spaces, uppercase)
-    // Example: Branch "CSE (AI&ML)" becomes "CSE-AIML"
     String normalizedBranch = branch.trim().toUpperCase()
         .replaceAll('(', '')
         .replaceAll(')', '')
@@ -16,15 +15,13 @@ class TimetableData {
     return allSchedules[key] ?? _emptySchedule;
   }
 
-  // 🕐 Period Timings (Official from RGMCET - Updated Feb 2026)
+  // 🕐 Period Timings (Official from RGMCET - WEF 05.02.2026)
   static const Map<String, String> periodTimings = {
     'Period 1': '9:00 AM - 10:40 AM',
-    'Break': '10:40 AM - 11:00 AM',
     'Period 2': '11:00 AM - 11:50 AM',
-    'Lunch': '11:50 AM - 1:00 PM',
     'Period 3': '1:00 PM - 1:50 PM',
     'Period 4': '1:50 PM - 2:40 PM',
-    'Period 5': '3:00 PM - 5:00 PM (Lab/Self-Study)',
+    'Period 5': '3:00 PM - 5:00 PM',
   };
 
   // 📚 Subject Full Names (Updated Feb 2026)
@@ -65,6 +62,9 @@ class TimetableData {
     // Mechanical
     'EM': 'Engineering Mechanics',
     'EM LAB': 'Engineering Mechanics Lab',
+    
+    // Free Period
+    'Free': 'Free Period',
   };
 
   static final Map<String, List<String>> _emptySchedule = {
@@ -77,227 +77,266 @@ class TimetableData {
   };
 
   // 🗓️ THE MASTER DATABASE (Feb 2026 - R23 Regulation)
-  // WEF: 05.02.2026 | Updated from 22 Timetable Images
+  // WEF: 05.02.2026 | 5 Periods Per Day
+  // Format: [P1(9:00-10:40), P2(11:00-11:50), P3(1:00-1:50), P4(1:50-2:40), P5(3:00-5:00)]
   static final Map<String, Map<String, List<String>>> allSchedules = {
 
-    // ================= ECE SECTIONS (Updated from Images) =================
+    // ================= ECE SECTIONS =================
+    // Screenshot: 205346.png
     'ECE_A': {
-      'Monday': ['CHE', 'CE', 'DEVC', 'Free', 'NWA LAB'],
-      'Tuesday': ['CHE LAB', 'CHE LAB', 'BME', 'CE', 'Free'],
-      'Wednesday': ['DEVC', 'CHE', 'NWA', 'Free', 'EWS'],
-      'Thursday': ['NWA', 'BME', 'SS', 'BCE', 'Free'],
+      'Monday': ['CHE', 'CE', 'DEVC', 'NWA LAB', 'NWA LAB'],
+      'Tuesday': ['CHE LAB', 'CHE LAB', 'BME', 'BME', 'CE'],
+      'Wednesday': ['DEVC', 'CHE', 'NWA', 'EWS', 'EWS'],
+      'Thursday': ['NWA', 'BME', 'SS', 'SS', 'BCE'],
       'Friday': ['CE LAB', 'CE LAB', 'BCE', 'CE', 'CHE'],
-      'Saturday': ['DEVC', 'CE', 'NWA', 'Free', 'EAA'],
+      'Saturday': ['DEVC', 'CE', 'NWA', 'NWA', 'EAA'],
     },
+    
+    // Screenshot: 205354.png
     'ECE_B': {
-      'Monday': ['SS', 'CE', 'DEVC', 'Free', 'EWS'],
-      'Tuesday': ['BCE', 'CHE', 'DEVC', 'Free', 'NWA'],
-      'Wednesday': ['CHE', 'CE', 'BME', 'Free', 'NWA LAB'],
-      'Thursday': ['CHE LAB', 'CHE LAB', 'NWA', 'Free', 'EAA'],
-      'Friday': ['CE', 'BCE', 'NWA', 'Free', 'CE LAB'],
-      'Saturday': ['DEVC', 'CE', 'BME', 'Free', 'CHE'],
+      'Monday': ['SS', 'CE', 'DEVC', 'EWS', 'EWS'],
+      'Tuesday': ['BCE', 'CHE', 'DEVC', 'DEVC', 'NWA'],
+      'Wednesday': ['CHE', 'CE', 'BME', 'NWA LAB', 'NWA LAB'],
+      'Thursday': ['CHE LAB', 'CHE LAB', 'NWA', 'NWA', 'EAA'],
+      'Friday': ['CE', 'BCE', 'NWA', 'CE LAB', 'CE LAB'],
+      'Saturday': ['DEVC', 'CE', 'BME', 'BME', 'CHE'],
     },
+    
+    // Screenshot: 205402.png
     'ECE_C': {
-      'Monday': ['CE', 'BME', 'SS', 'Free', 'BCE'],
-      'Tuesday': ['DEVC', 'NWA', 'CE', 'Free', 'NWA LAB'],
-      'Wednesday': ['CHE', 'DEVC', 'CE', 'Free', 'DEVC+BME'],
-      'Thursday': ['CE LAB', 'CE LAB', 'NWA', 'Free', 'CHE'],
-      'Friday': ['DEVC', 'BME', 'CHE', 'Free', 'BCE+EWS'],
-      'Saturday': ['CHE LAB', 'CHE LAB', 'NWA', 'Free', 'EAA'],
+      'Monday': ['CE', 'BME', 'SS', 'SS', 'BCE'],
+      'Tuesday': ['DEVC', 'NWA', 'CE', 'NWA LAB', 'NWA LAB'],
+      'Wednesday': ['CHE', 'DEVC', 'CE', 'DEVC', 'BME'],
+      'Thursday': ['CE LAB', 'CE LAB', 'NWA', 'NWA', 'CHE'],
+      'Friday': ['DEVC', 'BME', 'CHE', 'BCE', 'EWS'],
+      'Saturday': ['CHE LAB', 'CHE LAB', 'NWA', 'NWA', 'EAA'],
     },
-    // ECE-D and EEE-B share the same timetable
+    
+    // Screenshot: 205410.png (ECE-D / EEE-B shared timetable)
     'ECE_D': {
-      'Monday': ['CHE', 'BCE', 'CE', 'Free', 'BME'],
-      'Tuesday': ['SS', 'NWA/ECA', 'DEVC', 'Free', 'CHE LAB'],
-      'Wednesday': ['DEVC', 'CHE', 'BCE', 'Free', 'CE'],
-      'Thursday': ['EWS', 'NWA/ECA', 'Free', 'Free', 'EAA'],
-      'Friday': ['DEVC', 'BME', 'CHE', 'Free', 'NWA/ECA LAB'],
-      'Saturday': ['NWA/ECA', 'CHE', 'CE', 'Free', 'CE LAB'],
+      'Monday': ['CHE', 'BCE', 'CE', 'CE', 'BME'],
+      'Tuesday': ['SS', 'NWA/ECA', 'DEVC', 'CHE LAB', 'CHE LAB'],
+      'Wednesday': ['DEVC', 'CHE', 'BCE', 'CE', 'CE'],
+      'Thursday': ['EWS', 'EWS', 'NWA/ECA', 'NWA/ECA', 'EAA'],
+      'Friday': ['DEVC', 'BME', 'CHE', 'NWA/ECA', 'NWA/ECA LAB'],
+      'Saturday': ['NWA/ECA', 'CHE', 'CE', 'CE LAB', 'CE LAB'],
     },
 
-    // ================= EEE SECTIONS (Updated from Images) =================
+    // ================= EEE SECTIONS =================
+    // Screenshot: 205419.png
     'EEE_A': {
-      'Monday': ['DEVC', 'CE', 'ECA', 'Free', 'CHE LAB'],
-      'Tuesday': ['ECA', 'BCE', 'CHE', 'Free', 'EWS'],
-      'Wednesday': ['CE', 'DEVC', 'BME', 'Free', 'ECA LAB'],
-      'Thursday': ['SS', 'ECA', 'CE', 'Free', 'CE LAB'],
-      'Friday': ['BCE', 'CE', 'CHE', 'Free', 'DEVC'],
-      'Saturday': ['BME', 'ECA', 'CHE', 'Free', 'EAA'],
+      'Monday': ['DEVC', 'CE', 'ECA', 'CHE LAB', 'CHE LAB'],
+      'Tuesday': ['ECA', 'BCE', 'CHE', 'EWS', 'EWS'],
+      'Wednesday': ['CE', 'DEVC', 'BME', 'ECA LAB', 'ECA LAB'],
+      'Thursday': ['SS', 'ECA', 'CE', 'CE LAB', 'CE LAB'],
+      'Friday': ['BCE', 'CE', 'CHE', 'CHE', 'DEVC'],
+      'Saturday': ['BME', 'ECA', 'CHE', 'CHE', 'EAA'],
     },
-    // EEE-B shares timetable with ECE-D
+    
+    // EEE_B uses same timetable as ECE_D (Screenshot: 205410.png)
     'EEE_B': {
-      'Monday': ['CHE', 'BCE', 'CE', 'Free', 'BME'],
-      'Tuesday': ['SS', 'NWA/ECA', 'DEVC', 'Free', 'CHE LAB'],
-      'Wednesday': ['DEVC', 'CHE', 'BCE', 'Free', 'CE'],
-      'Thursday': ['EWS', 'NWA/ECA', 'Free', 'Free', 'EAA'],
-      'Friday': ['DEVC', 'BME', 'CHE', 'Free', 'NWA/ECA LAB'],
-      'Saturday': ['NWA/ECA', 'CHE', 'CE', 'Free', 'CE LAB'],
+      'Monday': ['CHE', 'BCE', 'CE', 'CE', 'BME'],
+      'Tuesday': ['SS', 'NWA/ECA', 'DEVC', 'CHE LAB', 'CHE LAB'],
+      'Wednesday': ['DEVC', 'CHE', 'BCE', 'BCE', 'CE'],
+      'Thursday': ['EWS', 'EWS', 'NWA/ECA', 'NWA/ECA', 'EAA'],
+      'Friday': ['DEVC', 'BME', 'CHE', 'NWA/ECA', 'NWA/ECA LAB'],
+      'Saturday': ['NWA/ECA', 'CHE', 'CE', 'CE LAB', 'CE LAB'],
     },
 
-    // ================= ME SECTIONS (Updated from Images) =================
+    // ================= ME SECTIONS =================
+    // Screenshot: 205435.png
     'ME_A': {
-      'Monday': ['CE LAB', 'CE LAB', 'BME', 'Free', 'SS'],
-      'Tuesday': ['CE', 'BME', 'EM', 'Free', 'EM LAB'],
-      'Wednesday': ['DEVC', 'BCE', 'CHE', 'Free', 'EM'],
-      'Thursday': ['CHE', 'DEVC', 'BCE', 'Free', 'CE'],
-      'Friday': ['EWS', 'Free', 'EM', 'Free', 'EAA'],
-      'Saturday': ['DEVC', 'CE', 'CHE', 'Free', 'CHE LAB'],
+      'Monday': ['CE LAB', 'CE LAB', 'BME', 'BME', 'SS'],
+      'Tuesday': ['CE', 'BME', 'EM', 'EM LAB', 'EM LAB'],
+      'Wednesday': ['DEVC', 'CHE', 'BCE', 'CHE', 'EM'],
+      'Thursday': ['CHE', 'DEVC', 'BCE', 'BCE', 'CE'],
+      'Friday': ['EWS', 'EWS', 'EM', 'EM', 'EAA'],
+      'Saturday': ['DEVC', 'CE', 'CHE', 'CHE LAB', 'CHE LAB'],
     },
-    // ME-B shares timetable with CIVIL
+    
+    // ME_B uses same timetable as CIVIL_A (Screenshot: 205425.png)
     'ME_B': {
-      'Monday': ['BCE', 'EM', 'CE', 'Free', 'CHE'],
-      'Tuesday': ['EM', 'BCE', 'DEVC', 'Free', 'CE LAB'],
-      'Wednesday': ['EWS', 'Free', 'DEVC', 'Free', 'CE'],
-      'Thursday': ['CHE', 'EM', 'BME', 'Free', 'EM LAB'],
-      'Friday': ['SS', 'EM', 'CHE', 'Free', 'CHE LAB'],
-      'Saturday': ['DEVC', 'CE', 'BME', 'Free', 'EAA'],
+      'Monday': ['BCE', 'EM', 'CE', 'CE', 'CHE'],
+      'Tuesday': ['EM', 'BCE', 'DEVC', 'CE LAB', 'CE LAB'],
+      'Wednesday': ['EWS', 'EWS', 'DEVC', 'DEVC', 'CE'],
+      'Thursday': ['CHE', 'EM', 'BME', 'EM LAB', 'EM LAB'],
+      'Friday': ['SS', 'EM', 'CHE', 'CHE LAB', 'CHE LAB'],
+      'Saturday': ['DEVC', 'CE', 'BME', 'BME', 'EAA'],
     },
 
-    // ================= CIVIL SECTION (Updated from Images) =================
+    // ================= CIVIL SECTION =================
+    // Screenshot: 205425.png (CIVIL/ME-B shared timetable)
     'CIVIL_A': {
-      'Monday': ['BCE', 'EM', 'CE', 'Free', 'CHE'],
-      'Tuesday': ['EM', 'BCE', 'DEVC', 'Free', 'CE LAB'],
-      'Wednesday': ['EWS', 'Free', 'DEVC', 'Free', 'CE'],
-      'Thursday': ['CHE', 'EM', 'BME', 'Free', 'EM LAB'],
-      'Friday': ['SS', 'EM', 'CHE', 'Free', 'CHE LAB'],
-      'Saturday': ['DEVC', 'CE', 'BME', 'Free', 'EAA'],
+      'Monday': ['BCE', 'EM', 'CE', 'CE', 'CHE'],
+      'Tuesday': ['EM', 'BCE', 'DEVC', 'CE LAB', 'CE LAB'],
+      'Wednesday': ['EWS', 'EWS', 'DEVC', 'DEVC', 'CE'],
+      'Thursday': ['CHE', 'EM', 'BME', 'EM LAB', 'EM LAB'],
+      'Friday': ['SS', 'EM', 'CHE', 'CHE LAB', 'CHE LAB'],
+      'Saturday': ['DEVC', 'CE', 'BME', 'BME', 'EAA'],
     },
 
-    // ================= CSE (AI&ML) SECTIONS (Updated from Images) =================
+    // ================= CSE (AI&ML) SECTIONS =================
+    // Screenshot: 205442.png
     'CSE-AIML_A': {
-      'Monday': ['DEVC', 'CE', 'BCE', 'Free', 'DS'],
-      'Tuesday': ['EWS', 'Free', 'CE', 'Free', 'CHE'],
+      'Monday': ['DEVC', 'CE', 'BCE', 'BCE', 'DS'],
+      'Tuesday': ['EWS', 'EWS', 'CE', 'CE', 'CHE'],
       'Wednesday': ['DEVC', 'CHE', 'DS LAB', 'DS LAB', 'BME'],
-      'Thursday': ['DS', 'BCE', 'DEVC', 'Free', 'CHE LAB'],
+      'Thursday': ['DS', 'BCE', 'DEVC', 'CHE LAB', 'CHE LAB'],
       'Friday': ['CHE', 'BME', 'DS LAB', 'DS LAB', 'CE'],
-      'Saturday': ['CE LAB', 'CE LAB', 'SS', 'Free', 'EAA'],
+      'Saturday': ['CE LAB', 'CE LAB', 'SS', 'SS', 'EAA'],
     },
+    
+    // Screenshot: 205449.png
     'CSE-AIML_B': {
-      'Monday': ['DS', 'BME', 'CHE', 'Free', 'CE LAB'],
+      'Monday': ['DS', 'BME', 'CHE', 'CE LAB', 'CE LAB'],
       'Tuesday': ['CHE', 'DEVC', 'DS LAB', 'DS LAB', 'BCE'],
-      'Wednesday': ['CHE LAB', 'CHE LAB', 'CE', 'Free', 'DS'],
+      'Wednesday': ['CHE LAB', 'CHE LAB', 'CE', 'CE', 'DS'],
       'Thursday': ['DEVC', 'CE', 'DS LAB', 'DS LAB', 'CHE'],
-      'Friday': ['CE', 'BCE', 'BME', 'Free', 'EAA'],
-      'Saturday': ['EWS', 'Free', 'DEVC', 'Free', 'SS'],
+      'Friday': ['CE', 'BCE', 'BME', 'BME', 'EAA'],
+      'Saturday': ['EWS', 'EWS', 'DEVC', 'DEVC', 'SS'],
     },
+    
+    // Screenshot: 205456.png
     'CSE-AIML_C': {
-      'Monday': ['CHE LAB', 'CHE LAB', 'CE', 'Free', 'DEVC'],
-      'Tuesday': ['BCE', 'BME', 'SS', 'Free', 'DS LAB'],
-      'Wednesday': ['CE LAB', 'CE LAB', 'CHE', 'Free', 'DS'],
-      'Thursday': ['DEVC', 'CHE', 'BCE', 'Free', 'EWS'],
-      'Friday': ['DS LAB', 'CE', 'BME', 'Free', 'CHE'],
-      'Saturday': ['DS', 'DEVC', 'CE', 'Free', 'EAA'],
+      'Monday': ['CHE LAB', 'CHE LAB', 'CE', 'CE', 'DEVC'],
+      'Tuesday': ['BCE', 'BME', 'SS', 'SS', 'DS LAB'],
+      'Wednesday': ['CE LAB', 'CE LAB', 'CHE', 'CHE', 'DS'],
+      'Thursday': ['DEVC', 'CHE', 'BCE', 'EWS', 'EWS'],
+      'Friday': ['DS LAB', 'CE', 'BME', 'BME', 'CHE'],
+      'Saturday': ['DS', 'DEVC', 'CE', 'CE', 'EAA'],
     },
+    
+    // Screenshot: 205507.png
     'CSE-AIML_D': {
-      'Monday': ['CHE', 'BCE', 'CE', 'Free', 'DS LAB'],
-      'Tuesday': ['DS', 'CHE', 'SS', 'Free', 'BME'],
-      'Wednesday': ['BCE', 'CE', 'DEVC', 'Free', 'CE LAB'],
-      'Thursday': ['DS LAB', 'CE', 'CHE', 'Free', 'DEVC'],
-      'Friday': ['CHE LAB', 'CHE LAB', 'DS', 'Free', 'EAA'],
-      'Saturday': ['DEVC', 'BME', 'CE', 'Free', 'EWS'],
+      'Monday': ['CHE', 'BCE', 'CE', 'CE', 'DS LAB'],
+      'Tuesday': ['DS', 'CHE', 'SS', 'SS', 'BME'],
+      'Wednesday': ['BCE', 'CE', 'DEVC', 'CE LAB', 'CE LAB'],
+      'Thursday': ['DS LAB', 'CE', 'CHE', 'CHE', 'DEVC'],
+      'Friday': ['CHE LAB', 'CHE LAB', 'DS', 'DS', 'EAA'],
+      'Saturday': ['DEVC', 'BME', 'CE', 'EWS', 'EWS'],
     },
 
-    // ================= CSE (CORE) SECTIONS (Keeping existing as no new data) =================
+    // ================= CSE (CORE) SECTIONS =================
+    // Screenshot: 205515.png
     'CSE_A': {
-      'Monday': ['ITWS', 'Free', 'DS', 'Free', 'EEEW LAB'],
-      'Tuesday': ['EG', 'Free', 'EP', 'Free', 'DS LAB'],
-      'Wednesday': ['EEEW LAB', 'BEE B', 'DS LAB', 'Free', 'DEVC'],
-      'Thursday': ['BEE B', 'DEVC', 'BEE A', 'Free', 'EP'],
-      'Friday': ['EP LAB', 'Free', 'DS', 'Free', 'EAA'],
-      'Saturday': ['SS', 'DEVC', 'BEE A', 'Free', 'EG'],
+      'Monday': ['ITWS', 'ITWS', 'DS', 'DS', 'EEEW LAB'],
+      'Tuesday': ['EG', 'EG', 'EP', 'EP', 'DS LAB'],
+      'Wednesday': ['EEEW LAB', 'BEE B', 'DS LAB', 'DS LAB', 'DEVC'],
+      'Thursday': ['BEE B', 'DEVC', 'BEE A', 'BEE A', 'EP'],
+      'Friday': ['EP LAB', 'EP LAB', 'DS', 'DS', 'EAA'],
+      'Saturday': ['SS', 'DEVC', 'BEE A', 'EG', 'EG'],
     },
+    
+    // Screenshot: 205522.png
     'CSE_B': {
-      'Monday': ['BEE A', 'DEVC', 'DS', 'Free', 'ITWS'],
-      'Tuesday': ['EG', 'Free', 'EP', 'Free', 'DS LAB'],
-      'Wednesday': ['BEE B', 'BEE A', 'DS LAB', 'Free', 'DEVC'],
-      'Thursday': ['EG', 'Free', 'SS', 'Free', 'EEEW LAB'],
-      'Friday': ['DS', 'BEE B', 'DEVC', 'Free', 'EP LAB'],
-      'Saturday': ['EEEW LAB', 'DS', 'EP', 'Free', 'EAA'],
+      'Monday': ['BEE A', 'DEVC', 'DS', 'ITWS', 'ITWS'],
+      'Tuesday': ['EG', 'EG', 'EP', 'EP', 'DS LAB'],
+      'Wednesday': ['BEE B', 'BEE A', 'DS LAB', 'DS LAB', 'DEVC'],
+      'Thursday': ['EG', 'EG', 'SS', 'SS', 'EEEW LAB'],
+      'Friday': ['DS', 'BEE B', 'DEVC', 'EP LAB', 'EP LAB'],
+      'Saturday': ['EEEW LAB', 'DS', 'EP', 'EP', 'EAA'],
     },
+    
+    // Screenshot: 205528.png
     'CSE_C': {
-      'Monday': ['EP LAB', 'Free', 'DEVC', 'Free', 'DS'],
-      'Tuesday': ['EP', 'BEE B', 'EEEW LAB', 'Free', 'SS'],
-      'Wednesday': ['EG', 'Free', 'DEVC', 'Free', 'DS LAB'],
-      'Thursday': ['BEE B', 'BEE A', 'DS LAB', 'Free', 'EP'],
-      'Friday': ['EEEW LAB', 'DS', 'BEE A', 'Free', 'EAA'],
-      'Saturday': ['EG', 'DS', 'Free', 'ITWS', 'Free'],
+      'Monday': ['EP LAB', 'EP LAB', 'DEVC', 'DEVC', 'DS'],
+      'Tuesday': ['EP', 'BEE B', 'EEEW LAB', 'EEEW LAB', 'SS'],
+      'Wednesday': ['EG', 'EG', 'DEVC', 'DEVC', 'DS LAB'],
+      'Thursday': ['BEE B', 'BEE A', 'DS LAB', 'DS LAB', 'EP'],
+      'Friday': ['EEEW LAB', 'DS', 'BEE A', 'BEE A', 'EAA'],
+      'Saturday': ['EG', 'EG', 'DS', 'DS', 'ITWS'],
     },
+    
+    // Screenshot: 205535.png
     'CSE_D': {
-      'Monday': ['EEEW LAB', 'BEE B', 'EP', 'Free', 'DS'],
-      'Tuesday': ['EG', 'Free', 'DS LAB', 'Free', 'DEVC'],
-      'Wednesday': ['BEE A', 'DS', 'EP', 'Free', 'EP LAB'],
-      'Thursday': ['SS', 'BEE A', 'BEE B', 'Free', 'DS LAB'],
-      'Friday': ['EG', 'DS', 'EP', 'Free', 'EEEW LAB'],
-      'Saturday': ['ITWS', 'Free', 'DEVC', 'Free', 'EAA'],
+      'Monday': ['EEEW LAB', 'BEE B', 'EP', 'EP', 'DS'],
+      'Tuesday': ['EG', 'EG', 'DS LAB', 'DS LAB', 'DEVC'],
+      'Wednesday': ['BEE A', 'DS', 'EP', 'EP LAB', 'EP LAB'],
+      'Thursday': ['SS', 'BEE A', 'BEE B', 'BEE B', 'DS LAB'],
+      'Friday': ['EG', 'EG', 'DS', 'EP', 'EEEW LAB'],
+      'Saturday': ['ITWS', 'ITWS', 'DEVC', 'DEVC', 'EAA'],
     },
+    
+    // Screenshot: 205542.png
     'CSE_E': {
-      'Monday': ['DS', 'BEE B', 'EEEW LAB', 'Free', 'DEVC'],
-      'Tuesday': ['EP', 'DS', 'DS LAB', 'Free', 'BEE A'],
-      'Wednesday': ['EG', 'Free', 'DS LAB', 'Free', 'SS'],
-      'Thursday': ['EEEW LAB', 'DEVC', 'EP', 'Free', 'EAA'],
-      'Friday': ['BEE B', 'DS', 'DEVC', 'Free', 'ITWS'],
-      'Saturday': ['EP LAB', 'BEE A', 'BEE A', 'Free', 'EG'],
+      'Monday': ['DS', 'BEE B', 'EEEW LAB', 'EEEW LAB', 'DEVC'],
+      'Tuesday': ['EP', 'DS', 'DS LAB', 'DS LAB', 'BEE A'],
+      'Wednesday': ['EG', 'EG', 'DS LAB', 'DS LAB', 'SS'],
+      'Thursday': ['EEEW LAB', 'DEVC', 'EP', 'EP ', 'EAA'],
+      'Friday': ['BEE B', 'DS', 'DEVC', 'DEVC', 'ITWS'],
+      'Saturday': ['EP LAB', 'EP LAB', 'BEE A', 'EG ', 'EG'],
     },
 
-    // ================= CSE (DS) SECTIONS (Updated from Images) =================
+    // ================= CSE (DS) SECTIONS =================
+    // Screenshot: 205601.png
     'CSE-DS_A': {
-      'Monday': ['BEE A', 'DS', 'DEVC', 'Free', 'EP'],
-      'Tuesday': ['EEEW LAB', 'EEEW LAB', 'DEVC', 'Free', 'ITWS'],
-      'Wednesday': ['EP LAB', 'Free', 'DS LAB', 'DS LAB', 'DS+BEE B'],
-      'Thursday': ['EG', 'Free', 'EEEW LAB', 'EEEW LAB', 'EAA'],
+      'Monday': ['BEE A', 'DS', 'DEVC', 'DEVC', 'EP'],
+      'Tuesday': ['EEEW LAB', 'DEVC', 'BEE A', 'ITWS', 'ITWS'],
+      'Wednesday': ['EP LAB', 'EP LAB', 'DS LAB', 'DS', 'BEE B'],
+      'Thursday': ['EG', 'EG', 'EEEW LAB', 'EEEW LAB', 'EAA'],
       'Friday': ['BEE B', 'DEVC', 'DS LAB', 'DS LAB', 'SS'],
-      'Saturday': ['EG', 'Free', 'EP', 'Free', 'DS'],
+      'Saturday': ['EG', 'EG', 'EP', 'EP ', 'DS'],
     },
+    
+    // Screenshot: 205609.png
     'CSE-DS_B': {
-      'Monday': ['BEE B', 'DEVC', 'EP', 'Free', 'EG'],
+      'Monday': ['BEE B', 'DEVC', 'EP', 'EG', 'EG'],
       'Tuesday': ['DS', 'BEE B', 'DS LAB', 'DS LAB', 'EEEW LAB'],
-      'Wednesday': ['DS LAB', 'DEVC', 'BEE A', 'Free', 'EP'],
-      'Thursday': ['EG', 'Free', 'DS', 'Free', 'EEEW LAB'],
-      'Friday': ['ITWS', 'DEVC', 'Free', 'Free', 'EAA'],
-      'Saturday': ['SS', 'BEE A', 'EP', 'Free', 'EP LAB'],
+      'Wednesday': ['DS LAB', 'DEVC', 'BEE A', 'BEE A', 'EP'],
+      'Thursday': ['EG', 'EG', 'DS', 'DS', 'EEEW LAB'],
+      'Friday': ['ITWS', 'ITWS', 'DEVC', 'DEVC', 'EAA'],
+      'Saturday': ['SS', 'BEE A', 'EP', 'EP LAB ', 'EP LAB'],
     },
+    
+    // Screenshot: 205617.png (DS-C section, R-20 regulation)
     'CSE-DS_C': {
       'Monday': ['DEVC', 'BEE B', 'DS LAB', 'DS LAB', 'BEE A'],
-      'Tuesday': ['EP LAB', 'BEE B', 'EG', 'Free', 'EG'],
-      'Wednesday': ['BEE A', 'DS', 'SS', 'Free', 'EEEW LAB'],
-      'Thursday': ['ITWS', 'Free', 'EP', 'Free', 'DS'],
-      'Friday': ['EG', 'DEVC', 'Free', 'Free', 'EAA'],
+      'Tuesday': ['EP LAB', 'EP LAB', 'BEE B', 'EG', 'EG'],
+      'Wednesday': ['DS', 'BEE A', 'SS', 'SS', 'EEEW LAB'],
+      'Thursday': ['ITWS', 'ITWS', 'EP', 'EP ', 'DS'],
+      'Friday': ['EG', 'EG', 'DEVC', 'DEVC', 'EAA'],
       'Saturday': ['DS LAB', 'BEE B', 'EEEW LAB', 'EEEW LAB', 'EP'],
     },
-    // CSE-F and DS-D share the same timetable (Updated from Images)
-    'CSE_F': {
-      'Monday': ['Free', 'EG', 'EP', 'Free', 'DEVC'],
-      'Tuesday': ['BEE A', 'DS', 'DS LAB', 'DS LAB', 'SS'],
-      'Wednesday': ['DEVC', 'BEE A', 'EP', 'Free', 'DS LAB'],
-      'Thursday': ['EP LAB', 'BEE B', 'ITWS', 'Free', 'ITWS'],
-      'Friday': ['BEE B', 'DS', 'EEEW LAB', 'EEEW LAB', 'EAA'],
-      'Saturday': ['EG', 'DS', 'Free', 'Free', 'EEEW LAB'],
-    },
+    
+    // Screenshot: 205550.png (CSE-F / DS-D shared timetable)
     'CSE-DS_D': {
-      'Monday': ['Free', 'EG', 'EP', 'Free', 'DEVC'],
+      'Monday': ['EG', 'EG', 'EP', 'EP ', 'DEVC'],
       'Tuesday': ['BEE A', 'DS', 'DS LAB', 'DS LAB', 'SS'],
-      'Wednesday': ['DEVC', 'BEE A', 'EP', 'Free', 'DS LAB'],
-      'Thursday': ['EP LAB', 'BEE B', 'ITWS', 'Free', 'ITWS'],
+      'Wednesday': ['DEVC', 'BEE A', 'EP', 'EP ', 'DS LAB'],
+      'Thursday': ['EP LAB', 'EP LAB', 'BEE B', 'ITWS', 'ITWS'],
       'Friday': ['BEE B', 'DS', 'EEEW LAB', 'EEEW LAB', 'EAA'],
-      'Saturday': ['EG', 'DS', 'Free', 'Free', 'EEEW LAB'],
+      'Saturday': ['EG', 'EG', 'DS', 'DS', 'EEEW LAB'],
+    },
+    
+    // CSE_F uses same timetable as CSE-DS_D
+    'CSE_F': {
+      'Monday': ['EG', 'EG', 'EP', 'EP ', 'DEVC'],
+      'Tuesday': ['BEE A', 'DS', 'DS LAB', 'DS LAB', 'SS'],
+      'Wednesday': ['DEVC', 'BEE A', 'EP', 'EP ', 'DS LAB'],
+      'Thursday': ['EP LAB', 'EP LAB', 'BEE B', 'ITWS', 'ITWS'],
+      'Friday': ['BEE B', 'DS', 'EEEW LAB', 'EEEW LAB', 'EAA'],
+      'Saturday': ['EG', 'EG', 'DS', 'DS', 'EEEW LAB'],
     },
 
-    // ================= CSE (CS) SECTIONS (Updated from Images) =================
+    // ================= CSE (CS) SECTIONS =================
+    // Screenshot: 205625.png
     'CSE-CS_A': {
-      'Monday': ['BEE A', 'DS', 'DEVC', 'Free', 'EP LAB'],
-      'Tuesday': ['ITWS', 'BEE A', 'EG', 'Free', 'Free'],
-      'Wednesday': ['BEE B', 'DEVC', 'SS', 'Free', 'DS LAB'],
+      'Monday': ['BEE A', 'DS', 'DEVC', 'EP LAB', 'EP LAB'],
+      'Tuesday': ['ITWS', 'ITWS', 'BEE A', 'EG', 'EG'],
+      'Wednesday': ['BEE B', 'DEVC', 'SS', 'SS', 'DS LAB'],
       'Thursday': ['EP', 'BEE B', 'EEEW LAB', 'EEEW LAB', 'DEVC'],
-      'Friday': ['EG', 'DS', 'Free', 'Free', 'EAA'],
+      'Friday': ['EG', 'EG', 'DS', 'DS', 'EAA'],
       'Saturday': ['EP', 'DS', 'DS LAB', 'DS LAB', 'EEEW LAB'],
     },
+    
+    // Screenshot: 205632.png
     'CSE-CS_B': {
-      'Monday': ['DS', 'DEVC', 'BEE A', 'Free', 'EG'],
-      'Tuesday': ['BEE A', 'DEVC', 'EP', 'Free', 'EP LAB'],
-      'Wednesday': ['ITWS', 'Free', 'EEEW LAB', 'EEEW LAB', 'DS'],
-      'Thursday': ['BEE B', 'EP', 'DEVC', 'Free', 'EAA'],
-      'Friday': ['EG', 'Free', 'SS', 'Free', 'DS LAB'],
-      'Saturday': ['EP', 'BEE B', 'Free', 'EEEW LAB', 'DS LAB'],
+      'Monday': ['DS', 'DEVC', 'BEE A', 'EG', 'EG'],
+      'Tuesday': ['BEE A', 'DEVC', 'EP', 'EP LAB', 'EP LAB'],
+      'Wednesday': ['ITWS', 'ITWS', 'EEEW LAB', 'EEEW LAB', 'DS'],
+      'Thursday': ['BEE B', 'EP', 'DEVC', 'DEVC', 'EAA'],
+      'Friday': ['EG', 'EG', 'SS', 'SS', 'DS LAB'],
+      'Saturday': ['EP', 'BEE B', 'EEEW LAB', 'EEEW LAB', 'DS LAB'],
     },
   };
 }

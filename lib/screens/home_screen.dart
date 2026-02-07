@@ -46,6 +46,10 @@ import 'login_screen.dart';
 import 'settings_screen.dart';
 import 'about_screen.dart';
 import 'chat_screen.dart';
+import 'community/community_screen.dart';
+import 'personal/daily_routine_screen.dart';
+import 'personal/diary_screen.dart';
+import '../widgets/flux_drawer.dart';
 
 import '../services/auth_service.dart';
 import '../services/student_auth_service.dart';
@@ -69,6 +73,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     const TimetableScreen(),  // Index 0 - Timetable
     const CalendarScreen(),   // Index 1 - Calendar
     const ChatScreen(),       // Index 2 - Chat
+    const DailyRoutineScreen(), // Index 3 - Routine
+    const DiaryScreen(), // Index 4 - Diary
   ];
 
   @override
@@ -206,9 +212,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               return;
             }
           }
+
+          // Start checking for notifications now that we are logged in
+          NotificationService.listenForBuzzNotifications();
+          
         } catch (e) {
           print("⚠️ Biometric check error: $e");
           // Continue without biometric if there's an error
+          
+          // Still try to listen for notifications
+          NotificationService.listenForBuzzNotifications();
         }
       }
     } catch (e) {
@@ -933,6 +946,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const NovaChatScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.forum_rounded,
+              title: 'Community Doubts',
+              subtitle: 'Ask & Solve Questions',
+              color: Colors.cyanAccent,
+              delay: 1035,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CommunityScreen(),
                   ),
                 );
               },

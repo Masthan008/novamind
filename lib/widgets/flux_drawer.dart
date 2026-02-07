@@ -11,6 +11,7 @@ class FluxDrawer extends StatefulWidget {
   final VoidCallback? onSettings;
   final VoidCallback? onLogout;
   final VoidCallback? onSubscription;
+  final VoidCallback? onCommunity;
 
   const FluxDrawer({
     super.key,
@@ -20,6 +21,7 @@ class FluxDrawer extends StatefulWidget {
     this.onSettings,
     this.onLogout,
     this.onSubscription,
+    this.onCommunity,
   });
 
   @override
@@ -128,6 +130,16 @@ class _FluxDrawerState extends State<FluxDrawer> {
                     widget.onLeaderboard?.call();
                   },
                 ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.2),
+                
+                _buildMenuItem(
+                  icon: Icons.forum_outlined,
+                  title: 'Community Doubts',
+                  color: Colors.cyanAccent,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onCommunity?.call();
+                  },
+                ).animate().fadeIn(delay: 210.ms).slideX(begin: -0.2),
                 
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
