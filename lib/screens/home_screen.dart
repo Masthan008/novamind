@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -1144,23 +1145,186 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Navigator.pop(context);
                 
                 // Show confirmation dialog
-                final confirm = await showDialog<bool>(
+                final confirm = await showGeneralDialog<bool>(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    backgroundColor: Colors.grey.shade900,
-                    title: const Text('Logout', style: TextStyle(color: Colors.white)),
-                    content: const Text('Are you sure you want to logout?', style: TextStyle(color: Colors.white70)),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+                  barrierDismissible: true,
+                  barrierLabel: 'Logout',
+                  barrierColor: Colors.black.withOpacity(0.7),
+                  transitionDuration: const Duration(milliseconds: 400),
+                  transitionBuilder: (context, anim1, anim2, child) {
+                    return ScaleTransition(
+                      scale: CurvedAnimation(
+                        parent: anim1,
+                        curve: Curves.elasticOut,
+                        reverseCurve: Curves.easeInBack,
                       ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: const Text('Logout', style: TextStyle(color: Colors.redAccent)),
+                      child: FadeTransition(opacity: anim1, child: child),
+                    );
+                  },
+                  pageBuilder: (context, anim1, anim2) {
+                    return Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(28),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF1A1A2E).withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(28),
+                                  border: Border.all(
+                                    color: Colors.redAccent.withOpacity(0.4),
+                                    width: 1.5,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.redAccent.withOpacity(0.3),
+                                      blurRadius: 30,
+                                      spreadRadius: 2,
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      blurRadius: 20,
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Animated warning icon
+                                    TweenAnimationBuilder<double>(
+                                      tween: Tween(begin: 0.0, end: 1.0),
+                                      duration: const Duration(milliseconds: 600),
+                                      builder: (context, value, child) {
+                                        return Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: RadialGradient(
+                                              colors: [
+                                                Colors.redAccent.withOpacity(0.3 * value),
+                                                Colors.redAccent.withOpacity(0.1 * value),
+                                                Colors.transparent,
+                                              ],
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.redAccent.withOpacity(0.5 * value),
+                                                blurRadius: 20 * value,
+                                                spreadRadius: 4 * value,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                            Icons.power_settings_new_rounded,
+                                            size: 42,
+                                            color: Color.lerp(Colors.grey, Colors.redAccent, value),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    
+                                    // Title
+                                    Text(
+                                      'Sign Out?',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    
+                                    // Subtitle
+                                    Text(
+                                      'You will need to login again\nto access your account',
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: Colors.grey.shade400,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 28),
+                                    
+                                    // Buttons
+                                    Row(
+                                      children: [
+                                        // Cancel button
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.pop(context, false),
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 14),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withOpacity(0.08),
+                                                borderRadius: BorderRadius.circular(16),
+                                                border: Border.all(
+                                                  color: Colors.white.withOpacity(0.15),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                'Cancel',
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.grey.shade300,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 14),
+                                        // Logout button
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.pop(context, true),
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 14),
+                                              decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [Color(0xFFFF416C), Color(0xFFFF4B2B)],
+                                                ),
+                                                borderRadius: BorderRadius.circular(16),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.redAccent.withOpacity(0.4),
+                                                    blurRadius: 12,
+                                                    offset: const Offset(0, 4),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Text(
+                                                'Logout',
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 );
 
                 if (confirm == true) {
