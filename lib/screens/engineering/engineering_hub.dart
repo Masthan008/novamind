@@ -12,12 +12,19 @@ class EngineeringHub extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text(
-          "Engineering Hub 📚",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(Icons.engineering, size: 24),
+            SizedBox(width: 8),
+            Text(
+              "Engineering Hub",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+            ),
+          ],
         ),
         backgroundColor: Colors.grey[900],
         elevation: 0,
@@ -59,11 +66,11 @@ class EngineeringHub extends StatelessWidget {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    _buildStatChip("📐 Mechanical", Colors.amber),
+                    _buildStatChip("Mechanical", Colors.amber, Icons.precision_manufacturing),
                     const SizedBox(width: 8),
-                    _buildStatChip("🏗️ Civil", Colors.orange),
+                    _buildStatChip("Civil", Colors.orange, Icons.foundation),
                     const SizedBox(width: 8),
-                    _buildStatChip("💻 CSE", Colors.blue),
+                    _buildStatChip("CSE", Colors.blue, Icons.computer),
                   ],
                 ),
               ],
@@ -211,7 +218,7 @@ class EngineeringHub extends StatelessWidget {
     );
   }
 
-  Widget _buildStatChip(String label, Color color) {
+  Widget _buildStatChip(String label, Color color, IconData icon) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
@@ -219,13 +226,20 @@ class EngineeringHub extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withOpacity(0.5)),
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 14),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
