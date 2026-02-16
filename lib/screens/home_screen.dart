@@ -9,10 +9,11 @@ import 'dart:io';
 import '../theme/app_theme.dart';
 import '../providers/theme_provider.dart';
 import '../providers/accessibility_provider.dart';
-import '../widgets/glass_bottom_nav.dart';
+import '../widgets/aquamorphic_nav_bar.dart';
 import '../widgets/accessibility_wrapper.dart';
 import '../modules/calculator/calculator_screen.dart';
 import '../modules/data_structures/data_structures_screen.dart';
+import 'quiz/quiz_topics_screen.dart';
 
 import '../modules/games/enhanced_2048_screen.dart';
 import '../modules/games/enhanced_tictactoe_screen.dart';
@@ -591,6 +592,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const DataStructuresScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.quiz_outlined,
+              title: 'DS Quiz Practice',
+              subtitle: 'Random MCQs with AI Tutor',
+              color: const Color(0xFF26C6DA),
+              delay: 150,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const QuizTopicsScreen(),
                   ),
                 );
               },
@@ -1476,7 +1493,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ],
                     ),
                   ),
-                  child: GlassBottomNav(
+                  child: AquamorphicNavBar(
                     currentIndex: _currentIndex,
                     onTap: (index) {
                       accessibilityProvider.provideFeedback(
@@ -1507,125 +1524,82 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildAnimatedDrawerItem({
-    required IconData icon,
-    required String title,
-    required Color color,
-    required VoidCallback onTap,
-    int delay = 0,
-    String? subtitle,
-  }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        gradient: LinearGradient(
-          colors: [
-            Colors.transparent,
-            color.withOpacity(0.12),
-            Colors.transparent,
-          ],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.1),
-            blurRadius: 8,
-            spreadRadius: 1,
-          ),
+  required IconData icon,
+  required String title,
+  required Color color,
+  required VoidCallback onTap,
+  int delay = 0,
+  String? subtitle,
+}) {
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(15),
+      gradient: LinearGradient(
+        colors: [
+          Colors.transparent,
+          color.withOpacity(0.08),
+          Colors.transparent,
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(15),
-          onTap: () {
-            // Add haptic feedback
-            onTap();
-          },
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            leading: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    color.withOpacity(0.4),
-                    color.withOpacity(0.15),
-                    Colors.transparent,
-                  ],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: color.withOpacity(0.3),
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                  ),
+    ),
+    child: Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        splashColor: color.withOpacity(0.2),
+        highlightColor: color.withOpacity(0.1),
+        onTap: onTap,
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          leading: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  color.withOpacity(0.3),
+                  color.withOpacity(0.1),
+                  Colors.transparent,
                 ],
               ),
-              child: Icon(icon, color: color, size: 24),
-            )
-              .animate(onPlay: (controller) => controller.repeat(reverse: true))
-              .scale(
-                begin: const Offset(0.95, 0.95),
-                end: const Offset(1.05, 1.05),
-                duration: 2.seconds,
-              ),
-            title: Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.5,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (subtitle != null)
-                      Text(
-                        subtitle,
-                        style: GoogleFonts.poppins(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                  ],
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
-            trailing: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color.withOpacity(0.2),
-              ),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                color: color,
-                size: 14,
-              ),
-            )
-              .animate()
-              .slideX(begin: -0.2, end: 0, duration: 800.ms, curve: Curves.elasticOut),
+              if (subtitle != null)
+                Text(
+                  subtitle,
+                  style: GoogleFonts.poppins(
+                    color: Colors.white54,
+                    fontSize: 11,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+          trailing: Icon(
+            Icons.chevron_right,
+            color: color.withOpacity(0.6),
+            size: 20,
           ),
         ),
       ),
-    )
-      .animate()
-      .fadeIn(delay: Duration(milliseconds: delay), duration: 700.ms)
-      .slideX(begin: -0.4, end: 0, curve: Curves.easeOutCubic)
-      .scale(begin: const Offset(0.8, 0.8), end: const Offset(1.0, 1.0))
-      .then()
-      .shimmer(
-        delay: Duration(milliseconds: delay + 1200),
-        duration: 2.5.seconds,
-        color: color.withOpacity(0.4),
-      );
-  }
+    ),
+  );
+}
 
   Widget _buildAnimatedExpansionTile({
     required IconData icon,
@@ -1641,17 +1615,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         gradient: LinearGradient(
           colors: [
             Colors.transparent,
-            color.withOpacity(0.12),
+            color.withOpacity(0.08),
             Colors.transparent,
           ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.1),
-            blurRadius: 8,
-            spreadRadius: 1,
-          ),
-        ],
       ),
       child: Theme(
         data: Theme.of(context).copyWith(
@@ -1665,56 +1632,28 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  color.withOpacity(0.4),
-                  color.withOpacity(0.15),
+                  color.withOpacity(0.3),
+                  color.withOpacity(0.1),
                   Colors.transparent,
                 ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: color.withOpacity(0.3),
-                  blurRadius: 8,
-                  spreadRadius: 1,
-                ),
-              ],
             ),
             child: Icon(icon, color: color, size: 24),
-          )
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .scale(
-              begin: const Offset(0.95, 0.95),
-              end: const Offset(1.05, 1.05),
-              duration: 2.5.seconds,
-            ),
+          ),
           title: Text(
             title,
             style: GoogleFonts.poppins(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w500,
-              letterSpacing: 0.5,
             ),
           ),
           iconColor: color,
           collapsedIconColor: color.withOpacity(0.7),
-          children: children.map((child) => 
-            child.animate()
-              .fadeIn(duration: 400.ms)
-              .slideY(begin: -0.2, end: 0, curve: Curves.easeOut)
-          ).toList(),
+          children: children,
         ),
       ),
-    )
-      .animate()
-      .fadeIn(delay: Duration(milliseconds: delay), duration: 700.ms)
-      .slideX(begin: -0.4, end: 0, curve: Curves.easeOutCubic)
-      .scale(begin: const Offset(0.8, 0.8), end: const Offset(1.0, 1.0))
-      .then()
-      .shimmer(
-        delay: Duration(milliseconds: delay + 1200),
-        duration: 2.5.seconds,
-        color: color.withOpacity(0.4),
-      );
+    );
   }
 }
 
