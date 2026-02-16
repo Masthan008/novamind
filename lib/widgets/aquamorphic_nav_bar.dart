@@ -186,10 +186,10 @@ class _AquamorphicNavBarState extends State<AquamorphicNavBar>
                   boxShadow: [
                     BoxShadow(
                       color: _items[widget.currentIndex].color.withOpacity(
-                        0.3 + 0.2 * _glowPulseController.value
+                        0.5 + 0.3 * _glowPulseController.value
                       ),
-                      blurRadius: 20 + 10 * _glowPulseController.value,
-                      spreadRadius: 2,
+                      blurRadius: 25 + 15 * _glowPulseController.value,
+                      spreadRadius: 4,
                     ),
                   ],
                 ),
@@ -236,20 +236,20 @@ class _AquamorphicNavBarState extends State<AquamorphicNavBar>
                                   end: Alignment.bottomCenter,
                                   colors: [
                                     _items[widget.currentIndex].color.withOpacity(
-                                      0.15 + 0.1 * _glowPulseController.value
+                                      0.30 + 0.15 * _glowPulseController.value
                                     ),
-                                    _items[widget.currentIndex].color.withOpacity(0.05),
+                                    _items[widget.currentIndex].color.withOpacity(0.15),
                                   ],
                                 ),
                                 border: Border.all(
-                                  color: _items[widget.currentIndex].color.withOpacity(0.5),
+                                  color: _items[widget.currentIndex].color.withOpacity(0.7),
                                   width: 1.5,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: _items[widget.currentIndex].color.withOpacity(0.4),
-                                    blurRadius: 15,
-                                    spreadRadius: 0,
+                                    color: _items[widget.currentIndex].color.withOpacity(0.6),
+                                    blurRadius: 20,
+                                    spreadRadius: 2,
                                   ),
                                 ],
                               ),
@@ -330,16 +330,16 @@ class _AquamorphicNavBarState extends State<AquamorphicNavBar>
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: item.color.withOpacity(0.6),
-                                blurRadius: 12 + 6 * _glowPulseController.value,
-                                spreadRadius: 1,
+                                color: item.color.withOpacity(0.8),
+                                blurRadius: 16 + 8 * _glowPulseController.value,
+                                spreadRadius: 3,
                               ),
                             ]
                           : isHovered
                               ? [
                                   BoxShadow(
-                                    color: item.color.withOpacity(0.4 * glowIntensity),
-                                    blurRadius: 10,
+                                    color: item.color.withOpacity(0.6 * glowIntensity),
+                                    blurRadius: 14,
                                   ),
                                 ]
                               : null,
@@ -364,7 +364,7 @@ class _AquamorphicNavBarState extends State<AquamorphicNavBar>
                             clipper: _WaveClipper(
                               fillLevel: _fillController.value,
                               wavePhase: _waveController.value * 2 * pi,
-                              waveAmplitude: 4,
+                              waveAmplitude: 6,
                             ),
                             child: ShaderMask(
                               shaderCallback: (bounds) => LinearGradient(
@@ -393,9 +393,9 @@ class _AquamorphicNavBarState extends State<AquamorphicNavBar>
                               shape: BoxShape.circle,
                               border: Border.all(
                                 color: item.color.withOpacity(
-                                  0.3 + 0.3 * sin(_waveController.value * 2 * pi)
+                                  0.5 + 0.4 * sin(_waveController.value * 2 * pi)
                                 ),
-                                width: 2,
+                                width: 2.5,
                               ),
                             ),
                           ),
@@ -421,8 +421,8 @@ class _AquamorphicNavBarState extends State<AquamorphicNavBar>
                   shadows: isSelected
                       ? [
                           Shadow(
-                            color: item.color.withOpacity(0.8),
-                            blurRadius: 8,
+                            color: item.color.withOpacity(1.0),
+                            blurRadius: 12,
                           ),
                         ]
                       : null,
@@ -510,37 +510,37 @@ class _LightTrailPainter extends CustomPainter {
     final paint = Paint()
       ..shader = RadialGradient(
         colors: [
-          color.withOpacity(0.6),
-          color.withOpacity(0.3),
-          color.withOpacity(0.1),
+          color.withOpacity(0.9),
+          color.withOpacity(0.5),
+          color.withOpacity(0.2),
           Colors.transparent,
         ],
         stops: const [0.0, 0.3, 0.6, 1.0],
       ).createShader(
         Rect.fromCircle(
           center: Offset(position, size.height / 2),
-          radius: 80,
+          radius: 90,
         ),
       );
     
-    canvas.drawCircle(Offset(position, size.height / 2), 80, paint);
+    canvas.drawCircle(Offset(position, size.height / 2), 90, paint);
     
     // Inner bright core
     final corePaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          Colors.white.withOpacity(0.5),
-          color.withOpacity(0.3),
+          Colors.white.withOpacity(0.8),
+          color.withOpacity(0.5),
           Colors.transparent,
         ],
       ).createShader(
         Rect.fromCircle(
           center: Offset(position, size.height / 2),
-          radius: 30,
+          radius: 40,
         ),
       );
     
-    canvas.drawCircle(Offset(position, size.height / 2), 30, corePaint);
+    canvas.drawCircle(Offset(position, size.height / 2), 40, corePaint);
   }
 
   @override
