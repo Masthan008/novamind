@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/ds_question_model.dart';
 import '../../services/quiz_service.dart';
 import '../../services/ai_service.dart';
 
+/// Native channel for FLAG_SECURE (screenshot prevention).
+const _secureChannel = MethodChannel('com.example.fluxflow/window_security');
+
 /// Interactive quiz screen that loads random questions for a topic.
+/// Anti-cheating: screenshot prevention (FLAG_SECURE) + app-switch detection.
 class QuizScreen extends StatefulWidget {
   final String topic;
   const QuizScreen({super.key, required this.topic});
@@ -14,7 +19,7 @@ class QuizScreen extends StatefulWidget {
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
   List<DsQuestion> _questions = [];
   bool _isLoading = true;
   String? _error;
@@ -25,11 +30,120 @@ class _QuizScreenState extends State<QuizScreen> {
   int _score = 0;
   bool _quizFinished = false;
 
+  // Anti-cheating state
+  bool _quizStarted = false; // true once first question is shown
+  bool _showingCheatWarning = false;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _enableSecureMode();
     _loadQuestions();
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _disableSecureMode();
+    super.dispose();
+  }
+
+  // ──────────── Screenshot Prevention ────────────
+
+  Future<void> _enableSecureMode() async {
+    try {
+      await _secureChannel.invokeMethod('enableSecure');
+    } catch (_) {
+      // Not supported on this platform — fail silently
+    }
+  }
+
+  Future<void> _disableSecureMode() async {
+    try {
+      await _secureChannel.invokeMethod('disableSecure');
+    } catch (_) {}
+  }
+
+  // ──────────── App Switch Detection ────────────
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    // Only trigger if quiz is active (not loading, not finished, not already warning)
+    if (state == AppLifecycleState.paused &&
+        _quizStarted &&
+        !_quizFinished &&
+        !_isLoading &&
+        !_showingCheatWarning) {
+      _onCheatDetected();
+    }
+  }
+
+  void _onCheatDetected() {
+    setState(() => _showingCheatWarning = true);
+    HapticFeedback.heavyImpact();
+
+    // Reset quiz state immediately
+    setState(() {
+      _currentIndex = 0;
+      _selectedOption = null;
+      _answered = false;
+      _score = 0;
+      _quizFinished = false;
+      _quizStarted = false;
+    });
+
+    // Show warning dialog when app comes back to foreground
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: const Color(0xFF1A1A2E),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Row(
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 28),
+              const SizedBox(width: 10),
+              Text(
+                'Cheating Detected!',
+                style: GoogleFonts.orbitron(
+                  color: Colors.redAccent,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'You left the quiz by switching to another app.\n\n'
+            'Your progress has been reset and new questions have been loaded.',
+            style: GoogleFonts.poppins(color: Colors.white70, fontSize: 14, height: 1.5),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                setState(() => _showingCheatWarning = false);
+                _loadQuestions(); // Load fresh questions
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent.withOpacity(0.2),
+                foregroundColor: Colors.redAccent,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: Text('Restart Quiz', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  // ──────────── Data Loading ────────────
 
   Future<void> _loadQuestions() async {
     setState(() {
@@ -53,6 +167,7 @@ class _QuizScreenState extends State<QuizScreen> {
     setState(() {
       _questions = questions;
       _isLoading = false;
+      _quizStarted = true; // Mark quiz as active — detection now armed
     });
   }
 
@@ -69,7 +184,6 @@ class _QuizScreenState extends State<QuizScreen> {
       if (isCorrect) _score++;
     });
 
-    // Record attempt
     QuizService.submitAnswer(
       questionId: _currentQuestion.id,
       isCorrect: isCorrect,
@@ -135,6 +249,40 @@ class _QuizScreenState extends State<QuizScreen> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
+        // Anti-cheat badge in app bar
+        actions: [
+          if (!_isLoading && !_quizFinished)
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Tooltip(
+                message: 'Screenshot & app-switch protection active',
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.redAccent.withOpacity(0.4)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.security, color: Colors.redAccent, size: 14),
+                      const SizedBox(width: 4),
+                      Text(
+                        'SECURE',
+                        style: GoogleFonts.sourceCodePro(
+                          fontSize: 10,
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
       body: _isLoading
           ? _buildLoading()
@@ -515,6 +663,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       _answered = false;
                       _score = 0;
                       _quizFinished = false;
+                      _quizStarted = false;
                     });
                     _loadQuestions();
                   },
@@ -536,7 +685,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white70,
-                    side: BorderSide(color: Colors.white24),
+                    side: const BorderSide(color: Colors.white24),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 14),
                     shape: RoundedRectangleBorder(

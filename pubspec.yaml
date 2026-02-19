@@ -25,9 +25,9 @@ dependencies:
   google_generative_ai: ^0.4.0
   flutter_markdown: ^0.7.0
 
-  # Camera & AI (Biometrics) - OPTIMIZED
-  # camera: ^0.10.5 # REMOVED - 15MB+ (use image_picker only for profile photos)
-  # google_mlkit_face_detection: ^0.11.0 # REMOVED - 10MB+ (biometric auth via local_auth only)
+  # Camera & AI
+  camera: ^0.11.0+2                       # Live camera for Code Lens
+  google_mlkit_text_recognition: ^0.14.0  # OCR text extraction
   image_picker: ^1.0.7
   geolocator: ^11.0.0
   local_auth: ^2.1.8
@@ -91,6 +91,9 @@ dependencies:
   dartssh2: ^2.13.0
   xterm: ^4.0.0
   flutter_secure_storage: ^10.0.0
+  
+  # P2P Sharing
+  nearby_connections: ^4.3.0              # Offline peer-to-peer sharing
   
   # 3D Model Viewer
   model_viewer_plus: ^1.7.0       # For viewing 3D models with AR support

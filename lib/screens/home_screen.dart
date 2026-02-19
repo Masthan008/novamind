@@ -48,6 +48,8 @@ import 'login_screen.dart';
 import 'settings_screen.dart';
 import 'about_screen.dart';
 import 'chat_screen.dart';
+import '../features/code_lens/code_lens_screen.dart';
+import '../features/lab_mesh/lab_mesh_screen.dart';
 import 'community/community_screen.dart';
 import 'personal/daily_routine_screen.dart';
 import 'personal/diary_screen.dart';
@@ -1133,6 +1135,42 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
             
 
+
+            // Code Lens - AR Scanner
+            _buildAnimatedDrawerItem(
+              icon: Icons.qr_code_scanner_rounded,
+              title: 'Code Lens',
+              subtitle: 'Scan & clean code with AI',
+              color: Colors.cyanAccent,
+              delay: 1370,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CodeLensScreen(),
+                  ),
+                );
+              },
+            ),
+            
+            // LabMesh - P2P Sharing
+            _buildAnimatedDrawerItem(
+              icon: Icons.wifi_tethering_rounded,
+              title: 'LabMesh',
+              subtitle: 'Offline P2P sharing',
+              color: Colors.greenAccent,
+              delay: 1400,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LabMeshScreen(),
+                  ),
+                );
+              },
+            ),
 
             // Logout Button
             _buildAnimatedDrawerItem(
