@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:open_file/open_file.dart';
 import 'lab_mesh_service.dart';
 
 class LabMeshScreen extends StatefulWidget {
@@ -90,6 +92,26 @@ class _LabMeshScreenState extends State<LabMeshScreen> with SingleTickerProvider
         });
         HapticFeedback.lightImpact();
       }
+    };
+
+    LabMeshService.onFileReceived = (endpointId, filePath, fileName) {
+      if (mounted) {
+        setState(() {
+          _messages.add(_ChatMessage(
+            text: fileName,
+            isMe: false,
+            peerName: _discoveredPeers[endpointId] ?? 'Peer',
+            timestamp: DateTime.now(),
+            isFile: true,
+            filePath: filePath,
+          ));
+        });
+        HapticFeedback.mediumImpact();
+      }
+    };
+
+    LabMeshService.onFileProgress = (endpointId, bytes, total) {
+      // Progress is tracked passively via debug logs for now
     };
 
     LabMeshService.onError = (error) {
@@ -184,6 +206,53 @@ class _LabMeshScreenState extends State<LabMeshScreen> with SingleTickerProvider
       HapticFeedback.lightImpact();
     } else {
       _showError('Failed to send message. Check connection.');
+    }
+  }
+
+  Future<void> _pickAndSendFile() async {
+    if (_connectedPeers.isEmpty) {
+      _showError('No peers connected');
+      return;
+    }
+
+    try {
+      final result = await FilePicker.platform.pickFiles();
+      if (result == null || result.files.isEmpty) return;
+
+      final file = result.files.first;
+      if (file.path == null) {
+        _showError('Cannot access file');
+        return;
+      }
+
+      final fileName = file.name;
+      final fileSize = file.size;
+      final fileSizeStr = fileSize > 1024 * 1024
+          ? '${(fileSize / (1024 * 1024)).toStringAsFixed(1)} MB'
+          : '${(fileSize / 1024).toStringAsFixed(1)} KB';
+
+      bool anySent = false;
+      for (final peerId in _connectedPeers) {
+        final success = await LabMeshService.sendFile(peerId, file.path!);
+        if (success) anySent = true;
+      }
+
+      if (anySent) {
+        setState(() {
+          _messages.add(_ChatMessage(
+            text: '$fileName ($fileSizeStr)',
+            isMe: true,
+            timestamp: DateTime.now(),
+            isFile: true,
+            filePath: file.path,
+          ));
+        });
+        HapticFeedback.mediumImpact();
+      } else {
+        _showError('Failed to send file');
+      }
+    } catch (e) {
+      _showError('File pick error: $e');
     }
   }
 
@@ -544,6 +613,77 @@ class _LabMeshScreenState extends State<LabMeshScreen> with SingleTickerProvider
           );
         }
 
+        // File message
+        if (msg.isFile) {
+          return Align(
+            alignment: msg.isMe ? Alignment.centerRight : Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: msg.filePath != null
+                  ? () => OpenFile.open(msg.filePath!)
+                  : null,
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+                decoration: BoxDecoration(
+                  color: msg.isMe
+                      ? Colors.greenAccent.withOpacity(0.10)
+                      : Colors.blueAccent.withOpacity(0.10),
+                  borderRadius: BorderRadius.circular(16).copyWith(
+                    bottomRight: msg.isMe ? const Radius.circular(4) : null,
+                    bottomLeft: !msg.isMe ? const Radius.circular(4) : null,
+                  ),
+                  border: Border.all(
+                    color: msg.isMe
+                        ? Colors.greenAccent.withOpacity(0.4)
+                        : Colors.blueAccent.withOpacity(0.4),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.insert_drive_file_rounded, color: Colors.cyanAccent, size: 20),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (!msg.isMe && msg.peerName != null)
+                            Text(
+                              msg.peerName!,
+                              style: GoogleFonts.poppins(
+                                color: Colors.blueAccent,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          Text(
+                            msg.text,
+                            style: GoogleFonts.poppins(color: Colors.white, fontSize: 13),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            msg.isMe ? 'Sent' : 'Tap to open',
+                            style: GoogleFonts.poppins(color: Colors.grey.shade600, fontSize: 10),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ).animate().fadeIn(duration: 200.ms).slideX(begin: msg.isMe ? 0.1 : -0.1);
+        }
+
         return Align(
           alignment: msg.isMe ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
@@ -597,6 +737,20 @@ class _LabMeshScreenState extends State<LabMeshScreen> with SingleTickerProvider
       ),
       child: Row(
         children: [
+          // File attachment button
+          GestureDetector(
+            onTap: _pickAndSendFile,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.08),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.attach_file_rounded, color: Colors.greenAccent, size: 20),
+            ),
+          ),
+          const SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: _messageController,
@@ -646,14 +800,18 @@ class _ChatMessage {
   final String text;
   final bool isMe;
   final bool isSystem;
+  final bool isFile;
   final String? peerName;
+  final String? filePath;
   final DateTime timestamp;
 
   _ChatMessage({
     required this.text,
     required this.isMe,
     this.isSystem = false,
+    this.isFile = false,
     this.peerName,
+    this.filePath,
     required this.timestamp,
   });
 }

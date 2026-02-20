@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1060434052604",
+    "project_id": "fluxflow-3e0eb",
+    "storage_bucket": "fluxflow-3e0eb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060434052604:android:715fe4b1ea223db291de79",
+        "android_client_info": {
+          "package_name": "com.example.fluxflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFzl2rrRYhNvCLaN4BlFIsRz5V7dJgZKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

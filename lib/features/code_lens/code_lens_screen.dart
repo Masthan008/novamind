@@ -211,8 +211,8 @@ class _CodeLensScreenState extends State<CodeLensScreen> with TickerProviderStat
             unselectedLabelColor: Colors.grey,
             labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14),
             tabs: const [
-              Tab(text: '📷 Camera', height: 44),
-              Tab(text: '🖼️ Gallery', height: 44),
+              Tab(icon: Icon(Icons.camera_alt_rounded, size: 18), text: 'Camera', height: 44),
+              Tab(icon: Icon(Icons.photo_library_rounded, size: 18), text: 'Gallery', height: 44),
             ],
           ),
         ),

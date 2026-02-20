@@ -12,14 +12,11 @@ import '../providers/theme_provider.dart';
 import '../providers/accessibility_provider.dart';
 import '../widgets/aquamorphic_nav_bar.dart';
 import '../widgets/accessibility_wrapper.dart';
-import '../modules/calculator/calculator_screen.dart';
 import '../modules/data_structures/data_structures_screen.dart';
 import 'quiz/quiz_topics_screen.dart';
 
-import '../modules/games/enhanced_2048_screen.dart';
-import '../modules/games/enhanced_tictactoe_screen.dart';
 import '../modules/focus/focus_forest_screen.dart';
-import '../modules/sleep/sleep_screen.dart';
+import 'launchpad/launchpad_screen.dart';
 import '../modules/cyber/cyber_vault_screen.dart';
 
 import '../modules/news/news_screen.dart';
@@ -615,232 +612,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
               },
             ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.nightlight_round,
-              title: 'Sleep Architect',
-              color: Colors.purpleAccent,
-              delay: 200,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SleepScreen(),
-                  ),
-                );
-              },
-            ),
-            // Games Arcade - Premium Gaming Experience
-            _buildAnimatedExpansionTile(
-              icon: Icons.sports_esports_outlined,
-              title: 'Games Arcade',
-              color: Colors.cyanAccent,
-              delay: 300,
-              children: [
-                // 2048 Game with Enhanced Design & Animations
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.amber.withOpacity(0.3),
-                          Colors.orange.withOpacity(0.2),
-                          Colors.deepOrange.withOpacity(0.1),
-                        ],
-                      ),
-                      border: Border.all(
-                        color: Colors.amber.withOpacity(0.4),
-                        width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.amber.withOpacity(0.2),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) => const Enhanced2048Screen(),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                return SlideTransition(
-                                  position: animation.drive(
-                                    Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
-                                      .chain(CurveTween(curve: Curves.easeInOutCubic)),
-                                  ),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.amber.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  Icons.view_module_outlined,
-                                  color: Colors.amber,
-                                  size: 24,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '2048 Puzzle',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.amber,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Strategic number puzzle with smooth animations',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        color: Colors.amber.withOpacity(0.8),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.amber.withOpacity(0.6),
-                                size: 16,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ).animate().fadeIn(delay: 350.ms).slideX(begin: 0.3),
-                ),
-                // Tic-Tac-Toe with Enhanced Design & Animations
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.cyanAccent.withOpacity(0.3),
-                          Colors.blue.withOpacity(0.2),
-                          Colors.indigo.withOpacity(0.1),
-                        ],
-                      ),
-                      border: Border.all(
-                        color: Colors.cyanAccent.withOpacity(0.4),
-                        width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.2),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) => const EnhancedTicTacToeScreen(),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                return SlideTransition(
-                                  position: animation.drive(
-                                    Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
-                                      .chain(CurveTween(curve: Curves.easeInOutCubic)),
-                                  ),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.cyanAccent.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  Icons.grid_3x3_outlined,
-                                  color: Colors.cyanAccent,
-                                  size: 24,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Tic-Tac-Toe',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.cyanAccent,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Classic strategy game with AI opponent',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        color: Colors.cyanAccent.withOpacity(0.8),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.cyanAccent.withOpacity(0.6),
-                                size: 16,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.3),
-                ),
-              ],
-            ),
+
             _buildAnimatedDrawerItem(
               icon: Icons.forest_outlined,
               title: 'Focus Forest',
@@ -933,6 +705,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const RoadmapsScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.rocket_launch,
+              title: 'LaunchPad',
+              subtitle: 'Internships & Job Board',
+              color: const Color(0xFF6C63FF),
+              delay: 960,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LaunchpadScreen(),
                   ),
                 );
               },

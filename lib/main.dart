@@ -5,6 +5,7 @@ import 'dart:io'; // For Platform check
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; // Critical Import
+import 'package:firebase_core/firebase_core.dart'; // Firebase Core
 import 'package:provider/provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
@@ -40,6 +41,7 @@ import 'services/news_service.dart';
 import 'services/enhanced_data_management_service.dart';
 import 'services/class_notification_service.dart';
 import 'services/timetable_preference_service.dart';
+import 'services/fcm_service.dart'; // Firebase Cloud Messaging
 
 // ---------------------------------------------------------
 // 🔐 SECURITY NOTE: In production, use environment variables
@@ -182,7 +184,13 @@ void main() async {
       print("✅ Supabase Initialized Successfully");
     }
 
-
+    // --- Firebase Init ---
+    try {
+      await Firebase.initializeApp();
+      print("✅ Firebase Initialized Successfully");
+    } catch (e) {
+      print("⚠️ Firebase Init Error: $e");
+    }
     
     // --- Services Init ---
 
@@ -251,6 +259,14 @@ void main() async {
     // --- Fetch User Plan ---
     await fetchUserPlan();
     print("✅ User Plan Fetched");
+
+    // --- Firebase Cloud Messaging Init ---
+    try {
+      await FCMService.initialize();
+      print("✅ FCM Service Initialized");
+    } catch (e) {
+      print("⚠️ FCM Init Error: $e");
+    }
 
     // --- Permissions ---
     // Using a separate try-catch because permissions can be finicky on some Android versions

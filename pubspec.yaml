@@ -77,6 +77,10 @@ dependencies:
   flutter_local_notifications: ^17.0.0
   timezone: ^0.9.2
   
+  # Firebase (Push Notifications)
+  firebase_core: ^3.13.0
+  firebase_messaging: ^15.2.5
+  
   # SQL Editor
   sqflite: ^2.3.2                  # Local SQL database (for testing)
   flutter_code_editor: ^0.3.3      # Code editor with syntax highlighting

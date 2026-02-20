@@ -47,10 +47,13 @@ class EnvConfig {
   static String get openRouterApiKey => get('OPENROUTER_API_KEY');
   static String get bytezApiKey => get('BYTEZ_API_KEY');
   static String get whoisApiKey => get('WHOIS_API_KEY');
+  static String get adzunaAppId => get('ADZUNA_APP_ID');
+  static String get adzunaAppKey => get('ADZUNA_APP_KEY');
 
   // Validation methods
   static bool get hasGroqKey => has('GROQ_API_KEY') && groqApiKey != 'your_groq_api_key_here';
   static bool get hasOpenRouterKey => has('OPENROUTER_API_KEY') && openRouterApiKey != 'your_openrouter_api_key_here';
   static bool get hasBytezKey => has('BYTEZ_API_KEY') && bytezApiKey != 'your_bytez_api_key_here';
   static bool get hasWhoisKey => has('WHOIS_API_KEY') && whoisApiKey != 'your_whois_api_key_here';
+  static bool get hasAdzunaKeys => has('ADZUNA_APP_ID') && has('ADZUNA_APP_KEY');
 }

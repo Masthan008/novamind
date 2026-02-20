@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/student_model.dart';
+import 'fcm_service.dart';
 
 /// Service for student authentication with Supabase
 class StudentAuthService {
@@ -76,6 +77,10 @@ class StudentAuthService {
       await prefs.setString('currentUserName', _currentStudent?.name ?? '');
       
       debugPrint('✅ Login success: ${_currentStudent?.name ?? "Unknown"}');
+      
+      // Push FCM token now that we have a logged-in student
+      FCMService.onUserLogin();
+      
       return (student: _currentStudent, error: null);
     } catch (e) {
       debugPrint('⚠️ Login error: $e');
@@ -149,6 +154,10 @@ class StudentAuthService {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('currentUserRegd');
       await prefs.remove('currentUserName');
+      
+      // Clean up FCM subscription
+      await FCMService.onUserLogout();
+      
       _currentStudent = null;
       debugPrint('✅ Logout success');
     } catch (e) {

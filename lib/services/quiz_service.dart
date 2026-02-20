@@ -45,6 +45,37 @@ class QuizService {
     }
   }
 
+  /// Batch submit all answers after quiz completion.
+  /// Records each question attempt with whether it was correct.
+  static Future<void> submitBatchAnswers({
+    required List<DsQuestion> questions,
+    required Map<int, String> answers,
+  }) async {
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) return;
+
+      final List<Map<String, dynamic>> rows = [];
+      for (int i = 0; i < questions.length; i++) {
+        final userAnswer = answers[i];
+        if (userAnswer == null) continue; // skip unanswered
+
+        rows.add({
+          'user_id': userId,
+          'question_id': questions[i].id,
+          'is_correct':
+              userAnswer == questions[i].correctOption.toUpperCase(),
+        });
+      }
+
+      if (rows.isNotEmpty) {
+        await _supabase.from('quiz_attempts').insert(rows);
+      }
+    } catch (e) {
+      debugPrint('QuizService.submitBatchAnswers error: $e');
+    }
+  }
+
   /// Get total and correct attempt counts for a [topic] for the current user.
   static Future<Map<String, int>> getTopicStats(String topic) async {
     try {
