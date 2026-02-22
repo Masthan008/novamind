@@ -3,9 +3,11 @@ import 'package:flutter/foundation.dart'; // For kDebugMode
 import 'package:flutter/material.dart';
 import 'dart:io'; // For Platform check
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; // Critical Import
 import 'package:firebase_core/firebase_core.dart'; // Firebase Core
+import 'package:firebase_messaging/firebase_messaging.dart'; // FCM
 import 'package:provider/provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
@@ -86,9 +88,63 @@ int getPlanScore(String plan) {
   return 1;                           // Lowest (Free)
 }
 
+// ─── FCM BACKGROUND HANDLER ─────────────────────────────────────
+// MUST be a top-level function (not inside any class).
+// MUST be registered before runApp for background delivery to work.
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  debugPrint('🔔 [FCM] Background message: ${message.notification?.title}');
+
+  // Explicitly show local notification — some Android OEMs suppress auto-display
+  final notification = message.notification;
+  if (notification != null) {
+    final plugin = FlutterLocalNotificationsPlugin();
+    const androidInit = AndroidInitializationSettings('@mipmap/launcher_icon');
+    await plugin.initialize(const InitializationSettings(android: androidInit));
+
+    final type = message.data['type'] ?? 'general';
+    String channelId;
+    switch (type) {
+      case 'news':
+        channelId = 'fcm_news_channel';
+        break;
+      case 'buzz_question':
+      case 'buzz_reply':
+        channelId = 'fcm_buzz_channel';
+        break;
+      case 'chat_message':
+      case 'chat_mention':
+        channelId = 'fcm_chat_channel';
+        break;
+      default:
+        channelId = 'fcm_news_channel';
+    }
+
+    await plugin.show(
+      DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      notification.title ?? 'Sentinel',
+      notification.body ?? '',
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channelId,
+          channelId,
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+        ),
+      ),
+    );
+  }
+}
+
 void main() async {
   // 1. Ensure Bindings FIRST
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 2. Register FCM background handler — MUST be before everything else
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // 2. Initialize Environment Configuration
   await EnvConfig.initialize();
@@ -184,7 +240,6 @@ void main() async {
       print("✅ Supabase Initialized Successfully");
     }
 
-    // --- Firebase Init ---
     try {
       await Firebase.initializeApp();
       print("✅ Firebase Initialized Successfully");
@@ -267,14 +322,6 @@ void main() async {
     // --- Fetch User Plan ---
     await fetchUserPlan();
     print("✅ User Plan Fetched");
-
-    // --- Firebase Cloud Messaging Init ---
-    try {
-      await FCMService.initialize();
-      print("✅ FCM Service Initialized");
-    } catch (e) {
-      print("⚠️ FCM Init Error: $e");
-    }
 
     // --- Permissions ---
     // Using a separate try-catch because permissions can be finicky on some Android versions

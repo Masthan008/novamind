@@ -294,16 +294,19 @@ class FCMService {
     // Determine the notification type from data payload
     final type = message.data['type'] ?? 'general';
 
-    // Skip notifications already handled by Supabase Realtime when app is open.
-    // Realtime shows in-app banners for news and buzz — no need for FCM push too.
-    if (type == 'news' || type == 'buzz_question' || type == 'buzz_reply') {
-      debugPrint('⏭️ [FCM] Skipping "$type" in foreground — Supabase Realtime handles it');
+    // Skip only news — Supabase Realtime already shows in-app banner for news
+    if (type == 'news') {
+      debugPrint('⏭️ [FCM] Skipping news in foreground — Realtime handles it');
       return;
     }
 
     // Determine which channel to use
     String channelId;
     switch (type) {
+      case 'buzz_question':
+      case 'buzz_reply':
+        channelId = _buzzChannel.id;
+        break;
       case 'chat_message':
       case 'chat_mention':
         channelId = _chatChannel.id;

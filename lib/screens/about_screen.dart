@@ -486,13 +486,6 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         ),
 
                         _buildEnhancedFeature(
-                          'Engineering Hub',
-                          'Engineering Graphics (1st Year) with Study Materials',
-                          Icons.precision_manufacturing_outlined,
-                          Colors.orange,
-                          1675,
-                        ),
-                        _buildEnhancedFeature(
                           'Programming Hub',
                           'Multi-Language Guides with Syntax & Code Examples',
                           Icons.code_outlined,

@@ -115,7 +115,6 @@ flutter:
     - .env
     - assets/images/
     - assets/images/logos/
-    - assets/engineering_hub/graphics/
     - assets/data/cheatsheets_index.json
     - assets/data/cheatsheets/programming/
     - assets/data/cheatsheets/frameworks/

@@ -24,7 +24,7 @@ import '../modules/academic/syllabus_screen.dart';
 import '../modules/academic/books_notes_screen.dart';
 import '../modules/roadmaps/roadmaps_screen.dart';
 import '../modules/ai/nova_chat_screen.dart';
-import '../screens/engineering/engineering_hub.dart';
+
 
 import '../screens/devref/devref_hub_screen.dart';
 
@@ -580,62 +580,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.data_array_rounded,
-              title: 'Data Structures',
-              subtitle: '10 C Programs with Explanations',
-              color: const Color(0xFFFF8E53),
-              delay: 100,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DataStructuresScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.quiz_outlined,
-              title: 'DS Quiz Practice',
-              subtitle: 'Random MCQs with AI Tutor',
-              color: const Color(0xFF26C6DA),
-              delay: 150,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const QuizTopicsScreen(),
-                  ),
-                );
-              },
-            ),
-
-
-            _buildAnimatedDrawerItem(
-              icon: Icons.shield_outlined,
-              title: 'Cyber Library',
-              color: Colors.amber,
-              delay: 700,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CyberVaultScreen(),
-                  ),
-                );
-              },
-            ),
-
-
+            // ─── DRAWER ITEMS (Alphabetical) ──────────────────────
             _buildAnimatedDrawerItem(
               icon: Icons.auto_stories_outlined,
               title: 'Academic Syllabus',
               color: Colors.amber,
-              delay: 900,
+              delay: 100,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -647,17 +597,252 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               },
             ),
             _buildAnimatedDrawerItem(
+              icon: Icons.qr_code_scanner_rounded,
+              title: 'Code Lens',
+              subtitle: 'Scan & clean code with AI',
+              color: Colors.cyanAccent,
+              delay: 150,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CodeLensScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.forum_rounded,
+              title: 'Community Doubts',
+              subtitle: 'Ask & Solve Questions',
+              color: Colors.cyanAccent,
+              delay: 200,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CommunityScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.shield_outlined,
+              title: 'Cyber Library',
+              color: Colors.amber,
+              delay: 250,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CyberVaultScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.security,
+              title: 'Cybersecurity Tools',
+              color: Colors.red,
+              delay: 300,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CybersecurityHubScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.data_array_rounded,
+              title: 'Data Structures',
+              subtitle: '10 C Programs with Explanations',
+              color: const Color(0xFFFF8E53),
+              delay: 350,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DataStructuresScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
               icon: Icons.library_books,
               title: 'DevRef',
               subtitle: '100+ Developer References',
               color: Colors.deepPurple,
-              delay: 950,
+              delay: 400,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => DevRefHubScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.quiz_outlined,
+              title: 'DS Quiz Practice',
+              subtitle: 'Random MCQs with AI Tutor',
+              color: const Color(0xFF26C6DA),
+              delay: 450,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const QuizTopicsScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.wifi_tethering_rounded,
+              title: 'LabMesh',
+              subtitle: 'Offline P2P sharing',
+              color: Colors.greenAccent,
+              delay: 500,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LabMeshScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.rocket_launch,
+              title: 'LaunchPad',
+              subtitle: 'Internships & Job Board',
+              color: const Color(0xFF6C63FF),
+              delay: 550,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LaunchpadScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.leaderboard_outlined,
+              title: 'Leaderboard',
+              color: Colors.amber,
+              delay: 600,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LeaderboardScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.folder_special,
+              title: 'Projects Store',
+              subtitle: 'Download ready-made projects',
+              color: Colors.purple,
+              delay: 650,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProjectsScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.auto_awesome,
+              title: 'PromptCraft',
+              subtitle: 'Prompt Engineering Course',
+              color: const Color(0xFFFF6B6B),
+              delay: 700,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PromptcraftHomeScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.auto_awesome,
+              title: 'Sentinel AI',
+              subtitle: 'Your intelligent study assistant',
+              color: const Color(0xFFFF6B6B),
+              delay: 750,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NovaChatScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.menu_book_outlined,
+              title: 'Student Library',
+              color: Colors.green,
+              delay: 800,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LibraryScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.star,
+              title: 'Subscription Plans',
+              subtitle: 'Upgrade to Pro/Ultra',
+              color: Colors.green,
+              delay: 850,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SubscriptionScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.settings_outlined,
+              title: 'System Settings',
+              color: Colors.grey,
+              delay: 900,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainSettingsScreen(),
                   ),
                 );
               },
@@ -678,106 +863,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               },
             ),
             _buildAnimatedDrawerItem(
-              icon: Icons.rocket_launch,
-              title: 'LaunchPad',
-              subtitle: 'Internships & Job Board',
-              color: const Color(0xFF6C63FF),
-              delay: 960,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LaunchpadScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.auto_awesome,
-              title: 'PromptCraft',
-              subtitle: 'Prompt Engineering Course',
-              color: const Color(0xFFFF6B6B),
-              delay: 980,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PromptcraftHomeScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.engineering_outlined,
-              title: 'Engineering Hub',
-              subtitle: 'Graphics & Diagrams',
-              color: Colors.orangeAccent,
-              delay: 1015,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EngineeringHub(),
-                  ),
-                );
-              },
-            ),
-            // Sentinel AI Chat
-            _buildAnimatedDrawerItem(
-              icon: Icons.auto_awesome,
-              title: 'Sentinel AI',
-              subtitle: 'Your intelligent study assistant',
-              color: const Color(0xFFFF6B6B),
-              delay: 1025,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NovaChatScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.forum_rounded,
-              title: 'Community Doubts',
-              subtitle: 'Ask & Solve Questions',
-              color: Colors.cyanAccent,
-              delay: 1035,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CommunityScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.menu_book_outlined,
-              title: 'Student Library',
-              color: Colors.green,
-              delay: 1050,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LibraryScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
               icon: Icons.play_circle_outlined,
               title: 'Video Library',
               color: Colors.blue,
-              delay: 1075,
+              delay: 1000,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -788,28 +877,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
               },
             ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.folder_special,
-              title: 'Projects Store',
-              subtitle: 'Download ready-made projects',
-              color: Colors.purple,
-              delay: 1090,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProjectsScreen(),
-                  ),
-                );
-              },
-            ),
+
+            // ─── BOTTOM GROUP ────────────────────────────────────────
+            const Divider(color: Colors.white24, height: 32),
+
             _buildAnimatedDrawerItem(
               icon: Icons.person_outline,
               title: 'Student Profile',
               subtitle: 'Manage your profile',
               color: Colors.teal,
-              delay: 1095,
+              delay: 1100,
               onTap: () async {
                 Navigator.pop(context);
                 await Navigator.push(
@@ -824,121 +901,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 }
               },
             ),
-
             _buildAnimatedDrawerItem(
-              icon: Icons.leaderboard_outlined,
-              title: 'Leaderboard',
-              color: Colors.amber,
-              delay: 1125,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LeaderboardScreen(),
-                  ),
-                );
-              },
-            ),
-
-            _buildAnimatedDrawerItem(
-              icon: Icons.security,
-              title: 'Cybersecurity Tools',
-              color: Colors.red,
+              icon: Icons.info_outline,
+              title: 'About Sentinel',
+              color: Colors.cyanAccent,
               delay: 1150,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CybersecurityHubScreen(),
-                  ),
-                );
-              },
-            ),
-
-            _buildAnimatedDrawerItem(
-              icon: Icons.info_outline,
-              title: 'About Sentinel',
-              color: Colors.cyanAccent,
-              delay: 1250,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
                     builder: (context) => const AboutScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.settings_outlined,
-              title: 'System Settings',
-              color: Colors.grey,
-              delay: 1300,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MainSettingsScreen(),
-                  ),
-                );
-              },
-            ),
-            
-            // Subscription Plans - NEW
-            _buildAnimatedDrawerItem(
-              icon: Icons.star,
-              title: 'Subscription Plans',
-              subtitle: 'Upgrade to Pro/Ultra',
-              color: Colors.green,
-              delay: 1350,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SubscriptionScreen(),
-                  ),
-                );
-              },
-            ),
-            
-
-
-            // Code Lens - AR Scanner
-            _buildAnimatedDrawerItem(
-              icon: Icons.qr_code_scanner_rounded,
-              title: 'Code Lens',
-              subtitle: 'Scan & clean code with AI',
-              color: Colors.cyanAccent,
-              delay: 1370,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CodeLensScreen(),
-                  ),
-                );
-              },
-            ),
-            
-            // LabMesh - P2P Sharing
-            _buildAnimatedDrawerItem(
-              icon: Icons.wifi_tethering_rounded,
-              title: 'LabMesh',
-              subtitle: 'Offline P2P sharing',
-              color: Colors.greenAccent,
-              delay: 1400,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LabMeshScreen(),
                   ),
                 );
               },
@@ -950,7 +923,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               title: 'Logout',
               subtitle: 'Sign out of account',
               color: Colors.redAccent,
-              delay: 1450,
+              delay: 1200,
               onTap: () async {
                 Navigator.pop(context);
                 
