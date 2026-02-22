@@ -36,12 +36,11 @@ class _AquamorphicNavBarState extends State<AquamorphicNavBar>
   double _dragPosition = 0.0;
   bool _isDragging = false;
   int _tentativeIndex = 0;
-  List<double> _neighborIntensities = [0, 0, 0, 0, 0];
+  List<double> _neighborIntensities = [0, 0, 0, 0];
   
   // === Nav Items Configuration ===
   final List<NavItem> _items = [
     NavItem(Icons.calendar_today_outlined, Icons.calendar_today, "Timetable", Colors.cyanAccent),
-    NavItem(Icons.event_outlined, Icons.event, "Calendar", Colors.greenAccent),
     NavItem(Icons.chat_bubble_outline, Icons.chat_bubble, "ChatHub", Colors.pinkAccent),
     NavItem(Icons.schedule_outlined, Icons.schedule, "Routine", Colors.orangeAccent),
     NavItem(Icons.book_outlined, Icons.book, "Diary", Colors.purpleAccent),

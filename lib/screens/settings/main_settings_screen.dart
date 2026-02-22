@@ -125,37 +125,38 @@ class MainSettingsScreen extends StatelessWidget {
                     [
                       SwitchListTile(
                         title: Text(
-                          'Screen Reader',
+                          'Haptic Feedback',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         subtitle: Text(
-                          'Read screen content aloud',
+                          'Vibration feedback for interactions',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
-                        secondary: const Icon(Icons.record_voice_over),
-                        value: accessibilityProvider.screenReaderEnabled,
+                        secondary: const Icon(Icons.vibration),
+                        value: accessibilityProvider.hapticFeedbackEnabled,
                         onChanged: (value) {
-                          accessibilityProvider.toggleScreenReader();
+                          accessibilityProvider.toggleHapticFeedback();
                           accessibilityProvider.provideFeedback(
-                            text: value ? 'Screen reader enabled' : 'Screen reader disabled',
+                            text: value ? 'Haptic feedback enabled' : 'Haptic feedback disabled',
+                            haptic: value,
                           );
                         },
                       ),
                       SwitchListTile(
                         title: Text(
-                          'Voice Commands',
+                          'Reduce Animations',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         subtitle: Text(
-                          'Control app with voice commands',
+                          'Reduces motion for better accessibility',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
-                        secondary: const Icon(Icons.mic),
-                        value: accessibilityProvider.voiceCommandsEnabled,
+                        secondary: const Icon(Icons.animation),
+                        value: accessibilityProvider.reduceAnimations,
                         onChanged: (value) {
-                          accessibilityProvider.toggleVoiceCommands();
+                          accessibilityProvider.toggleReduceAnimations();
                           accessibilityProvider.provideFeedback(
-                            text: value ? 'Voice commands enabled' : 'Voice commands disabled',
+                            text: value ? 'Animations reduced' : 'Normal animations enabled',
                           );
                         },
                       ),

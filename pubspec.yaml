@@ -121,7 +121,6 @@ flutter:
   uses-material-design: true
   assets:
     - .env
-    - assets/sounds/
     - assets/images/
     - assets/images/logos/
     - assets/images/flowcharts/
@@ -137,6 +136,16 @@ flutter:
     - assets/data/cheatsheets/devops/
     - assets/data/cheatsheets/linux/
     - assets/data/cheatsheets/databases/
+    - assets/promptcraft/level1/
+    - assets/promptcraft/level2/
+    - assets/promptcraft/level3/
+    - assets/promptcraft/level4/
+    - assets/promptcraft/level5/
+    - assets/promptcraft/level6/
+    - assets/promptcraft/level7/
+    - assets/promptcraft/level8/
+    - assets/promptcraft/level9/
+    - assets/promptcraft/level10/
 
 # Icon Generation Configuration
 flutter_launcher_icons:

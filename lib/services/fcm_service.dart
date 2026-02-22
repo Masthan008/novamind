@@ -81,7 +81,9 @@ class FCMService {
       // 4. Get FCM token and save it
       final token = await _messaging.getToken();
       if (token != null) {
-        debugPrint('🔔 [FCM] Token obtained (${token.substring(0, 20)}...)');
+        debugPrint('🔔 [FCM] FULL TOKEN ▼▼▼');
+        debugPrint(token);
+        debugPrint('🔔 [FCM] FULL TOKEN ▲▲▲');
         await _saveTokenToSupabase(token);
       }
 

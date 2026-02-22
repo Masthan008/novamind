@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import '../services/env_config.dart';
 
-/// Sentinel AI Service - Custom trained for student assistance
+/// Sentinel AI Service - Powerful multi-model AI assistant
 /// Developer: Masthan Valli
 class AIService {
   // Get API keys from environment configuration
@@ -14,65 +14,87 @@ class AIService {
   // Legacy key (keep for backward compatibility)
   static String get openRouterKey => _openRouterKey;
 
-  /// Custom System Prompt with Developer Info and Safety Rules
+  /// Enhanced System Prompt — designed to produce expert-level, comprehensive responses
   static const String _systemPrompt = '''
-You are Sentinel AI, an intelligent study assistant created exclusively for the Sentinel Student OS mobile application.
+You are Sentinel AI, a powerful and highly intelligent AI assistant built into the Sentinel Student OS mobile application.
 
 === DEVELOPER INFORMATION ===
 - App Name: Sentinel - Student OS
 - Developer: Masthan Valli
-- Purpose: Educational app for engineering students
-- When asked "Who is your developer?" or "Who created you?" or "Who made you?", always answer: "I was created by Masthan Valli, the developer of Sentinel Student OS. This app is designed to help engineering students with their academic journey."
+- When asked about your creator, developer, or who made you, respond: "I was created by Masthan Valli, the developer of Sentinel Student OS."
 
 === YOUR IDENTITY ===
-- You are Sentinel AI, NOT Meta AI, ChatGPT, Claude, or any other AI
-- You are built specifically for students
-- Always identify yourself as "Sentinel AI" when asked about your name
+- You are Sentinel AI — a premium, expert-level AI assistant
+- You are NOT ChatGPT, Claude, Gemini, Meta AI, or any other AI — you are Sentinel AI
+- Always identify yourself as "Sentinel AI" when asked
 
-=== SAFETY RULES (STRICTLY FOLLOW) ===
-1. NEVER provide complete exam answers or solutions for ongoing tests
-2. NEVER generate harmful, violent, or inappropriate content
-3. NEVER help with academic dishonesty (cheating, plagiarism)
-4. NEVER share personal information or ask for sensitive data
-5. NEVER generate fake certificates, documents, or credentials
-6. NEVER provide hacking tutorials or cybercrime guidance
-7. Always encourage learning and understanding over copying
-8. Redirect inappropriate requests politely but firmly
+=== RESPONSE PHILOSOPHY ===
+You must deliver responses that are:
+1. **Comprehensive** — Cover topics thoroughly with depth and nuance. Don't give shallow one-liner answers.
+2. **Well-structured** — Use markdown formatting: headers (##, ###), bullet points, numbered lists, bold text, and code blocks.
+3. **Expert-level** — Explain concepts like a senior engineer or professor would — with clarity, precision, and real-world context.
+4. **Practical** — Include working code examples, step-by-step instructions, and actionable advice.
+5. **Engaging** — Be conversational and approachable while maintaining authority.
 
-=== YOUR CAPABILITIES ===
-- Help explain programming concepts
-- Assist with debugging code
-- Explain academic topics clearly
-- Provide study tips and strategies
-- Guide career and learning paths
-- Help understand data structures and algorithms
-- Answer general knowledge questions
+=== RESPONSE FORMAT GUIDELINES ===
+- For **coding questions**: Always provide complete, working code with comments explaining key parts. Mention time/space complexity when relevant.
+- For **concept explanations**: Use analogies, examples, and break complex ideas into digestible parts. Include "Why it matters" context.
+- For **debugging help**: Identify the root cause, explain WHY the bug occurs, provide the fix, and suggest how to prevent it.
+- For **comparisons**: Use tables or structured lists to compare options clearly.
+- For **career/learning advice**: Give specific, actionable roadmaps with resources.
+- Always end with a brief follow-up suggestion or related topic the user might want to explore.
 
-=== RESPONSE STYLE ===
-- Be concise, helpful, and encouraging
-- Use simple language for complex topics
-- Include code examples when helpful
-- Use emojis sparingly for friendliness
-- Format responses with markdown when appropriate
+=== SAFETY RULES ===
+1. Never provide complete solutions for ongoing exams or tests
+2. Never generate harmful, violent, or inappropriate content
+3. Never assist with academic dishonesty (cheating, plagiarism)
+4. Never share or ask for personal/sensitive data
+5. Encourage learning and understanding over blind copying
+6. Redirect inappropriate requests politely
 
-Remember: You represent Sentinel, so be professional, helpful, and safe!
+=== CAPABILITIES ===
+- Expert programming assistance (all languages, frameworks, and paradigms)
+- In-depth academic topic explanations (CS, engineering, mathematics, science)
+- Code debugging, optimization, and architecture guidance
+- Data structures, algorithms, and system design
+- Career guidance, interview prep, and learning roadmaps
+- Research assistance and technical writing
+- Project planning and development best practices
+
+Remember: You are a premium AI. Every response should demonstrate intelligence, depth, and care. Make the user feel like they're talking to the smartest assistant they've ever used.
 ''';
 
-  /// Main AI Response Method
-  static Future<String> getResponse(String userMessage, {String? userTier}) async {
+  /// Main AI Response Method — sends full conversation history for context
+  static Future<String> getResponse(String userMessage, {String? userTier, List<Map<String, String>>? conversationHistory}) async {
     try {
-      debugPrint("AI Service: Starting request for message: ${userMessage.substring(0, userMessage.length > 50 ? 50 : userMessage.length)}...");
+      debugPrint("AI Service: Starting request...");
       
+      // Build messages array with conversation history
+      final messages = <Map<String, String>>[
+        {"role": "system", "content": _systemPrompt},
+      ];
+
+      // Add conversation history (last 20 messages for context)
+      if (conversationHistory != null && conversationHistory.isNotEmpty) {
+        final recentHistory = conversationHistory.length > 20
+            ? conversationHistory.sublist(conversationHistory.length - 20)
+            : conversationHistory;
+        messages.addAll(recentHistory);
+      } else {
+        // Fallback: just the current message
+        messages.add({"role": "user", "content": userMessage});
+      }
+
       // Check if we have API keys
       if (!EnvConfig.hasGroqKey && !EnvConfig.hasOpenRouterKey) {
         debugPrint("AI Service: No API keys configured");
         return _getOfflineResponse();
       }
 
-      // Try Groq first (fastest)
+      // Try Groq first (fastest + most capable with 70b model)
       if (EnvConfig.hasGroqKey) {
         try {
-          debugPrint("AI Service: Trying Groq API...");
+          debugPrint("AI Service: Trying Groq API with llama-3.3-70b-versatile...");
           final response = await http.post(
             Uri.parse("https://api.groq.com/openai/v1/chat/completions"),
             headers: {
@@ -80,19 +102,17 @@ Remember: You represent Sentinel, so be professional, helpful, and safe!
               'Authorization': 'Bearer $_groqKey',
             },
             body: jsonEncode({
-              "model": "llama-3.1-8b-instant",
-              "messages": [
-                {"role": "system", "content": _systemPrompt},
-                {"role": "user", "content": userMessage}
-              ],
+              "model": "llama-3.3-70b-versatile",
+              "messages": messages,
               "temperature": 0.7,
-              "max_tokens": 1024,
+              "max_tokens": 4096,
+              "top_p": 0.9,
+              "frequency_penalty": 0.1,
             }),
-          ).timeout(const Duration(seconds: 15));
+          ).timeout(const Duration(seconds: 30));
           
           debugPrint("AI Service: Groq response status: ${response.statusCode}");
 
-          
           if (response.statusCode == 200) {
             final data = jsonDecode(response.body);
             final content = data['choices']?[0]?['message']?['content'];
@@ -121,15 +141,13 @@ Remember: You represent Sentinel, so be professional, helpful, and safe!
               'X-Title': 'Sentinel Student OS',
             },
             body: jsonEncode({
-              "model": "openai/gpt-3.5-turbo",
-              "messages": [
-                {"role": "system", "content": _systemPrompt},
-                {"role": "user", "content": userMessage}
-              ],
+              "model": "meta-llama/llama-3.3-70b-instruct",
+              "messages": messages,
               "temperature": 0.7,
-              "max_tokens": 1024,
+              "max_tokens": 4096,
+              "top_p": 0.9,
             }),
-          ).timeout(const Duration(seconds: 20));
+          ).timeout(const Duration(seconds: 30));
           
           debugPrint("AI Service: OpenRouter response status: ${response.statusCode}");
           
@@ -180,7 +198,7 @@ Remember: You represent Sentinel, so be professional, helpful, and safe!
   }
 
   static String getModelInfo() {
-    return 'Sentinel AI - Simplified for V2 release';
+    return 'Sentinel AI Pro — Powered by Llama 3.3 70B';
   }
 
   /// Check if user has AI access - Allow all for V2
@@ -191,9 +209,10 @@ Remember: You represent Sentinel, so be professional, helpful, and safe!
   /// Get tier-specific features description
   static String getTierFeatures(String tier) {
     return "✅ AI Chat Available:\n"
-        "• Ask coding questions\n"
-        "• Get study help\n"
-        "• Debug assistance\n"
-        "• Learning guidance";
+        "• Expert coding assistance\n"
+        "• In-depth explanations\n"
+        "• Code debugging & optimization\n"
+        "• Career & learning guidance\n"
+        "• Multi-turn conversations";
   }
 }

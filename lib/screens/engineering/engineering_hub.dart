@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sentinel/data/engineering_data.dart';
 import 'package:sentinel/screens/engineering/topic_viewer_screen.dart';
-import 'package:sentinel/data/model_data.dart';
-import 'package:sentinel/screens/engineering/model_viewer_screen.dart';
+
 
 class EngineeringHub extends StatelessWidget {
   const EngineeringHub({super.key});
@@ -66,7 +65,7 @@ class EngineeringHub extends StatelessWidget {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    _buildStatChip("Mechanical", Colors.amber, Icons.precision_manufacturing),
+                    _buildStatChip("Graphics", Colors.tealAccent, Icons.architecture),
                     const SizedBox(width: 8),
                     _buildStatChip("Civil", Colors.orange, Icons.foundation),
                     const SizedBox(width: 8),
@@ -77,102 +76,11 @@ class EngineeringHub extends StatelessWidget {
             ),
           ),
 
-          // 3D Models Section
-          Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.view_in_ar,
-                      color: Colors.cyanAccent,
-                      size: 24,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      "Interactive 3D Models",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "Explore engineering models with AR support",
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                ...my3DModels.map((model) => Card(
-                  color: Colors.grey[900],
-                  margin: const EdgeInsets.only(bottom: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(
-                      color: Colors.cyanAccent.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    leading: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.cyanAccent.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.view_in_ar,
-                        color: Colors.cyanAccent,
-                        size: 28,
-                      ),
-                    ),
-                    title: Text(
-                      model.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                    subtitle: Text(
-                      model.dimensions,
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 12,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                      color: Colors.grey[600],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ModelViewerScreen(model: model),
-                        ),
-                      );
-                    },
-                  ),
-                )).toList(),
-              ],
-            ),
-          ),
+
+
 
           // Branch Cards
-          // 📐 FIRST YEAR GRAPHICS (NEW)
+          // 📐 FIRST YEAR GRAPHICS
           _buildBranchCard(
             context,
             "Engineering Graphics (1st Year)",
@@ -180,14 +88,6 @@ class EngineeringHub extends StatelessWidget {
             Icons.architecture,
             EngineeringData.graphicsTopics,
             "Curves, Projections & Development",
-          ),
-          _buildBranchCard(
-            context,
-            "Mechanical Engineering",
-            Colors.amber,
-            Icons.settings,
-            EngineeringData.mechTopics,
-            "Engineering Graphics & Design",
           ),
           _buildBranchCard(
             context,

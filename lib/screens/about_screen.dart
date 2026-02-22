@@ -464,10 +464,10 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           1500,
                         ),
                         _buildEnhancedFeature(
-                          'Focus Forest',
-                          'Gamified Pomodoro Timer for Deep Work Sessions',
-                          Icons.forest_outlined,
-                          Colors.green,
+                          'PromptCraft',
+                          'Interactive Prompt Engineering Course with 10 Levels',
+                          Icons.auto_awesome,
+                          const Color(0xFFFF6B6B),
                           1550,
                         ),
                         _buildEnhancedFeature(

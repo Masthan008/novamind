@@ -23,10 +23,10 @@ import 'screens/home_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/community/doubt_detail_screen.dart'; // Added import
 import 'animations/slide_up_route.dart';
-import 'modules/calculator/calculator_provider.dart';
 
 
-import 'providers/focus_provider.dart';
+
+
 import 'providers/theme_provider.dart';
 import 'providers/accessibility_provider.dart';
 import 'providers/dashboard_provider.dart';
@@ -357,8 +357,8 @@ void main() async {
           ChangeNotifierProvider(create: (_) => AccessibilityProvider()),
           ChangeNotifierProvider(create: (_) => DashboardProvider()),
           ChangeNotifierProvider(create: (_) => NotificationProvider()),
-          ChangeNotifierProvider(create: (_) => CalculatorProvider()),
-          ChangeNotifierProvider(create: (_) => FocusProvider()),
+
+
         ],
         child: const SentinelApp(),
       ),

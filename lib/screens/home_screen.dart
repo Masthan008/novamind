@@ -15,8 +15,8 @@ import '../widgets/accessibility_wrapper.dart';
 import '../modules/data_structures/data_structures_screen.dart';
 import 'quiz/quiz_topics_screen.dart';
 
-import '../modules/focus/focus_forest_screen.dart';
 import 'launchpad/launchpad_screen.dart';
+import 'promptcraft/promptcraft_home_screen.dart';
 import '../modules/cyber/cyber_vault_screen.dart';
 
 import '../modules/news/news_screen.dart';
@@ -27,12 +27,12 @@ import '../modules/ai/nova_chat_screen.dart';
 import '../screens/engineering/engineering_hub.dart';
 import '../screens/flowcharts_screen.dart';
 import '../screens/devref/devref_hub_screen.dart';
-import '../modules/community/community_books_screen.dart';
+
 import '../modules/study_companion/study_companion_screen.dart';
-import '../modules/social_learning/social_learning_screen.dart';
+
 import '../modules/cybersecurity/cybersecurity_hub_screen.dart';
 import 'timetable_screen.dart';
-import 'calendar_screen.dart';
+
 import 'library_screen.dart';
 import 'video_library_screen.dart';
 
@@ -42,8 +42,9 @@ import 'shop/projects_screen.dart';
 import 'student_profile_screen.dart';
 import 'login_screen.dart';
 
-import 'settings_screen.dart';
+
 import 'about_screen.dart';
+import 'settings/main_settings_screen.dart';
 import 'chat_screen.dart';
 import '../features/code_lens/code_lens_screen.dart';
 import '../features/lab_mesh/lab_mesh_screen.dart';
@@ -72,10 +73,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   final List<Widget> _screens = [
     const TimetableScreen(),  // Index 0 - Timetable
-    const CalendarScreen(),   // Index 1 - Calendar
-    const ChatScreen(),       // Index 2 - Chat
-    const DailyRoutineScreen(), // Index 3 - Routine
-    const DiaryScreen(), // Index 4 - Diary
+    const ChatScreen(),       // Index 1 - Chat
+    const DailyRoutineScreen(), // Index 2 - Routine
+    const DiaryScreen(), // Index 3 - Diary
   ];
 
   @override
@@ -613,21 +613,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               },
             ),
 
-            _buildAnimatedDrawerItem(
-              icon: Icons.forest_outlined,
-              title: 'Focus Forest',
-              color: Colors.green,
-              delay: 650,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FocusForestScreen(),
-                  ),
-                );
-              },
-            ),
+
             _buildAnimatedDrawerItem(
               icon: Icons.shield_outlined,
               title: 'Cyber Library',
@@ -721,6 +707,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const LaunchpadScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.auto_awesome,
+              title: 'PromptCraft',
+              subtitle: 'Prompt Engineering Course',
+              color: const Color(0xFFFF6B6B),
+              delay: 980,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PromptcraftHomeScreen(),
                   ),
                 );
               },
@@ -898,7 +900,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SettingsScreen(),
+                    builder: (context) => const MainSettingsScreen(),
                   ),
                 );
               },
@@ -1506,9 +1508,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   String _getScreenName(int index) {
     switch (index) {
       case 0: return 'Timetable';
-      case 1: return 'Alarm';
-      case 2: return 'Calendar';
-      case 3: return 'Chat';
+      case 1: return 'Chat';
+      case 2: return 'Routine';
+      case 3: return 'Diary';
       default: return 'Screen';
     }
   }
