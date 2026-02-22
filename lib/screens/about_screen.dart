@@ -279,7 +279,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                       ),
                     ),
                     child: Text(
-                      'v2.0.0 • Notification System & UI Polish',
+                      'v3.0.0 • FCM Push Notifications & Optimized Build',
                       style: GoogleFonts.firaCode(
                         fontSize: 14,
                         color: Colors.cyanAccent,
@@ -423,7 +423,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
 
                         _buildEnhancedFeature(
                           'Academic Syllabus',
-                          'Comprehensive Subject-Wise Study Materials with Flowcharts',
+                          'Comprehensive Subject-Wise Study Materials & Resources',
                           Icons.auto_stories_outlined,
                           Colors.amber,
                           1300,
@@ -484,16 +484,10 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           Colors.deepOrange,
                           1625,
                         ),
-                        _buildEnhancedFeature(
-                          'Social Learning',
-                          'Study Groups, Q&A, Peer Tutoring & Knowledge Sharing',
-                          Icons.groups_outlined,
-                          Colors.blue,
-                          1650,
-                        ),
+
                         _buildEnhancedFeature(
                           'Engineering Hub',
-                          'Engineering Topics with Interactive 3D Model Viewer',
+                          'Engineering Graphics (1st Year) with Study Materials',
                           Icons.precision_manufacturing_outlined,
                           Colors.orange,
                           1675,
