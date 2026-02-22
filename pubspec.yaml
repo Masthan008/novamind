@@ -37,16 +37,8 @@ dependencies:
   qr_flutter: ^4.1.0
   mobile_scanner: ^3.5.5
 
-  # Reports - OPTIMIZED
-  pdf: ^3.10.4 # Re-enabled for Digital Drafter
-  printing: ^5.11.1 # Re-enabled for Digital Drafter
-  signature: ^5.4.0 # For drawing functionality
-
-  # Alarm & Audio
-
-  audio_session: ^0.1.21
+  # Accessibility
   flutter_tts: ^4.0.2
-  flutter_foreground_task: ^8.0.0
   speech_to_text: ^7.0.0
 
   # UI & Design - OPTIMIZED
@@ -123,13 +115,11 @@ flutter:
     - .env
     - assets/images/
     - assets/images/logos/
-    - assets/images/flowcharts/
     - assets/engineering_hub/mech/
     - assets/engineering_hub/civil/
     - assets/engineering_hub/cse/
     - assets/engineering_hub/ece/
     - assets/engineering_hub/graphics/
-    - assets/3d_models/
     - assets/data/cheatsheets_index.json
     - assets/data/cheatsheets/programming/
     - assets/data/cheatsheets/frameworks/

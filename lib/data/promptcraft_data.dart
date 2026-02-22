@@ -19,7 +19,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'What is a Prompt?',
         description: 'A prompt is the instruction you give an AI. It\'s the bridge between your intent and the AI\'s response.',
-        assetPath: 'assets/promptcraft/level1/l1_flowchart_what_is_prompt.svg',
+        assetPath: 'assets/promptcraft/level1/l1_flowchart_what_is_prompt.png',
       ),
       PromptLesson(
         title: 'Garbage In, Garbage Out',
@@ -29,7 +29,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Bad vs Good Prompts',
         description: 'Compare: "Tell me about Python" vs "Explain Python list comprehensions with 3 examples for beginners".',
-        assetPath: 'assets/promptcraft/level1/l1_flowchart_bad_vs_good.svg',
+        assetPath: 'assets/promptcraft/level1/l1_flowchart_bad_vs_good.png',
         tryPrompt: 'Explain Python list comprehensions with 3 examples. Include syntax breakdown and when to use them vs regular loops.',
       ),
     ],
@@ -79,7 +79,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'The 5 Prompt Components',
         description: 'Every great prompt has: Role, Context, Task, Format, and Constraints. Master these five parts.',
-        assetPath: 'assets/promptcraft/level2/l2_flowchart_prompt_anatomy.svg',
+        assetPath: 'assets/promptcraft/level2/l2_flowchart_prompt_anatomy.png',
       ),
       PromptLesson(
         title: 'Role + Context + Task',
@@ -96,7 +96,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'With vs Without Parts',
         description: 'See the dramatic difference when you use all 5 parts vs a bare prompt. Structure transforms results.',
-        assetPath: 'assets/promptcraft/level2/l2_flowchart_with_without_parts.svg',
+        assetPath: 'assets/promptcraft/level2/l2_flowchart_with_without_parts.png',
       ),
     ],
     examQuestions: [
@@ -157,7 +157,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Chain of Thought',
         description: 'Ask AI to think step-by-step before answering. Forces logical reasoning and reduces errors dramatically.',
-        assetPath: 'assets/promptcraft/level3/l3_flowchart_chain_of_thought.svg',
+        assetPath: 'assets/promptcraft/level3/l3_flowchart_chain_of_thought.png',
         tryPrompt: 'Think step by step: A farmer has 17 sheep. All but 9 die. How many are left? Show your complete reasoning process before giving the final answer.',
       ),
       PromptLesson(
@@ -169,7 +169,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Patterns Overview',
         description: 'Six core patterns: Expert, Ladder, Critic, Template, Comparator, Chain of Thought. Mix them for powerful results.',
-        assetPath: 'assets/promptcraft/level3/l3_flowchart_patterns_overview.svg',
+        assetPath: 'assets/promptcraft/level3/l3_flowchart_patterns_overview.png',
       ),
     ],
     examQuestions: [
@@ -229,13 +229,13 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Prompt Chaining',
         description: 'Break complex tasks into linked prompts. Output of Prompt 1 feeds into Prompt 2. Like a pipeline for AI.',
-        assetPath: 'assets/promptcraft/level4/l4_flowchart_prompt_chaining.svg',
+        assetPath: 'assets/promptcraft/level4/l4_flowchart_prompt_chaining.png',
         tryPrompt: 'Step 1: List 5 trending topics in AI for 2024.\n\n(After getting results, use this as Step 2):\nFor the topic "[pick one from above]", create a detailed blog outline with: title, 5 sections, key points per section, and a compelling introduction.',
       ),
       PromptLesson(
         title: 'Few-Shot in Action',
         description: 'See how providing examples transforms AI output. Pattern recognition through demonstration is incredibly powerful.',
-        assetPath: 'assets/promptcraft/level4/l4_flowchart_fewshot.svg',
+        assetPath: 'assets/promptcraft/level4/l4_flowchart_fewshot.png',
       ),
     ],
     examQuestions: [
@@ -284,7 +284,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Why Chain Prompts?',
         description: 'Single prompts hit quality ceilings. Chaining breaks big tasks into focused steps for better results overall.',
-        assetPath: 'assets/promptcraft/level5/l5_flowchart_chain_advanced.svg',
+        assetPath: 'assets/promptcraft/level5/l5_flowchart_chain_advanced.png',
       ),
       PromptLesson(
         title: 'Study Plan Chain',
@@ -345,13 +345,13 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Coding Prompts Mastery',
         description: 'For code: specify language, version, style guide, error handling, and edge cases. Get production-ready output.',
-        assetPath: 'assets/promptcraft/level6/l6_flowchart_domain_coding.svg',
+        assetPath: 'assets/promptcraft/level6/l6_flowchart_domain_coding.png',
         tryPrompt: 'You are a senior Python developer. Write a function that validates email addresses using regex. Requirements:\n- Handle edge cases (empty, None, special chars)\n- Return bool\n- Include docstring\n- Add 5 unit tests\n- Follow PEP 8',
       ),
       PromptLesson(
         title: 'Study & Learning Prompts',
         description: 'For studying: specify subject, difficulty, exam format, and time constraints. AI becomes your personal tutor.',
-        assetPath: 'assets/promptcraft/level6/l6_flowchart_domain_study.svg',
+        assetPath: 'assets/promptcraft/level6/l6_flowchart_domain_study.png',
         tryPrompt: 'You are an expert CS tutor. I have a mid-term exam on Operating Systems tomorrow. Topics: Process scheduling, Deadlocks, Memory management. Create a 1-hour crash course plan with key formulas, mnemonics, and 3 likely exam questions with answers.',
       ),
       PromptLesson(
@@ -418,7 +418,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Image Prompt Anatomy',
         description: 'Structure: Subject + Style + Colors + Composition + Lighting + Quality modifiers. Order matters for emphasis.',
-        assetPath: 'assets/promptcraft/level7/l7_flowchart_image_anatomy.svg',
+        assetPath: 'assets/promptcraft/level7/l7_flowchart_image_anatomy.png',
       ),
       PromptLesson(
         title: 'Style Keywords',
@@ -478,7 +478,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'How Battles Work',
         description: 'Write the best prompt for a task. AI scores your output. Compare with other students. Top prompts win.',
-        assetPath: 'assets/promptcraft/level8/l8_flowchart_battle_flow.svg',
+        assetPath: 'assets/promptcraft/level8/l8_flowchart_battle_flow.png',
       ),
       PromptLesson(
         title: 'Scoring Criteria',
@@ -537,19 +537,19 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Project 1: Study Plan Generator',
         description: 'Build a complete study plan using chained prompts: Syllabus analysis → Weak areas → Schedule → Resources → Practice.',
-        assetPath: 'assets/promptcraft/level9/l9_flowchart_project1_studyplan.svg',
+        assetPath: 'assets/promptcraft/level9/l9_flowchart_project1_studyplan.png',
         tryPrompt: 'I\'m a 3rd year CSE student preparing for end-semester exams. Subjects: DBMS, Computer Networks, Operating Systems. Exam starts in 3 weeks. I\'m weakest in Computer Networks.\n\nCreate a complete study plan:\n1. Priority rank the subjects\n2. Weekly schedule (3 weeks)\n3. Best YouTube channels for each\n4. 5 most likely exam questions per subject',
       ),
       PromptLesson(
         title: 'Project 2: Debug Assistant',
         description: 'Create a multi-step debugging workflow: Error analysis → Root cause → Fix suggestion → Prevention strategy.',
-        assetPath: 'assets/promptcraft/level9/l9_flowchart_project2_debug.svg',
+        assetPath: 'assets/promptcraft/level9/l9_flowchart_project2_debug.png',
         tryPrompt: 'You are a senior debugger. I have this Python error:\n\nTypeError: can\'t multiply sequence by non-int of type \'float\'\n\nCode: result = "hello" * 2.5\n\n1. Explain what caused this error\n2. Show 3 ways to fix it\n3. Explain the underlying Python type system rule\n4. Give a pattern to prevent similar errors',
       ),
       PromptLesson(
         title: 'Project 3: Research Helper',
         description: 'Use AI to research topics: Define scope → Gather info → Summarize findings → Create presentation outline.',
-        assetPath: 'assets/promptcraft/level9/l9_flowchart_project3_research.svg',
+        assetPath: 'assets/promptcraft/level9/l9_flowchart_project3_research.png',
         tryPrompt: 'Help me research "Quantum Computing for Beginners" for a 10-minute class presentation.\n\n1. Give me the 5 most important concepts to cover\n2. Explain each in 2-3 sentences (simple language)\n3. Suggest 3 real-world applications\n4. Create a slide-by-slide outline (8 slides)\n5. Suggest a hook question to start the presentation',
       ),
       PromptLesson(
@@ -609,7 +609,7 @@ const List<PromptLevel> promptCraftLevels = [
       PromptLesson(
         title: 'Exam Overview',
         description: 'The final exam tests all 9 levels. 5 challenging questions covering every technique you\'ve learned. Score 70%+ to pass.',
-        assetPath: 'assets/promptcraft/level10/l10_flowchart_exam_flow.svg',
+        assetPath: 'assets/promptcraft/level10/l10_flowchart_exam_flow.png',
       ),
       PromptLesson(
         title: 'Your Certificate',

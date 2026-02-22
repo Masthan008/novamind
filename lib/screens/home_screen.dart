@@ -25,7 +25,7 @@ import '../modules/academic/books_notes_screen.dart';
 import '../modules/roadmaps/roadmaps_screen.dart';
 import '../modules/ai/nova_chat_screen.dart';
 import '../screens/engineering/engineering_hub.dart';
-import '../screens/flowcharts_screen.dart';
+
 import '../screens/devref/devref_hub_screen.dart';
 
 import '../modules/study_companion/study_companion_screen.dart';
@@ -629,24 +629,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
               },
             ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.account_tree,
-              title: 'C Flowcharts',
-              subtitle: '10 Programming Flowcharts',
-              color: Colors.blue,
-              delay: 725,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FlowchartsScreen(),
-                  ),
-                );
-              },
-            ),
-
-
 
 
             _buildAnimatedDrawerItem(

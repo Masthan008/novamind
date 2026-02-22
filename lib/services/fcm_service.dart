@@ -10,9 +10,51 @@ import 'student_auth_service.dart';
 /// Firebase requires this to be outside any class.
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you need to show a local notification in the background,
-  // you can do so here. For now, just log it.
   debugPrint('🔔 [FCM] Background message: ${message.messageId}');
+
+  // Some Android OEMs suppress auto-display of FCM notifications.
+  // Explicitly show a local notification to guarantee delivery.
+  final notification = message.notification;
+  if (notification != null) {
+    final plugin = FlutterLocalNotificationsPlugin();
+
+    const androidInit = AndroidInitializationSettings('@mipmap/launcher_icon');
+    await plugin.initialize(const InitializationSettings(android: androidInit));
+
+    final type = message.data['type'] ?? 'general';
+    String channelId;
+    switch (type) {
+      case 'news':
+        channelId = 'fcm_news_channel';
+        break;
+      case 'buzz_question':
+      case 'buzz_reply':
+        channelId = 'fcm_buzz_channel';
+        break;
+      case 'chat_message':
+      case 'chat_mention':
+        channelId = 'fcm_chat_channel';
+        break;
+      default:
+        channelId = 'fcm_news_channel';
+    }
+
+    await plugin.show(
+      DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      notification.title ?? 'Sentinel',
+      notification.body ?? '',
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channelId,
+          channelId,
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+        ),
+      ),
+    );
+  }
 }
 
 /// Firebase Cloud Messaging Service
@@ -75,7 +117,16 @@ class FCMService {
         return;
       }
 
-      // 3. Create Android notification channels
+      // 3. Initialize local notifications plugin
+      const androidInit = AndroidInitializationSettings('@mipmap/launcher_icon');
+      await _localNotifications.initialize(
+        const InitializationSettings(android: androidInit),
+        onDidReceiveNotificationResponse: (details) {
+          debugPrint('🔔 [FCM] Notification tapped: ${details.payload}');
+        },
+      );
+
+      // 4. Create Android notification channels
       await _createChannels();
 
       // 4. Get FCM token and save it
@@ -240,17 +291,19 @@ class FCMService {
     final notification = message.notification;
     if (notification == null) return;
 
-    // Determine which channel to use based on data payload
+    // Determine the notification type from data payload
     final type = message.data['type'] ?? 'general';
+
+    // Skip notifications already handled by Supabase Realtime when app is open.
+    // Realtime shows in-app banners for news and buzz — no need for FCM push too.
+    if (type == 'news' || type == 'buzz_question' || type == 'buzz_reply') {
+      debugPrint('⏭️ [FCM] Skipping "$type" in foreground — Supabase Realtime handles it');
+      return;
+    }
+
+    // Determine which channel to use
     String channelId;
     switch (type) {
-      case 'news':
-        channelId = _newsChannel.id;
-        break;
-      case 'buzz_question':
-      case 'buzz_reply':
-        channelId = _buzzChannel.id;
-        break;
       case 'chat_message':
       case 'chat_mention':
         channelId = _chatChannel.id;

@@ -256,6 +256,14 @@ void main() async {
     NewsService.listenForUpdates();
     print("✅ News Notification Listener Started");
 
+    // --- FCM Push Notification Service Init ---
+    try {
+      await FCMService.initialize();
+      print("✅ FCM Push Notification Service Initialized");
+    } catch (e) {
+      print("⚠️ FCM Service Init Error: $e");
+    }
+
     // --- Fetch User Plan ---
     await fetchUserPlan();
     print("✅ User Plan Fetched");
