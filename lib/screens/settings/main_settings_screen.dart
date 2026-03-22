@@ -178,7 +178,7 @@ class MainSettingsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Sentinel',
+                                'Zerno',
                                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,

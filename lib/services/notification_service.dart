@@ -109,7 +109,7 @@ class NotificationService {
 
               // Show system notification
               await _showNotification(
-                'Sentinel Buzz', 
+                'Zerno Buzz', 
                 '$senderName $message'
               );
               

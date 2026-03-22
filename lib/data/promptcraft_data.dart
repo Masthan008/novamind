@@ -618,7 +618,7 @@ const List<PromptLevel> promptCraftLevels = [
       ),
       PromptLesson(
         title: 'Master Badge',
-        description: 'Completing all 10 levels unlocks the PromptCraft Master badge on your Sentinel profile. You\'re now prompt-literate!',
+        description: 'Completing all 10 levels unlocks the PromptCraft Master badge on your Zerno profile. You\'re now prompt-literate!',
         assetPath: 'assets/promptcraft/level10/l10_img_master_badge.png',
       ),
     ],

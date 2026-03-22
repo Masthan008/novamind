@@ -29,7 +29,7 @@ class FluxDrawer extends StatefulWidget {
 }
 
 class _FluxDrawerState extends State<FluxDrawer> {
-  String _userName = 'Sentinel Student';
+  String _userName = 'Zerno Student';
   String _userEmail = '';
   bool _isLoading = true;
 
@@ -57,12 +57,12 @@ class _FluxDrawerState extends State<FluxDrawer> {
               _userName = data['full_name'] ?? 
                           data['username'] ?? 
                           user.email?.split('@').first ?? 
-                          'Sentinel Student';
+                          'Zerno Student';
               _userEmail = data['email'] ?? user.email ?? '';
             });
           } else if (mounted) {
             setState(() {
-              _userName = user.email?.split('@').first ?? 'Sentinel Student';
+              _userName = user.email?.split('@').first ?? 'Zerno Student';
               _userEmail = user.email ?? '';
             });
           }
@@ -70,7 +70,7 @@ class _FluxDrawerState extends State<FluxDrawer> {
           // Table might not exist, use auth user info
           if (mounted) {
             setState(() {
-              _userName = user.email?.split('@').first ?? 'Sentinel Student';
+              _userName = user.email?.split('@').first ?? 'Zerno Student';
               _userEmail = user.email ?? '';
             });
           }

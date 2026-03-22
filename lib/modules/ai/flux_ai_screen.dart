@@ -25,8 +25,8 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
     
     // Add welcome message
     final welcomeMessage = AIService.hasAIAccess(_userTier)
-        ? '👋 Hello! I\'m Sentinel AI, your intelligent study assistant created by Masthan Valli for Sentinel Student OS.\n\n${AIService.getTierFeatures(_userTier)}'
-        : '👋 Hello! I\'m Sentinel AI. ${AIService.getTierFeatures(_userTier)}';
+        ? '👋 Hello! I\'m Zerno AI, your intelligent study assistant created by Masthan Valli for Zerno Student OS.\n\n${AIService.getTierFeatures(_userTier)}'
+        : '👋 Hello! I\'m Zerno AI. ${AIService.getTierFeatures(_userTier)}';
     
     _messages.add({
       'role': 'ai',
@@ -66,7 +66,7 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          "Sentinel AI",
+          "Zerno AI",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w700,
             color: const Color(0xFFFF6B6B),
@@ -154,7 +154,7 @@ class _FluxAIScreenState extends State<FluxAIScreen> {
                       controller: _controller,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: "Ask Sentinel AI...",
+                        hintText: "Ask Zerno AI...",
                         filled: true,
                         fillColor: Colors.black,
                         border: OutlineInputBorder(

@@ -123,7 +123,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
     await plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      notification.title ?? 'Sentinel',
+      notification.title ?? 'Zerno',
       notification.body ?? '',
       NotificationDetails(
         android: AndroidNotificationDetails(
@@ -224,6 +224,36 @@ void main() async {
     if (!Hive.isBoxOpen('cheatsheets')) {
       await Hive.openBox<CheatSheet>('cheatsheets');
       print("✅ Cheatsheets box opened");
+    }
+    
+    // --- Zerno Phase 1 Hive Boxes ---
+    if (!Hive.isBoxOpen('bunk_meter_data')) {
+      await Hive.openBox('bunk_meter_data');
+      print("✅ Bunk Meter data box opened");
+    }
+    if (!Hive.isBoxOpen('cgpa_data')) {
+      await Hive.openBox('cgpa_data');
+      print("✅ CGPA data box opened");
+    }
+    if (!Hive.isBoxOpen('exam_countdown_data')) {
+      await Hive.openBox('exam_countdown_data');
+      print("✅ Exam Countdown data box opened");
+    }
+    if (!Hive.isBoxOpen('assignments_data')) {
+      await Hive.openBox('assignments_data');
+      print("✅ Assignments data box opened");
+    }
+    if (!Hive.isBoxOpen('saved_tools')) {
+      await Hive.openBox('saved_tools');
+      print("✅ Saved Tools box opened");
+    }
+    if (!Hive.isBoxOpen('saved_opportunities')) {
+      await Hive.openBox('saved_opportunities');
+      print("✅ Saved Opportunities box opened");
+    }
+    if (!Hive.isBoxOpen('promptcraft_progress')) {
+      await Hive.openBox('promptcraft_progress');
+      print("✅ PromptCraft Progress box opened");
     }
     
     print("✅ Hive Initialized Successfully");
@@ -415,7 +445,7 @@ void main() async {
 
 
         ],
-        child: const SentinelApp(),
+        child: const ZernoApp(),
       ),
     );
   }, (error, stack) {
@@ -425,14 +455,14 @@ void main() async {
   });
 }
 
-class SentinelApp extends StatefulWidget {
-  const SentinelApp({super.key});
+class ZernoApp extends StatefulWidget {
+  const ZernoApp({super.key});
 
   @override
-  State<SentinelApp> createState() => _SentinelAppState();
+  State<ZernoApp> createState() => _ZernoAppState();
 }
 
-class _SentinelAppState extends State<SentinelApp> {
+class _ZernoAppState extends State<ZernoApp> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
@@ -442,7 +472,7 @@ class _SentinelAppState extends State<SentinelApp> {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         return MaterialApp(
-          title: 'Sentinel',
+          title: 'Zerno',
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: themeProvider.getCurrentTheme(),

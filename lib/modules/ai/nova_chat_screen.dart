@@ -29,7 +29,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
     
     // Welcome message
     _messages.add(ChatMessage(
-      text: '👋 Hey there! I\'m **Sentinel AI**, your expert study assistant.\n\n'
+      text: '👋 Hey there! I\'m **Zerno AI**, your expert study assistant.\n\n'
             'I can help you with:\n'
             '• 💻 **Coding** — debugging, optimization, architecture\n'
             '• 📚 **Academics** — concepts, explanations, exam prep\n'
@@ -216,7 +216,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Sentinel AI',
+                'Zerno AI',
                 style: GoogleFonts.orbitron(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -287,7 +287,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Sentinel AI Pro',
+                  'Zerno AI Pro',
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 13,
@@ -513,7 +513,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
           ),
           const SizedBox(width: 12),
           Text(
-            'Sentinel AI is thinking...',
+            'Zerno AI is thinking...',
             style: GoogleFonts.poppins(
               color: const Color(0xFF9C88FF),
               fontSize: 13,
@@ -551,7 +551,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
               maxLines: null,
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
-                hintText: 'Ask Sentinel AI anything...',
+                hintText: 'Ask Zerno AI anything...',
                 hintStyle: GoogleFonts.poppins(color: Colors.white30),
                 filled: true,
                 fillColor: const Color(0xFF1A1A2E),

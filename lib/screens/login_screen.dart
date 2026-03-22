@@ -322,11 +322,11 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                   ).animate().fadeIn(delay: 200.ms).slideY(begin: -0.3),
                   
                   Text(
-                    'Student OS',
+                    'Your Skill to Career Platform',
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: Colors.grey.shade500,
-                      letterSpacing: 6,
+                      letterSpacing: 2,
                     ),
                   ).animate().fadeIn(delay: 300.ms),
                   

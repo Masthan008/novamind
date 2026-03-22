@@ -17,8 +17,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingPage> _pages = [
     OnboardingPage(
-      title: 'Welcome to Sentinel',
-      description: 'The Ultimate Student OS with 50+ features to boost your academic journey',
+      title: 'Welcome to Zerno',
+      description: 'Your Skill to Career Platform with 50+ features to boost your academic journey',
       icon: Icons.school,
       color: Colors.cyanAccent,
     ),

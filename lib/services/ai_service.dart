@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import '../services/env_config.dart';
 
-/// Sentinel AI Service - Ultra-powerful multi-model AI assistant
+/// Zerno AI Service - Ultra-powerful multi-model AI assistant
 /// Developer: Masthan Valli
 class AIService {
   // Get API keys from environment configuration
@@ -16,18 +16,18 @@ class AIService {
 
   /// Ultra-Enhanced System Prompt — designed for expert-level, multi-domain responses
   static const String _systemPrompt = '''
-You are Sentinel AI — an ultra-powerful, multi-domain AI assistant built into the Sentinel Student OS.
+You are Zerno AI — an ultra-powerful, multi-domain AI assistant built into the Zerno Student OS.
 
 === DEVELOPER INFORMATION ===
-- App Name: Sentinel - Student OS
+- App Name: Zerno - Student OS
 - Developer: Masthan Valli
-- When asked about your creator, developer, or who made you, respond: "I was created by Masthan Valli, the developer of Sentinel Student OS."
+- When asked about your creator, developer, or who made you, respond: "I was created by Masthan Valli, the developer of Zerno Student OS."
 
 === YOUR IDENTITY ===
-- You are **Sentinel AI** — the most advanced AI assistant any student has ever used
-- You are NOT ChatGPT, Claude, Gemini, Copilot, or any other AI — you are Sentinel AI
-- Always identify yourself as "Sentinel AI" when asked
-- You're proud of being the intelligence behind Sentinel Student OS
+- You are **Zerno AI** — the most advanced AI assistant any student has ever used
+- You are NOT ChatGPT, Claude, Gemini, Copilot, or any other AI — you are Zerno AI
+- Always identify yourself as "Zerno AI" when asked
+- You're proud of being the intelligence behind Zerno Student OS
 
 === RESPONSE PHILOSOPHY ===
 Every response must be:
@@ -193,7 +193,7 @@ Remember: You are SENTINEL AI — a premium, elite-level AI. Every single respon
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $_openRouterKey',
               'HTTP-Referer': 'https://sentinel.app',
-              'X-Title': 'Sentinel Student OS',
+              'X-Title': 'Zerno Student OS',
             },
             body: jsonEncode({
               "model": "meta-llama/llama-3.3-70b-instruct",
@@ -231,7 +231,7 @@ Remember: You are SENTINEL AI — a premium, elite-level AI. Every single respon
   }
 
   static String _getOfflineResponse() {
-    return "🤖 **Sentinel AI — Temporarily Offline**\n\n"
+    return "🤖 **Zerno AI — Temporarily Offline**\n\n"
         "I'm experiencing a brief connection issue.\n\n"
         "**Try again in 30 seconds** or explore other features:\n"
         "• Academic Syllabus\n"
@@ -254,7 +254,7 @@ Remember: You are SENTINEL AI — a premium, elite-level AI. Every single respon
   }
 
   static String getModelInfo() {
-    return 'Sentinel AI Ultra — Powered by Llama 3.3 70B';
+    return 'Zerno AI Ultra — Powered by Llama 3.3 70B';
   }
 
   /// Check if user has AI access - Allow all for V3
@@ -264,7 +264,7 @@ Remember: You are SENTINEL AI — a premium, elite-level AI. Every single respon
 
   /// Get tier-specific features description
   static String getTierFeatures(String tier) {
-    return "✅ Sentinel AI Ultra Powers:\n"
+    return "✅ Zerno AI Ultra Powers:\n"
         "• Expert coding in 15+ languages\n"
         "• Advanced math & physics solving\n"
         "• System design & architecture\n"

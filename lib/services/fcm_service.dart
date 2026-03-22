@@ -41,7 +41,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
     await plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      notification.title ?? 'Sentinel',
+      notification.title ?? 'Zerno',
       notification.body ?? '',
       NotificationDetails(
         android: AndroidNotificationDetails(
@@ -324,7 +324,7 @@ class FCMService {
 
     _localNotifications.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      notification.title ?? 'Sentinel',
+      notification.title ?? 'Zerno',
       notification.body ?? '',
       NotificationDetails(
         android: AndroidNotificationDetails(

@@ -48,6 +48,16 @@ import 'settings/main_settings_screen.dart';
 import 'chat_screen.dart';
 import '../features/code_lens/code_lens_screen.dart';
 import '../features/lab_mesh/lab_mesh_screen.dart';
+
+// Phase 1 — New Zerno Screens
+import 'bunk_meter/bunk_meter_screen.dart';
+import 'cgpa/cgpa_warroom_screen.dart';
+import 'exam_countdown/exam_countdown_screen.dart';
+import 'assignments/assignment_tracker_screen.dart';
+import 'tools_directory/tools_directory_screen.dart';
+import 'skill_gap/skill_gap_screen.dart';
+import 'opportunities/opportunities_screen.dart';
+import 'skillproof/skillproof_screen.dart';
 import 'community/community_screen.dart';
 import 'personal/daily_routine_screen.dart';
 import 'personal/diary_screen.dart';
@@ -245,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           style: TextStyle(color: Colors.redAccent),
         ),
         content: const Text(
-          'Please authenticate to access Sentinel',
+          'Please authenticate to access Zerno',
           style: TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -539,7 +549,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               ).createShader(bounds);
                             },
                             child: Text(
-                              'Sentinel OS',
+                              'Zerno',
                               style: GoogleFonts.orbitron(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900,
@@ -563,7 +573,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           
                           // Subtitle
                           Text(
-                            'Next-Gen Learning Platform',
+                            'From Zero Skills to Real Opportunities',
                             style: GoogleFonts.poppins(
                               fontSize: 14,
                               color: Colors.white.withOpacity(0.9),
@@ -785,9 +795,105 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
               },
             ),
+
+            // ─── ZERNO TOOLS ─────────────────────────────────────────
+            const Divider(color: Colors.white24, height: 32),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, bottom: 8),
+              child: Text('ZERNO TOOLS', style: GoogleFonts.orbitron(color: Colors.cyanAccent.withOpacity(0.5), fontSize: 10, letterSpacing: 2)),
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.how_to_reg,
+              title: 'Bunk Meter',
+              subtitle: 'Track attendance',
+              color: Colors.greenAccent,
+              delay: 710,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const BunkMeterScreen()));
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.calculate,
+              title: 'CGPA War Room',
+              subtitle: 'GPA calculator & trends',
+              color: Colors.purpleAccent,
+              delay: 720,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const CgpaWarroomScreen()));
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.timer,
+              title: 'Exam Countdown',
+              subtitle: 'Track exam deadlines',
+              color: Colors.orangeAccent,
+              delay: 730,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const ExamCountdownScreen()));
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.assignment,
+              title: 'Assignments',
+              subtitle: 'Track & manage tasks',
+              color: Colors.amberAccent,
+              delay: 740,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const AssignmentTrackerScreen()));
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.apps,
+              title: 'Free Tools',
+              subtitle: '60+ tools for students',
+              color: Colors.tealAccent,
+              delay: 750,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const ToolsDirectoryScreen()));
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.psychology,
+              title: 'Skill Gap Analyzer',
+              subtitle: 'Find your skill gaps',
+              color: Colors.deepPurpleAccent,
+              delay: 760,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const SkillGapScreen()));
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.emoji_events,
+              title: 'Opportunities',
+              subtitle: 'Hackathons & internships',
+              color: Colors.amber,
+              delay: 770,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const OpportunitiesScreen()));
+              },
+            ),
+            _buildAnimatedDrawerItem(
+              icon: Icons.verified,
+              title: 'SkillProof',
+              subtitle: 'Generate skill certificates',
+              color: Colors.amber,
+              delay: 780,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const SkillProofScreen()));
+              },
+            ),
+            const Divider(color: Colors.white24, height: 32),
             _buildAnimatedDrawerItem(
               icon: Icons.auto_awesome,
-              title: 'Sentinel AI',
+              title: 'Zerno AI',
               subtitle: 'Your intelligent study assistant',
               color: const Color(0xFFFF6B6B),
               delay: 750,
@@ -903,7 +1009,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
             _buildAnimatedDrawerItem(
               icon: Icons.info_outline,
-              title: 'About Sentinel',
+              title: 'About Zerno',
               color: Colors.cyanAccent,
               delay: 1150,
               onTap: () {

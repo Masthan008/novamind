@@ -1,7 +1,7 @@
-name: sentinel
-description: The Ultimate Student OS by Masthan Valli.
+name: zerno
+description: Zerno — From Zero Skills to Real Opportunities. The Ultimate Student OS by Masthan Valli.
 publish_to: 'none'
-version: 2.0.0+4
+version: 3.0.0+5
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -87,6 +87,9 @@ dependencies:
   dartssh2: ^2.13.0
   xterm: ^4.0.0
   flutter_secure_storage: ^10.0.0
+  
+  # Zerno Phase 1 Additions
+  confetti: ^0.7.0                # Confetti animations for SkillProof/PromptCraft
   
   # P2P Sharing
   nearby_connections: ^4.3.0              # Offline peer-to-peer sharing

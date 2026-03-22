@@ -66,7 +66,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
             ).createShader(bounds);
           },
           child: Text(
-            'About Sentinel',
+            'About Zerno',
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.w700,
               color: Colors.white,
@@ -200,7 +200,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                         child: Transform.rotate(
                           angle: _logoController.value * 2 * pi * 0.1,
                           child: const Icon(
-                            Icons.auto_awesome,
+                            Icons.bolt,
                             size: 100,
                             color: Colors.white,
                           ),
@@ -233,7 +233,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                     ).createShader(bounds);
                     },
                     child: Text(
-                      'Sentinel',
+                      'Zerno',
                       style: GoogleFonts.orbitron(
                         fontSize: 42,
                         fontWeight: FontWeight.w900,
@@ -279,7 +279,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                       ),
                     ),
                     child: Text(
-                      'v3.0.0 • FCM Push Notifications & Optimized Build',
+                      'v3.0.0 • Zerno Phase 1 — From Zero Skills to Real Opportunities',
                       style: GoogleFonts.firaCode(
                         fontSize: 14,
                         color: Colors.cyanAccent,
@@ -310,7 +310,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'Revolutionary AI-Powered Learning Ecosystem',
+                      'From Zero Skills to Real Opportunities',
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.9),
@@ -688,7 +688,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Text(
-                            'Exceptional minds behind Sentinel, Sentinel AI system, and next-generation student productivity experience:',
+                            'Exceptional minds behind Zerno, Zerno AI system, and next-generation student productivity experience:',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.poppins(
                               color: Colors.white.withOpacity(0.95),
