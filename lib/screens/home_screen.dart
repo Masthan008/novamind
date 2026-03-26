@@ -1,6 +1,7 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -49,7 +50,7 @@ import 'chat_screen.dart';
 import '../features/code_lens/code_lens_screen.dart';
 import '../features/lab_mesh/lab_mesh_screen.dart';
 
-// Phase 1 — New Zerno Screens
+// Phase 1 â€” New Zerno Screens
 import 'bunk_meter/bunk_meter_screen.dart';
 import 'cgpa/cgpa_warroom_screen.dart';
 import 'exam_countdown/exam_countdown_screen.dart';
@@ -62,6 +63,7 @@ import 'community/community_screen.dart';
 import 'personal/daily_routine_screen.dart';
 import 'personal/diary_screen.dart';
 import '../widgets/flux_drawer.dart';
+import '../widgets/animated_side_menu.dart';
 
 import '../services/auth_service.dart';
 import '../services/student_auth_service.dart';
@@ -80,6 +82,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _drawerAnimationController;
   late AnimationController _appBarAnimationController;
   late AnimationController _backgroundController;
+
+  // â”€â”€â”€ ANIMATED SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  late AnimationController _sidebarController;
+  late Animation<double> _sidebarAnim;
+  bool _isSideMenuOpen = false;
+
+  final _springDesc = const SpringDescription(
+    mass: 0.1,
+    stiffness: 40,
+    damping: 5,
+  );
+
+  void _toggleSideMenu() {
+    if (_isSideMenuOpen) {
+      _sidebarController.reverse();
+    } else {
+      final springAnim = SpringSimulation(_springDesc, 0, 1, 0);
+      _sidebarController.animateWith(springAnim);
+    }
+    setState(() {
+      _isSideMenuOpen = !_isSideMenuOpen;
+    });
+  }
+
+  void _closeSideMenu() {
+    if (_isSideMenuOpen) {
+      _sidebarController.reverse();
+      setState(() {
+        _isSideMenuOpen = false;
+      });
+    }
+  }
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   
   final List<Widget> _screens = [
     const TimetableScreen(),  // Index 0 - Timetable
@@ -106,6 +141,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _backgroundController = AnimationController(
       duration: const Duration(seconds: 20),
       vsync: this,
+    );
+
+    // Sidebar animation
+    _sidebarController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      upperBound: 1,
+      vsync: this,
+    );
+    _sidebarAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _sidebarController, curve: Curves.linear),
     );
     
     // Start animations
@@ -134,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
              await box.put('user_photo', updatedStudent.imageUrl);
           }
         } catch (e) {
-          print("⚠️ Hive update error: $e");
+          print("âš ï¸ Hive update error: $e");
         }
 
         if (mounted) {
@@ -144,20 +189,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           try {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("✅ Profile Synced: ${updatedStudent.name}"),
+                content: Text("âœ… Profile Synced: ${updatedStudent.name}"),
                 backgroundColor: Colors.green.withOpacity(0.8),
                 duration: const Duration(seconds: 2),
                 behavior: SnackBarBehavior.floating,
               ),
             );
           } catch (e) {
-            print("⚠️ SnackBar error: $e");
+            print("âš ï¸ SnackBar error: $e");
           }
         }
-        print("✅ Profile synced via StudentAuthService!");
+        print("âœ… Profile synced via StudentAuthService!");
       }
     } catch (e) {
-      print("⚠️ Sync error: $e");
+      print("âš ï¸ Sync error: $e");
       // Don't crash the app, just log the error
     }
   }
@@ -167,6 +212,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _drawerAnimationController.dispose();
     _appBarAnimationController.dispose();
     _backgroundController.dispose();
+    _sidebarController.dispose();
     super.dispose();
   }
 
@@ -175,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     try {
       return StudentAuthService.currentStudent?.name ?? 'Student';
     } catch (e) {
-      print("⚠️ Error getting student name: $e");
+      print("âš ï¸ Error getting student name: $e");
       return 'Student';
     }
   }
@@ -192,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
       return const SizedBox.shrink();
     } catch (e) {
-      print("⚠️ Error building user badge: $e");
+      print("âš ï¸ Error building user badge: $e");
       return const SizedBox.shrink();
     }
   }
@@ -228,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           NotificationService.listenForBuzzNotifications();
           
         } catch (e) {
-          print("⚠️ Biometric check error: $e");
+          print("âš ï¸ Biometric check error: $e");
           // Continue without biometric if there's an error
           
           // Still try to listen for notifications
@@ -236,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
       }
     } catch (e) {
-      print("⚠️ First run check error: $e");
+      print("âš ï¸ First run check error: $e");
       // If there's any error, redirect to login as safety measure
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/auth');
@@ -289,960 +335,88 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     
     return Consumer2<ThemeProvider, AccessibilityProvider>(
       builder: (context, themeProvider, accessibilityProvider, child) {
-        return Scaffold(
-          extendBody: true, // Important for floating nav bar
-          drawer: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.black.withOpacity(0.98),
-              Colors.grey.shade900.withOpacity(0.95),
-              Colors.black.withOpacity(0.98),
-            ],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.cyanAccent.withOpacity(0.2),
-              blurRadius: 30,
-              spreadRadius: 5,
+        return Stack(
+          children: [
+            // â”€â”€â”€ 1) DARK BACKGROUND BEHIND SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            Positioned.fill(
+              child: Container(color: const Color(0xFF17203A)),
             ),
-          ],
-        ),
-        child: Drawer(
-          backgroundColor: Colors.transparent,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              // Revolutionary Drawer Header with Advanced Animations
-              Container(
-                height: 220,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.cyanAccent.withOpacity(0.9),
-                      Colors.purple.withOpacity(0.8),
-                      Colors.pink.withOpacity(0.7),
-                      Colors.deepPurple.withOpacity(0.6),
-                    ],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.4),
-                      blurRadius: 25,
-                      spreadRadius: 8,
-                    ),
-                    BoxShadow(
-                      color: Colors.purple.withOpacity(0.3),
-                      blurRadius: 20,
-                      spreadRadius: 5,
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    // Enhanced Animated Background Pattern
-                    AnimatedBuilder(
-                      animation: _backgroundController,
-                      builder: (context, child) {
-                        return CustomPaint(
-                          painter: DrawerPatternPainter(_backgroundController.value),
-                          size: Size.infinite,
-                        );
-                      },
-                    ),
-                    
-                    // Floating Orbs Animation
-                    AnimatedBuilder(
-                      animation: _backgroundController,
-                      builder: (context, child) {
-                        return Stack(
-                          children: List.generate(8, (index) {
-                            double phase = (_backgroundController.value + (index * 0.125)) % 1.0;
-                            double x = 50 + (index * 25.0) + (15 * sin(phase * 2 * pi));
-                            double y = 30 + (index * 20.0) + (20 * cos(phase * 2 * pi));
-                            
-                            return Positioned(
-                              left: x,
-                              top: y,
-                              child: Container(
-                                width: 12 + sin(phase * 4 * pi) * 4,
-                                height: 12 + sin(phase * 4 * pi) * 4,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: RadialGradient(
-                                    colors: [
-                                      Colors.white.withOpacity((sin(phase * pi) * 0.5 + 0.5).clamp(0.0, 1.0) * 0.6),
-                                      Colors.cyanAccent.withOpacity((cos(phase * pi) * 0.5 + 0.5).clamp(0.0, 1.0) * 0.4),
-                                      Colors.transparent,
-                                    ],
-                                  ),
-                                ),
-                              ),
+
+            // â”€â”€â”€ 2) ANIMATED SIDE MENU â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            RepaintBoundary(
+              child: AnimatedBuilder(
+                animation: _sidebarAnim,
+                builder: (context, child) {
+                  return Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..rotateY(((1 - _sidebarAnim.value) * -30) * pi / 180)
+                      ..translate((1 - _sidebarAnim.value) * -300.0),
+                    child: child,
+                  );
+                },
+                child: FadeTransition(
+                  opacity: _sidebarAnim,
+                  child: AnimatedSideMenu(
+                    onClose: _closeSideMenu,
+                    onLogout: () async {
+                      _closeSideMenu();
+                      // Reuse existing logout dialog
+                      final confirm = await _showLogoutDialog(context);
+                      if (confirm == true) {
+                        try {
+                          await StudentAuthService.logout();
+                          if (context.mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => const LoginScreen()),
                             );
-                          }),
-                        );
-                      },
-                    ),
-                    
-                    // Header Content
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // Student Profile Row
-                          // Profile Section - Clickable
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const StudentProfileScreen(),
-                                  ),
-                                );
-                              },
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: Colors.cyanAccent.withOpacity(0.3),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    // Profile Avatar
-                                    Builder(
-                                      builder: (context) {
-                                        try {
-                                          final student = StudentAuthService.currentStudent;
-                                          final imageUrl = student?.imageUrl;
-                                          final hasImage = imageUrl != null && imageUrl.isNotEmpty;
-                                          
-                                          return Container(
-                                            width: 60,
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              gradient: !hasImage
-                                                  ? RadialGradient(
-                                                      colors: [
-                                                        Colors.white.withOpacity(0.9),
-                                                        Colors.cyanAccent.withOpacity(0.7),
-                                                      ],
-                                                    )
-                                                  : null,
-                                              image: hasImage
-                                                  ? DecorationImage(
-                                                      image: NetworkImage(imageUrl),
-                                                      fit: BoxFit.cover,
-                                                      onError: (exception, stackTrace) {
-                                                        // Handle image loading error
-                                                        print("Image loading error: $exception");
-                                                      },
-                                                    )
-                                                  : null,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.white.withOpacity(0.5),
-                                                  blurRadius: 15,
-                                                  spreadRadius: 3,
-                                                ),
-                                              ],
-                                            ),
-                                            child: !hasImage
-                                                ? Icon(
-                                                    Icons.person,
-                                                    color: Colors.black,
-                                                    size: 30,
-                                                  )
-                                                : null,
-                                          );
-                                        } catch (e) {
-                                          print("⚠️ Profile avatar error: $e");
-                                          // Return fallback avatar
-                                          return Container(
-                                            width: 60,
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              gradient: RadialGradient(
-                                                colors: [
-                                                  Colors.white.withOpacity(0.9),
-                                                  Colors.cyanAccent.withOpacity(0.7),
-                                                ],
-                                              ),
-                                            ),
-                                            child: Icon(
-                                              Icons.person,
-                                              color: Colors.black,
-                                              size: 30,
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    )
-                                      .animate()
-                                      .scale(delay: 200.ms, duration: 600.ms, curve: Curves.elasticOut)
-                                      .then()
-                                      .shimmer(duration: 2.seconds, color: Colors.white),
-                                    
-                                    const SizedBox(width: 12),
-                                    
-                                    // Student Name & Tier Badge
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            _getSafeStudentName(),
-                                            style: GoogleFonts.sourceCodePro(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          _buildSafeUserBadge(),
-                                        ],
-                                      ),
-                                    ),
-                                    
-                                    // Edit icon hint
-                                    Icon(
-                                      Icons.edit_outlined,
-                                      color: Colors.cyanAccent.withOpacity(0.6),
-                                      size: 20,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                            .animate()
-                            .fadeIn(delay: 300.ms)
-                            .slideX(begin: -0.2),
-                          
-                          const SizedBox(height: 16),
-                          
-                          // App Title
-                          ShaderMask(
-                            shaderCallback: (bounds) {
-                              // Prevent assertion error when bounds are empty or invalid
-                              if (bounds.isEmpty || bounds.width <= 0 || bounds.height <= 0) {
-                                return const LinearGradient(colors: [Colors.white, Colors.white]).createShader(const Rect.fromLTWH(0, 0, 1, 1));
-                              }
-                              return const LinearGradient(
-                                colors: [Colors.white, Colors.cyanAccent, Colors.white],
-                              ).createShader(bounds);
-                            },
-                            child: Text(
-                              'Zerno',
-                              style: GoogleFonts.orbitron(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white,
-                                letterSpacing: 2,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.5),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                            .animate()
-                            .fadeIn(delay: 400.ms, duration: 800.ms)
-                            .slideX(begin: -0.3, end: 0)
-                            .then()
-                            .shimmer(duration: 3.seconds, color: Colors.white),
-                          
-                          // Subtitle
-                          Text(
-                            'From Zero Skills to Real Opportunities',
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.9),
-                              fontWeight: FontWeight.w300,
-                              letterSpacing: 1,
-                            ),
-                          )
-                            .animate()
-                            .fadeIn(delay: 600.ms, duration: 600.ms)
-                            .slideX(begin: -0.2, end: 0),
-                        ],
-                      ),
-                    ),
-                  ],
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => const LoginScreen()),
+                            );
+                          }
+                        }
+                      }
+                    },
+                  ),
                 ),
               ),
-            // ─── DRAWER ITEMS (Alphabetical) ──────────────────────
-            _buildAnimatedDrawerItem(
-              icon: Icons.auto_stories_outlined,
-              title: 'Academic Syllabus',
-              color: Colors.amber,
-              delay: 100,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SyllabusScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.qr_code_scanner_rounded,
-              title: 'Code Lens',
-              subtitle: 'Scan & clean code with AI',
-              color: Colors.cyanAccent,
-              delay: 150,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CodeLensScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.forum_rounded,
-              title: 'Community Doubts',
-              subtitle: 'Ask & Solve Questions',
-              color: Colors.cyanAccent,
-              delay: 200,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CommunityScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.shield_outlined,
-              title: 'Cyber Library',
-              color: Colors.amber,
-              delay: 250,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CyberVaultScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.security,
-              title: 'Cybersecurity Tools',
-              color: Colors.red,
-              delay: 300,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CybersecurityHubScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.data_array_rounded,
-              title: 'Data Structures',
-              subtitle: '10 C Programs with Explanations',
-              color: const Color(0xFFFF8E53),
-              delay: 350,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DataStructuresScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.library_books,
-              title: 'DevRef',
-              subtitle: '100+ Developer References',
-              color: Colors.deepPurple,
-              delay: 400,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DevRefHubScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.quiz_outlined,
-              title: 'DS Quiz Practice',
-              subtitle: 'Random MCQs with AI Tutor',
-              color: const Color(0xFF26C6DA),
-              delay: 450,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const QuizTopicsScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.wifi_tethering_rounded,
-              title: 'LabMesh',
-              subtitle: 'Offline P2P sharing',
-              color: Colors.greenAccent,
-              delay: 500,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LabMeshScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.rocket_launch,
-              title: 'LaunchPad',
-              subtitle: 'Internships & Job Board',
-              color: const Color(0xFF6C63FF),
-              delay: 550,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LaunchpadScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.leaderboard_outlined,
-              title: 'Leaderboard',
-              color: Colors.amber,
-              delay: 600,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LeaderboardScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.folder_special,
-              title: 'Projects Store',
-              subtitle: 'Download ready-made projects',
-              color: Colors.purple,
-              delay: 650,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProjectsScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.auto_awesome,
-              title: 'PromptCraft',
-              subtitle: 'Prompt Engineering Course',
-              color: const Color(0xFFFF6B6B),
-              delay: 700,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PromptcraftHomeScreen(),
-                  ),
-                );
-              },
             ),
 
-            // ─── ZERNO TOOLS ─────────────────────────────────────────
-            const Divider(color: Colors.white24, height: 32),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 8),
-              child: Text('ZERNO TOOLS', style: GoogleFonts.orbitron(color: Colors.cyanAccent.withOpacity(0.5), fontSize: 10, letterSpacing: 2)),
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.how_to_reg,
-              title: 'Bunk Meter',
-              subtitle: 'Track attendance',
-              color: Colors.greenAccent,
-              delay: 710,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const BunkMeterScreen()));
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.calculate,
-              title: 'CGPA War Room',
-              subtitle: 'GPA calculator & trends',
-              color: Colors.purpleAccent,
-              delay: 720,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const CgpaWarroomScreen()));
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.timer,
-              title: 'Exam Countdown',
-              subtitle: 'Track exam deadlines',
-              color: Colors.orangeAccent,
-              delay: 730,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const ExamCountdownScreen()));
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.assignment,
-              title: 'Assignments',
-              subtitle: 'Track & manage tasks',
-              color: Colors.amberAccent,
-              delay: 740,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const AssignmentTrackerScreen()));
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.apps,
-              title: 'Free Tools',
-              subtitle: '60+ tools for students',
-              color: Colors.tealAccent,
-              delay: 750,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const ToolsDirectoryScreen()));
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.psychology,
-              title: 'Skill Gap Analyzer',
-              subtitle: 'Find your skill gaps',
-              color: Colors.deepPurpleAccent,
-              delay: 760,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const SkillGapScreen()));
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.emoji_events,
-              title: 'Opportunities',
-              subtitle: 'Hackathons & internships',
-              color: Colors.amber,
-              delay: 770,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const OpportunitiesScreen()));
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.verified,
-              title: 'SkillProof',
-              subtitle: 'Generate skill certificates',
-              color: Colors.amber,
-              delay: 780,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const SkillProofScreen()));
-              },
-            ),
-            const Divider(color: Colors.white24, height: 32),
-            _buildAnimatedDrawerItem(
-              icon: Icons.auto_awesome,
-              title: 'Zerno AI',
-              subtitle: 'Your intelligent study assistant',
-              color: const Color(0xFFFF6B6B),
-              delay: 750,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NovaChatScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.menu_book_outlined,
-              title: 'Student Library',
-              color: Colors.green,
-              delay: 800,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LibraryScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.star,
-              title: 'Subscription Plans',
-              subtitle: 'Upgrade to Pro/Ultra',
-              color: Colors.green,
-              delay: 850,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SubscriptionScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.settings_outlined,
-              title: 'System Settings',
-              color: Colors.grey,
-              delay: 900,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MainSettingsScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.route_outlined,
-              title: 'Tech Roadmaps',
-              color: Colors.blue,
-              delay: 950,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RoadmapsScreen(),
-                  ),
-                );
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.play_circle_outlined,
-              title: 'Video Library',
-              color: Colors.blue,
-              delay: 1000,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const VideoLibraryScreen(),
-                  ),
-                );
-              },
-            ),
-
-            // ─── BOTTOM GROUP ────────────────────────────────────────
-            const Divider(color: Colors.white24, height: 32),
-
-            _buildAnimatedDrawerItem(
-              icon: Icons.person_outline,
-              title: 'Student Profile',
-              subtitle: 'Manage your profile',
-              color: Colors.teal,
-              delay: 1100,
-              onTap: () async {
-                Navigator.pop(context);
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const StudentProfileScreen(),
-                  ),
-                );
-                // Refresh home screen data when returning from profile
-                if (mounted) {
-                  setState(() {});
-                }
-              },
-            ),
-            _buildAnimatedDrawerItem(
-              icon: Icons.info_outline,
-              title: 'About Zerno',
-              color: Colors.cyanAccent,
-              delay: 1150,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AboutScreen(),
-                  ),
-                );
-              },
-            ),
-
-            // Logout Button
-            _buildAnimatedDrawerItem(
-              icon: Icons.logout,
-              title: 'Logout',
-              subtitle: 'Sign out of account',
-              color: Colors.redAccent,
-              delay: 1200,
-              onTap: () async {
-                Navigator.pop(context);
-                
-                // Show confirmation dialog
-                final confirm = await showGeneralDialog<bool>(
-                  context: context,
-                  barrierDismissible: true,
-                  barrierLabel: 'Logout',
-                  barrierColor: Colors.black.withOpacity(0.7),
-                  transitionDuration: const Duration(milliseconds: 400),
-                  transitionBuilder: (context, anim1, anim2, child) {
-                    return ScaleTransition(
-                      scale: CurvedAnimation(
-                        parent: anim1,
-                        curve: Curves.elasticOut,
-                        reverseCurve: Curves.easeInBack,
-                      ),
-                      child: FadeTransition(opacity: anim1, child: child),
-                    );
-                  },
-                  pageBuilder: (context, anim1, anim2) {
-                    return Center(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(28),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF1A1A2E).withOpacity(0.9),
-                                  borderRadius: BorderRadius.circular(28),
-                                  border: Border.all(
-                                    color: Colors.redAccent.withOpacity(0.4),
-                                    width: 1.5,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.redAccent.withOpacity(0.3),
-                                      blurRadius: 30,
-                                      spreadRadius: 2,
-                                    ),
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.5),
-                                      blurRadius: 20,
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // Animated warning icon
-                                    TweenAnimationBuilder<double>(
-                                      tween: Tween(begin: 0.0, end: 1.0),
-                                      duration: const Duration(milliseconds: 600),
-                                      builder: (context, value, child) {
-                                        return Container(
-                                          width: 80,
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            gradient: RadialGradient(
-                                              colors: [
-                                                Colors.redAccent.withOpacity(0.3 * value),
-                                                Colors.redAccent.withOpacity(0.1 * value),
-                                                Colors.transparent,
-                                              ],
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.redAccent.withOpacity(0.5 * value),
-                                                blurRadius: 20 * value,
-                                                spreadRadius: 4 * value,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Icon(
-                                            Icons.power_settings_new_rounded,
-                                            size: 42,
-                                            color: Color.lerp(Colors.grey, Colors.redAccent, value),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(height: 20),
-                                    
-                                    // Title
-                                    Text(
-                                      'Sign Out?',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    
-                                    // Subtitle
-                                    Text(
-                                      'You will need to login again\nto access your account',
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                        color: Colors.grey.shade400,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 28),
-                                    
-                                    // Buttons
-                                    Row(
-                                      children: [
-                                        // Cancel button
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () => Navigator.pop(context, false),
-                                            child: Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 14),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white.withOpacity(0.08),
-                                                borderRadius: BorderRadius.circular(16),
-                                                border: Border.all(
-                                                  color: Colors.white.withOpacity(0.15),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                'Cancel',
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.grey.shade300,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 14),
-                                        // Logout button
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () => Navigator.pop(context, true),
-                                            child: Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 14),
-                                              decoration: BoxDecoration(
-                                                gradient: const LinearGradient(
-                                                  colors: [Color(0xFFFF416C), Color(0xFFFF4B2B)],
-                                                ),
-                                                borderRadius: BorderRadius.circular(16),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.redAccent.withOpacity(0.4),
-                                                    blurRadius: 12,
-                                                    offset: const Offset(0, 4),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Text(
-                                                'Logout',
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+            // â”€â”€â”€ 3) ANIMATED MAIN BODY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            RepaintBoundary(
+              child: AnimatedBuilder(
+                animation: _sidebarAnim,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: 1 - (_sidebarAnim.value * 0.1),
+                    child: Transform.translate(
+                      offset: Offset(_sidebarAnim.value * 265, 0),
+                      child: Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY((_sidebarAnim.value * 30) * pi / 180),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(_sidebarAnim.value * 24),
+                          child: child,
                         ),
                       ),
-                    );
-                  },
-                );
-
-                if (confirm == true) {
-                  try {
-                    await StudentAuthService.logout();
-                    if (context.mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      );
-                    }
-                  } catch (e) {
-                    print("⚠️ Logout error: $e");
-                    // Force navigation to login even if logout fails
-                    if (context.mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      );
-                    }
-                  }
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    ),
-      appBar: PreferredSize(
+                    ),
+                  );
+                },
+                child: GestureDetector(
+                  onTap: _isSideMenuOpen ? _closeSideMenu : null,
+                  child: AbsorbPointer(
+                    absorbing: _isSideMenuOpen,
+                    child: Scaffold(
+          extendBody: true,
+          appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: AnimatedBuilder(
           animation: _appBarAnimationController,
@@ -1286,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.cyanAccent,
                     ),
                   ),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  onPressed: _toggleSideMenu,
                 )
                   .animate()
                   .scale(delay: 200.ms, duration: 600.ms, curve: Curves.elasticOut)
@@ -1338,12 +512,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             try {
                               setState(() {});
                             } catch (e) {
-                              print("⚠️ setState error in notification listener: $e");
+                              print("âš ï¸ setState error in notification listener: $e");
                             }
                           }
                         });
                       } catch (e) {
-                        print("⚠️ Notification listener setup error: $e");
+                        print("âš ï¸ Notification listener setup error: $e");
                       }
                       
                       return Container(
@@ -1560,6 +734,60 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
             ],
+          ),
+        ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool?> _showLogoutDialog(BuildContext context) {
+    return showGeneralDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Logout',
+      barrierColor: Colors.black.withOpacity(0.7),
+      transitionDuration: const Duration(milliseconds: 400),
+      transitionBuilder: (ctx, anim1, anim2, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: anim1, curve: Curves.elasticOut, reverseCurve: Curves.easeInBack),
+          child: FadeTransition(opacity: anim1, child: child),
+        );
+      },
+      pageBuilder: (ctx, anim1, anim2) {
+        return Center(
+          child: Container(
+            width: MediaQuery.of(ctx).size.width * 0.85,
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A1A2E),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: Colors.redAccent.withOpacity(0.4), width: 1.5),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.power_settings_new_rounded, size: 42, color: Colors.redAccent),
+                  const SizedBox(height: 20),
+                  Text('Sign Out?', style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                  const SizedBox(height: 8),
+                  Text('You will need to login again', textAlign: TextAlign.center, style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey.shade400)),
+                  const SizedBox(height: 28),
+                  Row(children: [
+                    Expanded(child: GestureDetector(onTap: () => Navigator.pop(ctx, false), child: Container(padding: const EdgeInsets.symmetric(vertical: 14), decoration: BoxDecoration(color: Colors.white.withOpacity(0.08), borderRadius: BorderRadius.circular(16)), child: Text('Cancel', textAlign: TextAlign.center, style: GoogleFonts.poppins(color: Colors.grey.shade300, fontWeight: FontWeight.w600))))),
+                    const SizedBox(width: 14),
+                    Expanded(child: GestureDetector(onTap: () => Navigator.pop(ctx, true), child: Container(padding: const EdgeInsets.symmetric(vertical: 14), decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFFFF416C), Color(0xFFFF4B2B)]), borderRadius: BorderRadius.circular(16)), child: Text('Logout', textAlign: TextAlign.center, style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold))))),
+                  ]),
+                ],
+              ),
+            ),
           ),
         );
       },

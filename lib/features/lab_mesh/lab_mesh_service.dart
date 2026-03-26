@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 /// Wraps nearby_connections for P2P text/file sharing between students
 class LabMeshService {
   static final Nearby _nearby = Nearby();
-  static const String _serviceId = 'com.sentinel.labmesh';
+  static const String _serviceId = 'com.zerno.labmesh';
   static const Strategy _strategy = Strategy.P2P_STAR;
 
   // === Callbacks (set these from the UI) ===

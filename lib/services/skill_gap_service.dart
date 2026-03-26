@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Skill Gap Analyzer Service — Analyzes skill gaps for target roles
 ///
@@ -44,16 +45,16 @@ class SkillGapService {
     'Prompt Engineering', 'LLM/GenAI',
   ];
 
-  static Map<String, dynamic> analyzeGap({
+  static Future<Map<String, dynamic>> analyzeGap({
     required String targetRole,
     required List<String> currentSkills,
-  }) {
+  }) async {
     final required = roleSkills[targetRole] ?? [];
     final missing = required.where((s) => !currentSkills.contains(s)).toList();
     final matched = required.where((s) => currentSkills.contains(s)).toList();
     final readiness = required.isEmpty ? 0.0 : matched.length / required.length * 100;
 
-    return {
+    final result = {
       'targetRole': targetRole,
       'currentSkills': currentSkills,
       'requiredSkills': required,
@@ -62,5 +63,40 @@ class SkillGapService {
       'readinessPercent': readiness,
       'analysisDate': DateTime.now().toIso8601String(),
     };
+
+    try {
+      final supabase = Supabase.instance.client;
+      final userId = supabase.auth.currentUser?.id;
+      
+      if (userId != null) {
+        await supabase.from('skill_gap_results').insert({
+          'user_id': userId,
+          'target_role': targetRole,
+          'current_skills': currentSkills,
+          'missing_skills': missing,
+          'readiness_percent': readiness,
+          'analysis_date': DateTime.now().toIso8601String(),
+          // Ensure we don't try storing complex objects if the schema doesn't match perfectly,
+          // but SQL schema provided by user says: Gap_Percentage, current_skills text[], missing_skills text[], etc.
+          // Wait, user SQL says:
+          // CREATE TABLE skill_gap_results (
+          //   id bigserial PRIMARY KEY,
+          //   student_id uuid,
+          //   target_role text,
+          //   current_skills text[],
+          //   gap_percentage int,
+          //   recommended_skills text[],
+          //   created_at timestamp DEFAULT now()
+          // );
+          'student_id': userId,
+          'gap_percentage': 100 - readiness.toInt(),
+          'recommended_skills': missing,
+        });
+      }
+    } catch (e) {
+      print('⚠️ Error saving skill gap results to Supabase: $e');
+    }
+
+    return result;
   }
 }

@@ -58,7 +58,7 @@ class EnhancedDashboard extends StatelessWidget {
     AccessibilityProvider accessibilityProvider,
   ) {
     return AccessibilityWrapper(
-      semanticLabel: 'Welcome to Sentinel dashboard',
+      semanticLabel: 'Welcome to Zerno dashboard',
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -73,7 +73,7 @@ class EnhancedDashboard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Welcome to Sentinel',
+              'Welcome to Zerno',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,

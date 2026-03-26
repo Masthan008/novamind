@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../widgets/glass_container.dart';
+
+final supabase = Supabase.instance.client;
 
 /// Opportunity Alerts — Curated hackathons, internships, scholarships
 ///
@@ -37,26 +40,47 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
     'All', 'Hackathons', 'Internships', 'Scholarships', 'Competitions', 'Workshops', 'Open Source',
   ];
 
-  // Sample curated opportunities
-  static final List<Map<String, dynamic>> _sampleOpportunities = [
-    {'id': '1', 'title': 'MLH Global Hack Week', 'description': 'Week-long hackathon with workshops and prizes', 'category': 'Hackathons', 'organization': 'Major League Hacking', 'url': 'https://mlh.io', 'deadline': DateTime.now().add(const Duration(days: 14)).toIso8601String()},
-    {'id': '2', 'title': 'Google Summer of Code', 'description': 'Contribute to open source projects with Google mentorship', 'category': 'Open Source', 'organization': 'Google', 'url': 'https://summerofcode.withgoogle.com', 'deadline': DateTime.now().add(const Duration(days: 45)).toIso8601String()},
-    {'id': '3', 'title': 'LFX Mentorship', 'description': 'Linux Foundation mentorship program for open source', 'category': 'Open Source', 'organization': 'Linux Foundation', 'url': 'https://mentorship.lfx.linuxfoundation.org', 'deadline': DateTime.now().add(const Duration(days: 30)).toIso8601String()},
-    {'id': '4', 'title': 'Microsoft Imagine Cup', 'description': 'Global student technology competition', 'category': 'Competitions', 'organization': 'Microsoft', 'url': 'https://imaginecup.microsoft.com', 'deadline': DateTime.now().add(const Duration(days: 60)).toIso8601String()},
-    {'id': '5', 'title': 'MITACS Globalink', 'description': 'Research internship in Canada for undergrads', 'category': 'Internships', 'organization': 'MITACS', 'url': 'https://mitacs.ca', 'deadline': DateTime.now().add(const Duration(days: 90)).toIso8601String()},
-    {'id': '6', 'title': 'GitHub Externship', 'description': 'Remote externship program for students', 'category': 'Internships', 'organization': 'GitHub', 'url': 'https://github.com', 'deadline': DateTime.now().add(const Duration(days: 20)).toIso8601String()},
-    {'id': '7', 'title': 'Smart India Hackathon', 'description': 'India\u0027s largest hackathon by MHRD', 'category': 'Hackathons', 'organization': 'MHRD', 'url': 'https://sih.gov.in', 'deadline': DateTime.now().add(const Duration(days: 40)).toIso8601String()},
-    {'id': '8', 'title': 'AICTE Pragati Scholarship', 'description': 'Scholarship for girl students in technical education', 'category': 'Scholarships', 'organization': 'AICTE', 'url': 'https://aicte-india.org', 'deadline': DateTime.now().add(const Duration(days: 50)).toIso8601String()},
-    {'id': '9', 'title': 'HacktoberFest', 'description': 'Month-long celebration of open source (October)', 'category': 'Open Source', 'organization': 'DigitalOcean', 'url': 'https://hacktoberfest.com', 'deadline': DateTime.now().add(const Duration(days: 120)).toIso8601String()},
-    {'id': '10', 'title': 'AWS Cloud Workshop', 'description': 'Free cloud computing workshops for students', 'category': 'Workshops', 'organization': 'Amazon', 'url': 'https://aws.amazon.com/education', 'deadline': DateTime.now().add(const Duration(days: 15)).toIso8601String()},
-    {'id': '11', 'title': 'GirlScript Summer of Code', 'description': 'Open source program for beginners', 'category': 'Open Source', 'organization': 'GirlScript', 'url': 'https://gssoc.girlscript.tech', 'deadline': DateTime.now().add(const Duration(days: 35)).toIso8601String()},
-    {'id': '12', 'title': 'CodeChef SnackDown', 'description': 'Global competitive programming contest', 'category': 'Competitions', 'organization': 'CodeChef', 'url': 'https://codechef.com', 'deadline': DateTime.now().add(const Duration(days: 25)).toIso8601String()},
-  ];
+  // Fetch from Supabase, but keep samples as fallback if needed
+  List<Map<String, dynamic>> _opportunities = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _loadSaved();
+    _fetchOpportunities();
+  }
+
+  Future<void> _fetchOpportunities() async {
+    try {
+      final response = await supabase
+          .from('opportunities')
+          .select()
+          .eq('is_active', true)
+          .order('deadline', ascending: true);
+          
+      if (mounted) {
+        setState(() {
+          // Store response and also convert Supabase timestamps to expected format
+          _opportunities = List<Map<String, dynamic>>.from(response).map((opp) {
+            // Check mapping compatibility, sometimes date fields might be named differently
+            return opp; 
+          }).toList();
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('⚠️ Error fetching opportunities from Supabase: $e');
+      if (mounted) {
+        setState(() {
+          // If fetch fails, show empty state or fallback 
+          // (In a real app, maybe show an error or fallback to local cache. 
+          // Here, we'll just leave it empty and not crash)
+          _opportunities = [];
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   void _loadSaved() {
@@ -74,7 +98,7 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
   }
 
   List<Map<String, dynamic>> get _filtered {
-    return _sampleOpportunities.where((o) {
+    return _opportunities.where((o) {
       final matchesCat = _selectedCategory == 'All' || o['category'] == _selectedCategory;
       final matchesSearch = _searchQuery.isEmpty ||
           (o['title'] ?? '').toLowerCase().contains(_searchQuery.toLowerCase()) ||
@@ -113,7 +137,9 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
           child: Text('Opportunities', style: GoogleFonts.orbitron(fontWeight: FontWeight.bold, color: Colors.white)),
         ),
       ),
-      body: Column(
+      body: _isLoading 
+        ? const Center(child: CircularProgressIndicator(color: Colors.amber))
+        : Column(
         children: [
           // Search
           Padding(

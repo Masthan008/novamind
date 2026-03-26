@@ -12,7 +12,7 @@ class GlassContainer extends StatelessWidget {
 
   const GlassContainer({
     super.key,
-    required this.width,
+    this.width = double.infinity,
     this.height,
     required this.child,
     this.borderRadius = 20.0,

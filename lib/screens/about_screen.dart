@@ -443,7 +443,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           1400,
                         ),
                         _buildEnhancedFeature(
-                          'Sentinel AI',
+                          'Zerno AI',
                           'Multi-Provider AI Assistant for Pro & Ultra Users',
                           Icons.auto_awesome,
                           Colors.purple,
@@ -1051,7 +1051,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          '© 2024 Sentinel • Next-Generation Learning Platform',
+                          '© 2024 Zerno • Next-Generation Learning Platform',
                           style: GoogleFonts.poppins(
                             color: Colors.white.withOpacity(0.6),
                             fontSize: 11,

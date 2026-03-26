@@ -23,14 +23,19 @@ class _SkillGapScreenState extends State<SkillGapScreen> {
     setState(() { _selectedRole = role; _step = 1; });
   }
 
-  void _analyze() {
+  bool _isAnalyzing = false;
+
+  Future<void> _analyze() async {
     if (_selectedRole == null) return;
     HapticFeedback.mediumImpact();
-    final result = SkillGapService.analyzeGap(
+    setState(() { _isAnalyzing = true; });
+    final result = await SkillGapService.analyzeGap(
       targetRole: _selectedRole!,
       currentSkills: _selectedSkills.toList(),
     );
-    setState(() { _analysisResult = result; _step = 2; });
+    if (mounted) {
+      setState(() { _analysisResult = result; _step = 2; _isAnalyzing = false; });
+    }
   }
 
   void _reset() {
@@ -151,7 +156,9 @@ class _SkillGapScreenState extends State<SkillGapScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               ),
-              child: Text('Analyze Gap', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16)),
+              child: _isAnalyzing 
+                ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2))
+                : Text('Analyze Gap', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16)),
             ),
           ),
         ),

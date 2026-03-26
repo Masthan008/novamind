@@ -97,6 +97,9 @@ dependencies:
   # 3D Model Viewer
   model_viewer_plus: ^1.7.0       # For viewing 3D models with AR support
 
+  # Rive Animation (Teddy Bear Login)
+  rive: ^0.13.0
+
 
 dev_dependencies:
   flutter_test:
@@ -117,6 +120,7 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/rive/
     - assets/images/logos/
     - assets/data/cheatsheets_index.json
     - assets/data/cheatsheets/programming/

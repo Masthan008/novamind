@@ -222,7 +222,7 @@ class _PromptcraftLevelScreenState extends State<PromptcraftLevelScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Try in Sentinel AI',
+                            'Try in Zerno AI',
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontSize: 14,

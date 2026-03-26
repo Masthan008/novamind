@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:sentinel/modules/cybersecurity/models/scan_result.dart';
+import 'package:zerno/modules/cybersecurity/models/scan_result.dart';
 
 class ScanResultCard extends StatelessWidget {
   final ScanResult result;

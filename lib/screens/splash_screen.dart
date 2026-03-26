@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   late Animation<double> _textFadeAnimation;
   
   double _loadingProgress = 0.0;
-  String _loadingText = '🚀 Initializing Sentinel...';
+  String _loadingText = '🚀 Initializing Zerno...';
   String _subText = 'Preparing your learning experience';
   bool _isLoading = true;
   
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     '🌟 Optimizing performance...',
     '🎨 Preparing beautiful UI...',
     '✨ Almost ready...',
-    '🎉 Welcome to Sentinel!'
+    '🎉 Welcome to Zerno!'
   ];
   
   final List<String> _subMessages = [

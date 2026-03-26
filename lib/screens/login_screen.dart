@@ -1,8 +1,8 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rive/rive.dart' hide LinearGradient, RadialGradient, Image;
 import '../services/student_auth_service.dart';
 import 'home_screen.dart';
 
@@ -21,14 +21,19 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   final _nameController = TextEditingController();
   final _regdController = TextEditingController();
   
-  // Focus nodes for lamp effect
+  // Focus nodes
   final _nameFocus = FocusNode();
   final _regdFocus = FocusNode();
   
-  // Lamp animation
-  late AnimationController _lampController;
+  // General animation controller
   late AnimationController _animController;
-  late AnimationController _lampPulseController;
+  
+  // === Rive Teddy Bear Animation ===
+  Artboard? _teddyArtboard;
+  SMITrigger? _successTrigger, _failTrigger;
+  SMIBool? _isHandsUp, _isChecking;
+  SMINumber? _numLook;
+  StateMachineController? _stateMachineController;
   
   // Avatar Selection
   String? _selectedAvatar;
@@ -47,9 +52,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   String? _selectedGroup;
   String? _selectedSection;
   String? _selectedYear;
-  
-  bool _hasAnyFocus = false;
-  int _filledFieldCount = 0;
 
   @override
   void initState() {
@@ -61,25 +63,68 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     );
     _animController.forward();
     
-    // Lamp on/off controller
-    _lampController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
+    // Load Rive teddy bear animation
+    _loadTeddyAnimation();
     
-    // Lamp breathing pulse
-    _lampPulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-    
-    // Listen for focus changes
-    _nameFocus.addListener(_onFocusChange);
-    _regdFocus.addListener(_onFocusChange);
-    
-    // Listen for text changes to track filled fields
-    _nameController.addListener(_updateFilledCount);
-    _regdController.addListener(_updateFilledCount);
+    // Listen for focus changes to drive teddy animation
+    _nameFocus.addListener(_onNameFocusChange);
+    _regdFocus.addListener(_onRegdFocusChange);
+  }
+
+  Future<void> _loadTeddyAnimation() async {
+    final data = await rootBundle.load('assets/rive/login.riv');
+    final file = RiveFile.import(data);
+    final artboard = file.mainArtboard;
+    _stateMachineController =
+        StateMachineController.fromArtboard(artboard, 'Login Machine');
+
+    if (_stateMachineController != null) {
+      artboard.addController(_stateMachineController!);
+
+      for (final input in _stateMachineController!.inputs) {
+        if (input.name == 'trigSuccess') {
+          _successTrigger = input as SMITrigger;
+        } else if (input.name == 'trigFail') {
+          _failTrigger = input as SMITrigger;
+        } else if (input.name == 'isHandsUp') {
+          _isHandsUp = input as SMIBool;
+        } else if (input.name == 'isChecking') {
+          _isChecking = input as SMIBool;
+        } else if (input.name == 'numLook') {
+          _numLook = input as SMINumber;
+        }
+      }
+    }
+    setState(() => _teddyArtboard = artboard);
+  }
+
+  void _onNameFocusChange() {
+    if (_nameFocus.hasFocus) {
+      _lookOnTheField();
+    }
+  }
+
+  void _onRegdFocusChange() {
+    if (_regdFocus.hasFocus) {
+      _handsOnTheEyes();
+    }
+  }
+
+  /// Teddy covers eyes (for regd number / password-like field)
+  void _handsOnTheEyes() {
+    _isHandsUp?.change(true);
+  }
+
+  /// Teddy looks at the text field
+  void _lookOnTheField() {
+    _isHandsUp?.change(false);
+    _isChecking?.change(true);
+    _numLook?.change(0);
+  }
+
+  /// Teddy eye-tracks based on text length
+  void _moveEyeBalls(String val) {
+    _numLook?.change(val.length.toDouble());
   }
 
   @override
@@ -89,44 +134,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     _nameFocus.dispose();
     _regdFocus.dispose();
     _animController.dispose();
-    _lampController.dispose();
-    _lampPulseController.dispose();
+    _stateMachineController?.dispose();
     super.dispose();
-  }
-
-  void _onFocusChange() {
-    final hasFocus = _nameFocus.hasFocus || _regdFocus.hasFocus;
-    if (hasFocus != _hasAnyFocus) {
-      setState(() => _hasAnyFocus = hasFocus);
-      if (hasFocus) {
-        _lampController.forward();
-        _lampPulseController.repeat(reverse: true);
-      } else {
-        // Keep lamp on if fields have content
-        if (_filledFieldCount == 0) {
-          _lampController.reverse();
-          _lampPulseController.stop();
-        }
-      }
-    }
-  }
-
-  void _updateFilledCount() {
-    int count = 0;
-    if (_nameController.text.trim().isNotEmpty) count++;
-    if (_regdController.text.trim().isNotEmpty) count++;
-    if (_selectedGroup != null) count++;
-    if (_selectedSection != null) count++;
-    if (_selectedYear != null) count++;
-    
-    if (count != _filledFieldCount) {
-      setState(() => _filledFieldCount = count);
-      // Turn on lamp if any field is filled
-      if (count > 0 && !_lampController.isAnimating && _lampController.value == 0) {
-        _lampController.forward();
-        _lampPulseController.repeat(reverse: true);
-      }
-    }
   }
 
   void _toggleMode() {
@@ -143,8 +152,13 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     
     if (name.isEmpty || regdNo.isEmpty) {
       _showError('Please fill all required fields');
+      _failTrigger?.fire();
       return;
     }
+    
+    // Stop checking animation before submit
+    _isChecking?.change(false);
+    _isHandsUp?.change(false);
     
     setState(() => _isLoading = true);
     
@@ -153,18 +167,25 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       final result = await StudentAuthService.login(name, regdNo);
       
       if (result.student != null && mounted) {
+        _successTrigger?.fire();
         HapticFeedback.mediumImpact();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
+        // Small delay so user can see the success animation
+        await Future.delayed(const Duration(milliseconds: 1200));
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomeScreen()),
+          );
+        }
       } else if (mounted) {
+        _failTrigger?.fire();
         _showError(result.error ?? 'Login failed');
       }
     } else {
       // Register
       if (_selectedGroup == null || _selectedSection == null || _selectedYear == null) {
         _showError('Please fill all required fields');
+        _failTrigger?.fire();
         setState(() => _isLoading = false);
         return;
       }
@@ -179,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       );
       
       if (result.success && mounted) {
+        _successTrigger?.fire();
         HapticFeedback.mediumImpact();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -186,8 +208,10 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
             backgroundColor: Colors.green,
           ),
         );
+        await Future.delayed(const Duration(milliseconds: 1000));
         _toggleMode(); // Switch to login
       } else if (mounted) {
+        _failTrigger?.fire();
         _showError(result.error ?? 'Registration failed');
       }
     }
@@ -202,12 +226,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         backgroundColor: Colors.red,
       ),
     );
-  }
-
-  // Calculate lamp intensity (0.0 to 1.0) based on filled fields
-  double get _lampIntensity {
-    final maxFields = _isLogin ? 2 : 5;
-    return (_filledFieldCount / maxFields).clamp(0.0, 1.0);
   }
 
   @override
@@ -273,208 +291,45 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 10),
                   
-                  // Logo - Using Launcher Icon
+                  // === TEDDY BEAR RIVE ANIMATION (no background container) ===
+                  SizedBox(
+                    width: double.infinity,
+                    height: 250,
+                    child: _teddyArtboard != null
+                        ? Rive(
+                            artboard: _teddyArtboard!,
+                            fit: BoxFit.contain,
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.cyanAccent,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                  ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
+                  
+                  const SizedBox(height: 8),
+                  
+                  // === FORM CARD ===
                   Container(
-                    width: 120,
-                    height: 120,
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                      color: const Color(0xFF1A1A2E).withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: Colors.purple.withOpacity(0.3),
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFF6B6B).withOpacity(0.4),
-                          blurRadius: 30,
-                          spreadRadius: 5,
+                          color: Colors.purple.withOpacity(0.15),
+                          blurRadius: 40,
+                          spreadRadius: 4,
+                          offset: const Offset(0, -5),
                         ),
                       ],
                     ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/images/launcher_icon.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // Title
-                  ShaderMask(
-                    shaderCallback: (bounds) {
-                      if (bounds.isEmpty) {
-                        return const LinearGradient(
-                          colors: [Color(0xFFFF6B6B), Color(0xFFFF6B6B)],
-                        ).createShader(Rect.fromLTWH(0, 0, 1, 1));
-                      }
-                      return const LinearGradient(
-                        colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
-                      ).createShader(bounds);
-                    },
-                    child: Text(
-                      'Sentinel',
-                      style: GoogleFonts.poppins(
-                        fontSize: 38,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ).animate().fadeIn(delay: 200.ms).slideY(begin: -0.3),
-                  
-                  Text(
-                    'Your Skill to Career Platform',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: Colors.grey.shade500,
-                      letterSpacing: 2,
-                    ),
-                  ).animate().fadeIn(delay: 300.ms),
-                  
-                  const SizedBox(height: 30),
-                  
-                  // === LAMP + FORM CONTAINER ===
-                  AnimatedBuilder(
-                    animation: Listenable.merge([_lampController, _lampPulseController]),
-                    builder: (context, child) {
-                      final lampVal = _lampController.value;
-                      final pulseVal = _lampPulseController.value;
-                      final intensity = _lampIntensity;
-                      // warm amber color
-                      final lampColor = Color.lerp(
-                        Colors.grey.shade600,
-                        const Color(0xFFFFB74D), // warm amber
-                        lampVal,
-                      )!;
-                      
-                      return Column(
-                        children: [
-                          // === Desk Lamp Widget ===
-                          SizedBox(
-                            height: 60,
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                // Lamp base/pole
-                                Positioned(
-                                  bottom: 0,
-                                  child: Container(
-                                    width: 4,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade700,
-                                      borderRadius: BorderRadius.circular(2),
-                                    ),
-                                  ),
-                                ),
-                                // Lamp shade (trapezoid-ish)
-                                Positioned(
-                                  top: 0,
-                                  child: Container(
-                                    width: 60,
-                                    height: 35,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.grey.shade800,
-                                          Colors.grey.shade700,
-                                        ],
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4),
-                                        topRight: Radius.circular(4),
-                                        bottomLeft: Radius.circular(20),
-                                        bottomRight: Radius.circular(20),
-                                      ),
-                                      border: Border.all(
-                                        color: lampColor.withOpacity(0.5),
-                                        width: 1,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: lampColor.withOpacity(0.6 * lampVal),
-                                          blurRadius: 15 * lampVal,
-                                          spreadRadius: 2 * lampVal,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: Container(
-                                        width: 12,
-                                        height: 12,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: lampColor,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: lampColor.withOpacity(0.8 * lampVal),
-                                              blurRadius: 10 * lampVal,
-                                              spreadRadius: 3 * lampVal,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          
-                          // === Light Cone (using CustomPaint) ===
-                          SizedBox(
-                            width: double.infinity,
-                            height: 30,
-                            child: CustomPaint(
-                              painter: _LightConePainter(
-                                intensity: lampVal,
-                                pulseValue: pulseVal,
-                                color: lampColor,
-                                fillProgress: intensity,
-                              ),
-                            ),
-                          ),
-                          
-                          // === Form Card with lamp illumination ===
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 400),
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Color.lerp(
-                                const Color(0xFF1A1A2E).withOpacity(0.8),
-                                const Color(0xFF2A1A1E).withOpacity(0.9),
-                                lampVal * 0.3,
-                              ),
-                              borderRadius: BorderRadius.circular(24),
-                              border: Border.all(
-                                color: Color.lerp(
-                                  Colors.purple.withOpacity(0.3),
-                                  lampColor.withOpacity(0.5),
-                                  lampVal,
-                                )!,
-                              ),
-                              boxShadow: [
-                                // Lamp illumination shadow from top
-                                BoxShadow(
-                                  color: lampColor.withOpacity(0.15 * lampVal + 0.1 * pulseVal * lampVal),
-                                  blurRadius: 40 * lampVal,
-                                  spreadRadius: 4 * lampVal,
-                                  offset: const Offset(0, -5),
-                                ),
-                                // Subtle ambient glow based on fill progress
-                                BoxShadow(
-                                  color: lampColor.withOpacity(0.1 * intensity),
-                                  blurRadius: 60 * intensity,
-                                  spreadRadius: 8 * intensity,
-                                ),
-                              ],
-                            ),
-                            child: child!,
-                          ),
-                        ],
-                      );
-                    },
                     child: _buildFormContent(),
                   ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.15),
                   
@@ -504,6 +359,54 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   Widget _buildFormContent() {
     return Column(
       children: [
+        // Small inline branding
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/launcher_icon.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            ShaderMask(
+              shaderCallback: (bounds) {
+                if (bounds.isEmpty) {
+                  return const LinearGradient(
+                    colors: [Color(0xFFFF6B6B), Color(0xFFFF6B6B)],
+                  ).createShader(Rect.fromLTWH(0, 0, 1, 1));
+                }
+                return const LinearGradient(
+                  colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
+                ).createShader(bounds);
+              },
+              child: Text(
+                'Zerno',
+                style: GoogleFonts.poppins(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        
         // Toggle buttons
         Container(
           padding: const EdgeInsets.all(4),
@@ -566,17 +469,18 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         
         const SizedBox(height: 28),
         
-        // Name field
+        // Name field — teddy watches as you type
         _buildTextField(
           controller: _nameController,
           label: 'Full Name',
           icon: Icons.person_outline,
           focusNode: _nameFocus,
+          onChanged: _moveEyeBalls,
         ),
         
         const SizedBox(height: 16),
         
-        // Regd No field
+        // Regd No field — teddy covers eyes
         _buildTextField(
           controller: _regdController,
           label: 'Registration Number',
@@ -649,7 +553,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
             icon: Icons.school_outlined,
             onChanged: (val) {
               setState(() => _selectedGroup = val);
-              _updateFilledCount();
             },
           ),
           
@@ -666,7 +569,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                   icon: Icons.class_outlined,
                   onChanged: (val) {
                     setState(() => _selectedSection = val);
-                    _updateFilledCount();
                   },
                 ),
               ),
@@ -680,7 +582,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                   icon: Icons.calendar_today_outlined,
                   onChanged: (val) {
                     setState(() => _selectedYear = val);
-                    _updateFilledCount();
                   },
                 ),
               ),
@@ -693,37 +594,31 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         // Submit button
         SizedBox(
           width: double.infinity,
-          child: AnimatedBuilder(
-            animation: _lampController,
-            builder: (context, child) {
-              final lampOn = _lampController.value > 0.5;
-              return ElevatedButton(
-                onPressed: _isLoading ? null : _handleSubmit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isLogin ? Colors.cyanAccent : Colors.purple,
-                  foregroundColor: _isLogin ? Colors.black : Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+          child: ElevatedButton(
+            onPressed: _isLoading ? null : _handleSubmit,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _isLogin ? Colors.cyanAccent : Colors.purple,
+              foregroundColor: _isLogin ? Colors.black : Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              elevation: 8,
+              shadowColor: (_isLogin ? Colors.cyanAccent : Colors.purple).withOpacity(0.5),
+            ),
+            child: _isLoading
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  )
+                : Text(
+                    _isLogin ? 'Login' : 'Create Account',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                  elevation: lampOn ? 12 : 8,
-                  shadowColor: (_isLogin ? Colors.cyanAccent : Colors.purple).withOpacity(lampOn ? 0.7 : 0.5),
-                ),
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                      )
-                    : Text(
-                        _isLogin ? 'Login' : 'Create Account',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-              );
-            },
           ),
         ),
       ],
@@ -735,64 +630,34 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     required String label,
     required IconData icon,
     required FocusNode focusNode,
+    ValueChanged<String>? onChanged,
   }) {
-    return AnimatedBuilder(
-      animation: _lampController,
-      builder: (context, _) {
-        final lampVal = _lampController.value;
-        final isFocused = focusNode.hasFocus;
-        final hasFill = controller.text.trim().isNotEmpty;
-        
-        // When lamp is on and field is focused/filled, use warm amber glow
-        final glowColor = (isFocused || hasFill) && lampVal > 0
-            ? Color.lerp(Colors.cyanAccent, const Color(0xFFFFB74D), lampVal)!
-            : Colors.cyanAccent;
-        
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: isFocused && lampVal > 0
-                ? [
-                    BoxShadow(
-                      color: glowColor.withOpacity(0.3 * lampVal),
-                      blurRadius: 12 * lampVal,
-                      spreadRadius: 1,
-                    ),
-                  ]
-                : null,
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
+      onChanged: onChanged,
+      style: GoogleFonts.poppins(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: GoogleFonts.poppins(color: Colors.grey.shade500),
+        prefixIcon: Icon(icon, color: Colors.cyanAccent),
+        filled: true,
+        fillColor: Colors.black.withOpacity(0.4),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.cyanAccent, width: 1.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: Colors.cyanAccent.withOpacity(0.3),
           ),
-          child: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            style: GoogleFonts.poppins(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: label,
-              labelStyle: GoogleFonts.poppins(color: Colors.grey.shade500),
-              prefixIcon: Icon(icon, color: glowColor),
-              filled: true,
-              fillColor: isFocused && lampVal > 0
-                  ? Colors.black.withOpacity(0.3)
-                  : Colors.black.withOpacity(0.4),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: glowColor, width: 1.5),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                  color: hasFill && lampVal > 0
-                      ? glowColor.withOpacity(0.5)
-                      : Colors.cyanAccent.withOpacity(0.3),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -803,127 +668,32 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     required IconData icon,
     required Function(String?) onChanged,
   }) {
-    return AnimatedBuilder(
-      animation: _lampController,
-      builder: (context, _) {
-        final lampVal = _lampController.value;
-        final hasFill = value != null;
-        
-        final glowColor = hasFill && lampVal > 0
-            ? Color.lerp(Colors.purple, const Color(0xFFFFB74D), lampVal * 0.6)!
-            : Colors.purple;
-        
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: hasFill && lampVal > 0
-                ? [
-                    BoxShadow(
-                      color: glowColor.withOpacity(0.2 * lampVal),
-                      blurRadius: 8 * lampVal,
-                    ),
-                  ]
-                : null,
+    return DropdownButtonFormField<String>(
+      value: value,
+      items: items.map((item) => DropdownMenuItem(
+        value: item,
+        child: Text(item),
+      )).toList(),
+      onChanged: onChanged,
+      style: GoogleFonts.poppins(color: Colors.white),
+      dropdownColor: const Color(0xFF1A1A2E),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: GoogleFonts.poppins(color: Colors.grey.shade500),
+        prefixIcon: Icon(icon, color: Colors.purple),
+        filled: true,
+        fillColor: Colors.black.withOpacity(0.4),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: Colors.purple.withOpacity(0.3),
           ),
-          child: DropdownButtonFormField<String>(
-            value: value,
-            items: items.map((item) => DropdownMenuItem(
-              value: item,
-              child: Text(item),
-            )).toList(),
-            onChanged: onChanged,
-            style: GoogleFonts.poppins(color: Colors.white),
-            dropdownColor: const Color(0xFF1A1A2E),
-            decoration: InputDecoration(
-              labelText: label,
-              labelStyle: GoogleFonts.poppins(color: Colors.grey.shade500),
-              prefixIcon: Icon(icon, color: glowColor),
-              filled: true,
-              fillColor: Colors.black.withOpacity(0.4),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                  color: hasFill && lampVal > 0
-                      ? glowColor.withOpacity(0.5)
-                      : Colors.purple.withOpacity(0.3),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+        ),
+      ),
     );
-  }
-}
-
-/// Custom painter that draws a light cone from the lamp onto the form
-class _LightConePainter extends CustomPainter {
-  final double intensity; // 0.0 = off, 1.0 = fully on
-  final double pulseValue;
-  final Color color;
-  final double fillProgress;
-
-  _LightConePainter({
-    required this.intensity,
-    required this.pulseValue,
-    required this.color,
-    required this.fillProgress,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (intensity < 0.01) return;
-    
-    final centerX = size.width / 2;
-    
-    // Light cone: narrow at top (lamp), wide at bottom (form)
-    final topWidth = 30.0;
-    final bottomWidth = size.width * (0.5 + 0.3 * fillProgress);
-    final alpha = (0.15 + 0.1 * pulseValue) * intensity;
-    
-    final path = Path()
-      ..moveTo(centerX - topWidth / 2, 0)
-      ..lineTo(centerX - bottomWidth / 2, size.height)
-      ..lineTo(centerX + bottomWidth / 2, size.height)
-      ..lineTo(centerX + topWidth / 2, 0)
-      ..close();
-    
-    // Gradient fill for the light cone
-    final paint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          color.withOpacity(alpha * 1.5),
-          color.withOpacity(alpha * 0.8),
-          color.withOpacity(alpha * 0.2),
-        ],
-        stops: const [0.0, 0.4, 1.0],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-    
-    canvas.drawPath(path, paint);
-    
-    // Add a soft glow at the top center (bulb glow)
-    final glowPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          color.withOpacity(0.4 * intensity),
-          Colors.transparent,
-        ],
-      ).createShader(
-        Rect.fromCircle(center: Offset(centerX, 0), radius: 25),
-      );
-    canvas.drawCircle(Offset(centerX, 0), 25, glowPaint);
-  }
-
-  @override
-  bool shouldRepaint(_LightConePainter oldDelegate) {
-    return oldDelegate.intensity != intensity ||
-           oldDelegate.pulseValue != pulseValue ||
-           oldDelegate.fillProgress != fillProgress;
   }
 }

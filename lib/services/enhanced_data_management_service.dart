@@ -262,7 +262,7 @@ class EnhancedDataManagementService {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final fileName = 'sentinel_backup_$timestamp.json';
+      final fileName = 'zerno_backup_$timestamp.json';
       final file = File('${directory.path}/$fileName');
       
       String jsonString = const JsonEncoder.withIndent('  ').convert(backup);
@@ -519,7 +519,7 @@ class EnhancedDataManagementService {
   }
 
   static Future<String> _exportToJson(Map<String, dynamic> backup, Directory directory, int timestamp) async {
-    final fileName = 'sentinel_export_$timestamp.json';
+    final fileName = 'zerno_export_$timestamp.json';
     final file = File('${directory.path}/$fileName');
     final jsonString = const JsonEncoder.withIndent('  ').convert(backup);
     await file.writeAsString(jsonString);
@@ -527,7 +527,7 @@ class EnhancedDataManagementService {
   }
 
   static Future<String> _exportToCsv(Map<String, dynamic> backup, Directory directory, int timestamp, String? specificData) async {
-    final fileName = 'sentinel_export_$timestamp.csv';
+    final fileName = 'zerno_export_$timestamp.csv';
     final file = File('${directory.path}/$fileName');
     
     final buffer = StringBuffer();
@@ -556,12 +556,12 @@ class EnhancedDataManagementService {
   }
 
   static Future<String> _exportToText(Map<String, dynamic> backup, Directory directory, int timestamp) async {
-    final fileName = 'sentinel_report_$timestamp.txt';
+    final fileName = 'zerno_report_$timestamp.txt';
     final file = File('${directory.path}/$fileName');
     
     final buffer = StringBuffer();
     buffer.writeln('╔══════════════════════════════════════════════════════════╗');
-    buffer.writeln('║                 SENTINEL DATA EXPORT                     ║');
+    buffer.writeln('║                 ZERNO DATA EXPORT                     ║');
     buffer.writeln('╚══════════════════════════════════════════════════════════╝');
     buffer.writeln('Generated: ${DateTime.now().toString().split('.')[0]}');
     buffer.writeln('Export Version: ${backup['version']}');

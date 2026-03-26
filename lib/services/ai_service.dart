@@ -115,7 +115,7 @@ Every response must be:
 - Respond in the language the user writes in (English, Hindi, Telugu, Tamil, etc.)
 - For technical terms, provide both English and local language explanations when helpful
 
-Remember: You are SENTINEL AI — a premium, elite-level AI. Every single response should make the user think "This is the best AI I have ever used." Deliver brilliance consistently.
+Remember: You are ZERNO AI — a premium, elite-level AI. Every single response should make the user think "This is the best AI I have ever used." Deliver brilliance consistently.
 ''';
 
   /// Main AI Response Method — sends full conversation history for context
@@ -192,7 +192,7 @@ Remember: You are SENTINEL AI — a premium, elite-level AI. Every single respon
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $_openRouterKey',
-              'HTTP-Referer': 'https://sentinel.app',
+              'HTTP-Referer': 'https://zerno.app',
               'X-Title': 'Zerno Student OS',
             },
             body: jsonEncode({
