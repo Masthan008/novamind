@@ -49,6 +49,23 @@ class EnvConfig {
   static String get whoisApiKey => get('WHOIS_API_KEY');
   static String get adzunaAppId => get('ADZUNA_APP_ID');
   static String get adzunaAppKey => get('ADZUNA_APP_KEY');
+  static String get newsApiKey => get('NEWS_API_KEY');
+
+  // Phase 2 — Razorpay
+  static String get razorpayKeyId => get('RAZORPAY_KEY_ID');
+  static String get razorpayKeySecret => get('RAZORPAY_KEY_SECRET');
+
+  // Phase 2 — ImageKit
+  static String get imagekitId => get('IMAGEKIT_ID');
+  static String get imagekitPrivateKey => get('IMAGEKIT_PRIVATE_KEY');
+
+  // Phase 2 — Cloudinary
+  static String get cloudinaryCloudName => get('CLOUDINARY_CLOUD_NAME');
+  static String get cloudinaryUploadPreset => get('CLOUDINARY_UPLOAD_PRESET');
+  static String get cloudinaryApiKey => get('CLOUDINARY_API_KEY');
+
+  // Phase 2 — OpenAI (for RAG embeddings)
+  static String get openaiApiKey => get('OPENAI_API_KEY');
 
   // Validation methods
   static bool get hasGroqKey => has('GROQ_API_KEY') && groqApiKey != 'your_groq_api_key_here';
@@ -56,4 +73,8 @@ class EnvConfig {
   static bool get hasBytezKey => has('BYTEZ_API_KEY') && bytezApiKey != 'your_bytez_api_key_here';
   static bool get hasWhoisKey => has('WHOIS_API_KEY') && whoisApiKey != 'your_whois_api_key_here';
   static bool get hasAdzunaKeys => has('ADZUNA_APP_ID') && has('ADZUNA_APP_KEY');
+  static bool get hasRazorpayKeys => has('RAZORPAY_KEY_ID') && razorpayKeyId != 'YOUR_RAZORPAY_KEY_ID';
+  static bool get hasImagekitKeys => has('IMAGEKIT_ID') && imagekitId != 'YOUR_IMAGEKIT_ID';
+  static bool get hasCloudinaryKeys => has('CLOUDINARY_CLOUD_NAME') && cloudinaryCloudName != 'YOUR_CLOUD_NAME';
+  static bool get hasOpenaiKey => has('OPENAI_API_KEY') && openaiApiKey != 'YOUR_OPENAI_API_KEY';
 }

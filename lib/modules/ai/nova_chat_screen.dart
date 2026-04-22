@@ -5,7 +5,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import '../../services/ai_service.dart';
+import '../../services/rag_service.dart';
 import '../../services/student_auth_service.dart';
+import '../../services/subscription_service.dart';
 
 class NovaChatScreen extends StatefulWidget {
   const NovaChatScreen({super.key});
@@ -19,6 +21,8 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isThinking = false;
+  bool _useZernoBrain = false; // RAG toggle
+  List<String> _lastSources = []; // Sources from last RAG response
   
   // Get tier dynamically from StudentAuthService
   String get _userTier => StudentAuthService.currentStudent?.subscriptionTier ?? 'free';
@@ -74,6 +78,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
         timestamp: DateTime.now(),
       ));
       _isThinking = true;
+      _lastSources = [];
     });
 
     _controller.clear();
@@ -82,19 +87,32 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
     // Build conversation history including the new user message
     final history = _buildConversationHistory();
 
-    // Get AI response with full conversation context
     try {
-      final response = await AIService.getResponse(
-        text,
-        userTier: _userTier,
-        conversationHistory: history,
-      );
+      String response;
+      
+      if (_useZernoBrain && SubscriptionService.isPro) {
+        // RAG-enhanced response
+        final result = await RAGService.askWithContext(
+          text,
+          conversationHistory: history,
+        );
+        response = result.answer;
+        _lastSources = result.sources;
+      } else {
+        // Standard AI response
+        response = await AIService.getResponse(
+          text,
+          userTier: _userTier,
+          conversationHistory: history,
+        );
+      }
 
       setState(() {
         _messages.add(ChatMessage(
           text: response,
           isUser: false,
           timestamp: DateTime.now(),
+          sources: List.from(_lastSources),
         ));
         _isThinking = false;
       });
@@ -248,6 +266,49 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
         ],
       ),
       actions: [
+        // Zerno Brain toggle (Pro only)
+        if (SubscriptionService.isPro)
+          Tooltip(
+            message: _useZernoBrain ? 'Brain ON' : 'Brain OFF',
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.lightImpact();
+                setState(() => _useZernoBrain = !_useZernoBrain);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                margin: const EdgeInsets.only(right: 4),
+                decoration: BoxDecoration(
+                  color: _useZernoBrain
+                      ? const Color(0xFF6C63FF).withOpacity(0.3)
+                      : Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: _useZernoBrain ? const Color(0xFF6C63FF) : Colors.white24,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.psychology,
+                      size: 16,
+                      color: _useZernoBrain ? const Color(0xFF9C88FF) : Colors.white38,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Brain',
+                      style: GoogleFonts.poppins(
+                        fontSize: 11,
+                        color: _useZernoBrain ? const Color(0xFF9C88FF) : Colors.white38,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         IconButton(
           icon: const Icon(Icons.delete_outline, color: Colors.white54),
           onPressed: _clearChat,
@@ -452,7 +513,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
               ],
             ],
           ),
-          // Time + Copy button row
+          // Time + Copy + Feedback row
           Padding(
             padding: EdgeInsets.only(
               top: 4,
@@ -479,10 +540,77 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
                       color: Colors.white.withOpacity(0.3),
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  // Thumbs up
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      // Find the preceding user message
+                      final idx = _messages.indexOf(message);
+                      final question = idx > 0 ? _messages[idx - 1].text : '';
+                      RAGService.saveFeedback(
+                        question: question,
+                        answer: message.text,
+                        rating: 1,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('👍 Thanks for the feedback!', style: GoogleFonts.poppins(fontSize: 12)),
+                          backgroundColor: const Color(0xFF2A2A3E),
+                          behavior: SnackBarBehavior.floating,
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.thumb_up_alt_outlined, size: 14, color: Colors.white.withOpacity(0.3)),
+                  ),
+                  const SizedBox(width: 6),
+                  // Thumbs down
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      final idx = _messages.indexOf(message);
+                      final question = idx > 0 ? _messages[idx - 1].text : '';
+                      RAGService.saveFeedback(
+                        question: question,
+                        answer: message.text,
+                        rating: -1,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('👎 Noted, we\'ll improve!', style: GoogleFonts.poppins(fontSize: 12)),
+                          backgroundColor: const Color(0xFF2A2A3E),
+                          behavior: SnackBarBehavior.floating,
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.thumb_down_alt_outlined, size: 14, color: Colors.white.withOpacity(0.3)),
+                  ),
                 ],
               ],
             ),
           ),
+          // Source chips (if RAG was used)
+          if (!message.isUser && message.sources.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(top: 6, left: message.isUser ? 0 : 46),
+              child: Wrap(
+                spacing: 6,
+                children: [
+                  Icon(Icons.psychology, size: 12, color: const Color(0xFF9C88FF).withOpacity(0.6)),
+                  ...message.sources.map((s) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF6C63FF).withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFF6C63FF).withOpacity(0.3)),
+                    ),
+                    child: Text(s, style: GoogleFonts.poppins(fontSize: 9, color: const Color(0xFF9C88FF))),
+                  )),
+                ],
+              ),
+            ),
         ],
       ),
     ).animate().fadeIn(duration: 300.ms).slideX(
@@ -513,7 +641,7 @@ class _NovaChatScreenState extends State<NovaChatScreen> {
           ),
           const SizedBox(width: 12),
           Text(
-            'Zerno AI is thinking...',
+            _useZernoBrain ? 'Searching Zerno Brain...' : 'Zerno AI is thinking...',
             style: GoogleFonts.poppins(
               color: const Color(0xFF9C88FF),
               fontSize: 13,
@@ -608,10 +736,12 @@ class ChatMessage {
   final String text;
   final bool isUser;
   final DateTime timestamp;
+  final List<String> sources;
 
   ChatMessage({
     required this.text,
     required this.isUser,
     required this.timestamp,
+    this.sources = const [],
   });
 }

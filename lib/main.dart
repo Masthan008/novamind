@@ -44,6 +44,7 @@ import 'services/enhanced_data_management_service.dart';
 import 'services/class_notification_service.dart';
 import 'services/timetable_preference_service.dart';
 import 'services/fcm_service.dart'; // Firebase Cloud Messaging
+import 'services/sync_service.dart'; // Phase 3 Sync Engine
 
 // ---------------------------------------------------------
 // 🔐 SECURITY NOTE: In production, use environment variables
@@ -258,6 +259,16 @@ void main() async {
     
     print("✅ Hive Initialized Successfully");
 
+    // --- Phase 3 Sync Hive Boxes ---
+    if (!Hive.isBoxOpen('sync_queue')) {
+      await Hive.openBox<Map>('sync_queue');
+      print("✅ Sync queue box opened");
+    }
+    if (!Hive.isBoxOpen('sync_meta')) {
+      await Hive.openBox('sync_meta');
+      print("✅ Sync meta box opened");
+    }
+
     // --- Supabase Init ---
     // Safety check for Placeholder URL (Fixes "Invalid Argument" crash)
     if (mySupabaseUrl.contains('YOUR_SUPABASE_URL')) {
@@ -286,6 +297,10 @@ void main() async {
     // --- Enhanced Data Management Service Init ---
     await EnhancedDataManagementService.initializeHiveBoxes();
     print("✅ Enhanced Data Management Service Initialized");
+
+    // --- Phase 3: Cross-Device Sync Engine ---
+    await SyncService.init();
+    print("✅ SyncService Initialized");
 
     // --- Timetable Preference Service Init ---
     await TimetablePreferenceService.init();

@@ -33,11 +33,44 @@ extension SubscriptionTierExtension on SubscriptionTier {
   String get price {
     switch (this) {
       case SubscriptionTier.ultra:
-        return '₹99';
+        return '₹499/mo';
       case SubscriptionTier.pro:
-        return '₹49';
+        return '₹199/mo';
       case SubscriptionTier.free:
         return 'Free';
+    }
+  }
+
+  String get yearlyPrice {
+    switch (this) {
+      case SubscriptionTier.ultra:
+        return '₹2999/yr';
+      case SubscriptionTier.pro:
+        return '₹999/yr';
+      case SubscriptionTier.free:
+        return 'Free';
+    }
+  }
+
+  int get monthlyAmount {
+    switch (this) {
+      case SubscriptionTier.ultra:
+        return 499;
+      case SubscriptionTier.pro:
+        return 199;
+      case SubscriptionTier.free:
+        return 0;
+    }
+  }
+
+  int get yearlyAmount {
+    switch (this) {
+      case SubscriptionTier.ultra:
+        return 2999;
+      case SubscriptionTier.pro:
+        return 999;
+      case SubscriptionTier.free:
+        return 0;
     }
   }
 
@@ -97,6 +130,9 @@ class SubscriptionService {
     return stringToTier(student.subscriptionTier);
   }
 
+  /// Quick check: is user Pro or above?
+  static bool get isPro => currentTier.level >= SubscriptionTier.pro.level;
+
   /// Submit payment request (UTR verification)
   static Future<({bool success, String? error})> submitPaymentRequest({
     required String utrNumber,
@@ -129,7 +165,7 @@ class SubscriptionService {
         'student_id': student.id,
         'utr_number': utrNumber.trim(),
         'requested_plan': plan == SubscriptionTier.ultra ? 'ultra' : 'pro',
-        'amount': plan == SubscriptionTier.ultra ? '99' : '49',
+        'amount': plan == SubscriptionTier.ultra ? '499' : '199',
         'status': 'pending',
       });
       

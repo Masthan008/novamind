@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../services/subscription_service.dart';
+import '../services/razorpay_service.dart';
 import '../services/student_auth_service.dart';
 import '../widgets/payment_dialog.dart';
 import '../widgets/user_badge.dart';
@@ -19,6 +21,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
     with SingleTickerProviderStateMixin {
   bool _hasPendingRequest = false;
   late AnimationController _glowController;
+  Razorpay? _razorpay;
+  SubscriptionTier? _pendingPlan;
   
   @override
   void initState() {
@@ -28,12 +32,157 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat(reverse: true);
+
+    // Initialize Razorpay
+    if (RazorpayService.isConfigured) {
+      _razorpay = Razorpay();
+      _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+      _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+      _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    }
   }
   
   @override
   void dispose() {
     _glowController.dispose();
+    _razorpay?.clear();
     super.dispose();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    final plan = _pendingPlan;
+    if (plan == null) return;
+
+    final ok = await RazorpayService.recordPayment(
+      paymentId: response.paymentId ?? '',
+      orderId: response.orderId ?? '',
+      signature: response.signature ?? '',
+      plan: plan,
+    );
+
+    if (mounted) {
+      setState(() => _pendingPlan = null);
+      if (ok) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('🎉 Upgraded to ${plan.displayName}!', style: GoogleFonts.poppins(fontSize: 13)),
+          backgroundColor: Colors.green.shade700,
+        ));
+        setState(() {}); // Refresh UI
+      }
+    }
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    final plan = _pendingPlan;
+    if (plan != null) {
+      RazorpayService.recordFailedPayment(
+        errorCode: '${response.code}',
+        errorDescription: response.message ?? 'Payment failed',
+        plan: plan,
+      );
+    }
+    setState(() => _pendingPlan = null);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('❌ Payment failed: ${response.message}', style: GoogleFonts.poppins(fontSize: 13)),
+        backgroundColor: Colors.red.shade700,
+      ));
+    }
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    debugPrint('💳 External wallet: ${response.walletName}');
+  }
+
+  void _showPaymentMethodSheet(SubscriptionTier tier) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1A2E),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Upgrade to ${tier.displayName}',
+              style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+            const SizedBox(height: 8),
+            Text('${tier.price} • ${tier.yearlyPrice}',
+              style: GoogleFonts.poppins(color: Colors.grey, fontSize: 13)),
+            const SizedBox(height: 24),
+
+            // Razorpay option
+            if (RazorpayService.isConfigured)
+              _paymentOption(
+                icon: Icons.payment,
+                title: 'Pay with Razorpay',
+                subtitle: 'UPI, Cards, Net Banking (instant)',
+                color: Colors.blueAccent,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pendingPlan = tier;
+                  final options = RazorpayService.createCheckoutOptions(plan: tier);
+                  _razorpay?.open(options);
+                },
+              ),
+
+            if (RazorpayService.isConfigured) const SizedBox(height: 12),
+
+            // UTR option (always available)
+            _paymentOption(
+              icon: Icons.qr_code_2,
+              title: 'Pay via UPI/QR',
+              subtitle: 'Manual verification (1-2 hrs)',
+              color: Colors.orangeAccent,
+              onTap: () async {
+                Navigator.pop(ctx);
+                final result = await PaymentDialog.show(context, tier);
+                if (result == true) _checkPendingRequest();
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _paymentOption({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withOpacity(0.3)),
+        ),
+        child: Row(children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(width: 14),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(title, style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14)),
+            Text(subtitle, style: GoogleFonts.poppins(color: Colors.grey, fontSize: 11)),
+          ])),
+          Icon(Icons.arrow_forward_ios, color: color.withOpacity(0.6), size: 16),
+        ]),
+      ),
+    );
   }
   
   Future<void> _checkPendingRequest() async {
@@ -362,9 +511,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                             ),
                             const SizedBox(height: 16),
                             _buildStep(1, 'Tap on Pro or Ultra plan'),
-                            _buildStep(2, 'Scan QR code to pay via PhonePe/GPay'),
-                            _buildStep(3, 'Enter UTR/Transaction ID'),
-                            _buildStep(4, 'Wait for admin approval (1-2 hrs)'),
+                            _buildStep(2, 'Choose Razorpay (instant) or UPI/QR'),
+                            _buildStep(3, 'Complete payment securely'),
+                            _buildStep(4, 'Plan activates instantly (Razorpay) or in 1-2 hrs (UPI)'),
                           ],
                         ),
                       ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1),
@@ -571,12 +720,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () async {
+                    onPressed: () {
                       HapticFeedback.mediumImpact();
-                      final result = await PaymentDialog.show(context, tier);
-                      if (result == true) {
-                        _checkPendingRequest();
-                      }
+                      _showPaymentMethodSheet(tier);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: tier.color,

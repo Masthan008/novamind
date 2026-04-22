@@ -44,6 +44,25 @@ import '../features/lab_mesh/lab_mesh_screen.dart';
 import '../services/student_auth_service.dart';
 import '../widgets/user_badge.dart';
 
+// Phase 2 imports
+import '../screens/microdegrees/microdegrees_home_screen.dart';
+import '../screens/mentors/mentor_marketplace_screen.dart';
+import '../screens/skillmatch/skillmatch_screen.dart';
+import '../screens/senior_connect/senior_connect_screen.dart';
+import '../screens/build_public/build_public_screen.dart';
+import '../screens/placement/placement_warroom_screen.dart';
+
+// Phase 3 imports
+import '../screens/admin/admin_panel_screen.dart';
+import '../screens/college_dashboard/college_dashboard_screen.dart';
+import '../screens/memory_wall/memory_wall_screen.dart';
+import '../screens/confessions/confession_screen.dart';
+import '../screens/professor_ratings/professor_rating_screen.dart';
+import '../screens/lost_found/lost_found_screen.dart';
+import '../screens/marketplace/student_marketplace_screen.dart';
+import '../screens/pomodoro_battle/pomodoro_battle_screen.dart';
+import '../screens/skill_dna/skill_dna_screen.dart';
+
 /// Animated side menu widget inspired by the Rive App sample.
 /// Displays user profile, navigation items, and settings in a
 /// glassmorphic dark sidebar with scrollable content.
@@ -290,6 +309,28 @@ class AnimatedSideMenu extends StatelessWidget {
           _menuItem(Icons.play_circle_outlined, 'Video Library', Colors.blue, context, const VideoLibraryScreen()),
           _menuItem(Icons.route_outlined, 'Tech Roadmaps', Colors.blue, context, const RoadmapsScreen()),
           _menuItem(Icons.star, 'Subscription Plans', Colors.green, context, const SubscriptionScreen(), subtitle: 'Upgrade to Pro/Ultra'),
+
+          // ─── PHASE 2 ────────────────
+          _sectionTitle('PHASE 2'),
+          _menuItem(Icons.workspace_premium, 'Zerno Pro', const Color(0xFFFF6B6B), context, const SubscriptionScreen(), subtitle: 'Subscription & Plans'),
+          _menuItem(Icons.school, 'MicroDegrees', Colors.tealAccent, context, const MicrodegreesHomeScreen(), subtitle: 'Learn & Certify'),
+          _menuItem(Icons.people, 'Mentors', Colors.orangeAccent, context, const MentorMarketplaceScreen(), subtitle: 'Book sessions'),
+          _menuItem(Icons.handshake, 'SkillMatch', Colors.lightGreenAccent, context, const SkillmatchScreen(), subtitle: 'Jobs & Internships'),
+          _menuItem(Icons.connect_without_contact, 'Senior Connect', Colors.pinkAccent, context, const SeniorConnectScreen(), subtitle: 'Alumni network'),
+          _menuItem(Icons.rocket_launch, 'Build Public', Colors.deepPurpleAccent, context, const BuildPublicScreen(), subtitle: 'Ship & Share'),
+          _menuItem(Icons.business_center, 'Placement', Colors.indigoAccent, context, const PlacementWarroomScreen(), subtitle: 'Companies & Prep'),
+
+          // ─── PHASE 3 ────────────────
+          _sectionTitle('CAMPUS LIFE'),
+          _menuItem(Icons.admin_panel_settings, 'Admin Panel', Colors.redAccent, context, const AdminPanelScreen(), subtitle: 'Platform admin'),
+          _menuItem(Icons.account_balance, 'College Hub', Colors.greenAccent, context, const CollegeDashboardScreen(), subtitle: 'TPO & Batch'),
+          _menuItem(Icons.photo_library, 'Memory Wall', Colors.pinkAccent, context, const MemoryWallScreen(), subtitle: 'Campus photos'),
+          _menuItem(Icons.lock, 'Confessions', Colors.deepPurpleAccent, context, const ConfessionScreen(), subtitle: 'Anonymous'),
+          _menuItem(Icons.star_half, 'Prof Ratings', Colors.amber, context, const ProfessorRatingScreen(), subtitle: 'Rate teachers'),
+          _menuItem(Icons.search, 'Lost & Found', Colors.tealAccent, context, const LostFoundScreen(), subtitle: 'Find items'),
+          _menuItem(Icons.storefront, 'Marketplace', Colors.cyanAccent, context, const StudentMarketplaceScreen(), subtitle: 'Buy & Sell'),
+          _menuItem(Icons.timer, 'Pomodoro Battle', Colors.amberAccent, context, const PomodoroBattleScreen(), subtitle: 'Focus wars'),
+          _menuItem(Icons.fingerprint, 'Skill DNA', const Color(0xFF6C63FF), context, const SkillDnaScreen(), subtitle: 'Your profile'),
 
           const SizedBox(height: 16),
         ],

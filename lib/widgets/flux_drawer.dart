@@ -12,6 +12,13 @@ class FluxDrawer extends StatefulWidget {
   final VoidCallback? onLogout;
   final VoidCallback? onSubscription;
   final VoidCallback? onCommunity;
+  // Phase 2 callbacks
+  final VoidCallback? onMicroDegrees;
+  final VoidCallback? onMentors;
+  final VoidCallback? onSkillMatch;
+  final VoidCallback? onSeniorConnect;
+  final VoidCallback? onBuildPublic;
+  final VoidCallback? onPlacement;
 
   const FluxDrawer({
     super.key,
@@ -22,6 +29,12 @@ class FluxDrawer extends StatefulWidget {
     this.onLogout,
     this.onSubscription,
     this.onCommunity,
+    this.onMicroDegrees,
+    this.onMentors,
+    this.onSkillMatch,
+    this.onSeniorConnect,
+    this.onBuildPublic,
+    this.onPlacement,
   });
 
   @override
@@ -146,16 +159,82 @@ class _FluxDrawerState extends State<FluxDrawer> {
                   child: Divider(color: Colors.grey),
                 ),
                 
-                // NEW: Subscription Plans
+                // --- Phase 2 Features ---
+                
                 _buildMenuItem(
-                  icon: Icons.star,
-                  title: 'Subscription Plans',
-                  color: Colors.green,
+                  icon: Icons.workspace_premium,
+                  title: 'Zerno Pro',
+                  color: const Color(0xFFFF6B6B),
                   onTap: () {
                     Navigator.pop(context);
                     widget.onSubscription?.call();
                   },
                 ).animate().fadeIn(delay: 225.ms).slideX(begin: -0.2),
+                
+                _buildMenuItem(
+                  icon: Icons.school,
+                  title: 'MicroDegrees',
+                  color: Colors.tealAccent,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onMicroDegrees?.call();
+                  },
+                ).animate().fadeIn(delay: 240.ms).slideX(begin: -0.2),
+                
+                _buildMenuItem(
+                  icon: Icons.people,
+                  title: 'Mentors',
+                  color: Colors.orangeAccent,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onMentors?.call();
+                  },
+                ).animate().fadeIn(delay: 255.ms).slideX(begin: -0.2),
+                
+                _buildMenuItem(
+                  icon: Icons.handshake,
+                  title: 'SkillMatch',
+                  color: Colors.lightGreenAccent,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onSkillMatch?.call();
+                  },
+                ).animate().fadeIn(delay: 270.ms).slideX(begin: -0.2),
+                
+                _buildMenuItem(
+                  icon: Icons.connect_without_contact,
+                  title: 'Senior Connect',
+                  color: Colors.pinkAccent,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onSeniorConnect?.call();
+                  },
+                ).animate().fadeIn(delay: 285.ms).slideX(begin: -0.2),
+                
+                _buildMenuItem(
+                  icon: Icons.rocket_launch,
+                  title: 'Build Public',
+                  color: Colors.deepPurpleAccent,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onBuildPublic?.call();
+                  },
+                ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.2),
+                
+                _buildMenuItem(
+                  icon: Icons.business_center,
+                  title: 'Placement',
+                  color: Colors.indigoAccent,
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onPlacement?.call();
+                  },
+                ).animate().fadeIn(delay: 315.ms).slideX(begin: -0.2),
+                
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Divider(color: Colors.grey),
+                ),
                 
                 _buildMenuItem(
                   icon: Icons.settings,
@@ -165,7 +244,7 @@ class _FluxDrawerState extends State<FluxDrawer> {
                     Navigator.pop(context);
                     widget.onSettings?.call();
                   },
-                ).animate().fadeIn(delay: 250.ms).slideX(begin: -0.2),
+                ).animate().fadeIn(delay: 330.ms).slideX(begin: -0.2),
               ],
             ),
           ),
